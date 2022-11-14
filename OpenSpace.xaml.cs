@@ -37,6 +37,7 @@ namespace CaseManager
         }
         public void SetPosition(Point point)
         {
+            SetVisible(true);
             Canvas.SetLeft(text, point.X+10); 
             Canvas.SetTop(text, point.Y+10);
             text.Text = $"[{point.X},{point.Y}]";
@@ -44,6 +45,12 @@ namespace CaseManager
             line1.Y1 = 0; line1.Y2 = canvas.Height;
             line2.Y1 = line2.Y2 = point.Y;
             line2.X1 = 0; line2.X2 = canvas.Width;
+        }
+        public void SetVisible(bool visible)
+        {
+            text.Visibility  = visible ? Visibility.Visible : Visibility.Hidden;
+            line1.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+            line2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
     }
     /// <summary>
@@ -55,7 +62,7 @@ namespace CaseManager
         private Point start;
         private bool _isAdding = false;
         private UIElement Adding = null;
-        Canvas_Cursor canvas_Cursor;
+        public Canvas_Cursor canvas_Cursor;
         public OpenSpace()
         {
             InitializeComponent();
@@ -73,6 +80,7 @@ namespace CaseManager
             if (!_isAdding)
             {
                 Adding = uIElement;
+                Adding.IsEnabled= false;
                 Canvas.Children.Add(uIElement);
                 _isAdding = true;
             }
@@ -80,10 +88,10 @@ namespace CaseManager
         private void UserControl_Initialized(object sender, EventArgs e)
         {
             
-            Canvas.MouseWheel += image_MouseWheel;
-            Canvas.MouseLeftButtonDown += image_MouseLeftButtonDown;
-            Canvas.MouseLeftButtonUp += image_MouseLeftButtonUp;
-            Canvas.MouseMove += image_MouseMove;
+            Canvas.MouseWheel           += image_MouseWheel;
+            Canvas.MouseLeftButtonDown  += image_MouseLeftButtonDown;
+            Canvas.MouseLeftButtonUp    += image_MouseLeftButtonUp;
+            Canvas.MouseMove            += image_MouseMove;
             InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
         }
@@ -126,6 +134,7 @@ namespace CaseManager
             if (tt.X > 0) tt.X = 0;
             if (tt.Y > 0) tt.Y = 0;
             if (Canvas.GetLeft(Canvas) > 0) Canvas.SetLeft(Canvas, 0d);
+            if (Canvas.GetTop(Canvas) > 0) Canvas.SetTop(Canvas, 0d);
             if (Math.Abs(tt.X) > Canvas.Width - CanvasViewer.Width) tt.X = -(Canvas.Width - CanvasViewer.Width);
             if (Math.Abs(tt.Y) > Canvas.Height - CanvasViewer.Height) tt.Y = -(Canvas.Height - CanvasViewer.Height);
         }
@@ -144,12 +153,17 @@ namespace CaseManager
                     Console.WriteLine($"MouseMove\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
                 }
+                else
+                {
+                    canvas_Cursor.SetVisible(false);
+                }
             }
             else
             {
+                canvas_Cursor.SetVisible(false);
                 Point point = e.GetPosition(Canvas);
-                Canvas.SetLeft(Adding, point.X);
-                Canvas.SetTop(Adding, point.Y);
+                Canvas.SetLeft(Adding, point.X-Adding.DesiredSize.Width/2);
+                Canvas.SetTop(Adding, point.Y-Adding.DesiredSize.Height/2);
             }
         }
         private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -170,6 +184,7 @@ namespace CaseManager
             else
             {
                 _isAdding = false;
+                Adding.IsEnabled = true;
                 Adding = null;
             }
         }
@@ -179,17 +194,8 @@ namespace CaseManager
             {
                 TransformGroup transformGroup = (TransformGroup)Canvas.RenderTransform;
                 ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-                double zoom = e.Delta > 0 ? .2 : -.2;
-                if ((transform.ScaleX <= .4d || transform.ScaleY <= .4d) || (transform.ScaleX >= 1.8d || transform.ScaleY >= 1.8d))
-                {
-                    if (transform.ScaleX < 1.0d)
-                        transform.ScaleX = transform.ScaleY = .4d;
-                    else
-                        transform.ScaleX = transform.ScaleY = 1.8d;
-                    Corect_Size();
-                    return;
-                }
-                else
+                double zoom = e.Delta > 0 ? .1 : -.1;
+                if ((transform.ScaleX >= .4d || transform.ScaleY >= .4d) && (transform.ScaleX <= 1.8d || transform.ScaleY <= 1.8d))
                 {
                     Point mouse = e.GetPosition(Canvas);
                     transform.CenterX = mouse.X;
@@ -198,8 +204,24 @@ namespace CaseManager
                     Console.WriteLine($"Zoom:{transform.ScaleX}");
                     Corect_Size();
                 }
-                
+                else
+                {
+                    if (transform.ScaleX < 1.0d)
+                        transform.ScaleX = transform.ScaleY = .4d;
+                    else
+                        transform.ScaleX = transform.ScaleY = 1.8d;
+                    Corect_Size();
+                    return;
+                }
             }
+        }
+        /// <summary>
+        /// Блокирует прокрутку для CanvasViewer.
+        /// OpenSpace.xaml
+        /// </summary>
+        private void CanvasViewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

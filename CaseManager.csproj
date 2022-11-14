@@ -74,10 +74,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PersonUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OpenSpace.xaml.cs">
       <DependentUpon>OpenSpace.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PersonUI.xaml.cs">
+      <DependentUpon>PersonUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -106,6 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="kkzd22zpllj11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="blank_head_profile.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

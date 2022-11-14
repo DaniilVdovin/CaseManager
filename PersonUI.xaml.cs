@@ -16,18 +16,14 @@ using System.Windows.Shapes;
 namespace CaseManager
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для PersonUI.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class PersonUI : UserControl
     {
-        
-        public MainWindow()
+        public PersonUI()
         {
             InitializeComponent();
-
-
-            os_bt_create.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
-
         }
+
     }
 }
