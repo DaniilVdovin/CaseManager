@@ -16,7 +16,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <local:OpenSpace/>
+        <local:OpenSpace x:Name="Op_Sp"/>
+        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small"/>
 
     </Grid>
 </Window>

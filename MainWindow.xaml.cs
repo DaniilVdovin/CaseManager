@@ -25,6 +25,11 @@ namespace CaseManager
         {
             InitializeComponent();
 
+            os_bt_create.Click += (s, e) =>
+            {
+                Calendar calendar = new Calendar();
+                Op_Sp.Add_Element(calendar);
+            };
         }
     }
 }

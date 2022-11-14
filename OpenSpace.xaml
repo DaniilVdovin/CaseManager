@@ -7,10 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
     <Grid>
-        <ScrollViewer x:Name="CanvasViewer"   HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden">
-            <Canvas x:Name="Canvas"  IsHitTestVisible="False">
-                <Image Source="/kkzd22zpllj11.png" Stretch="Fill" Width="800" Height="450" />
-            </Canvas>
+        <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}">
+            <Canvas x:Name="Canvas" Width="5000" Height="5000"/>
         </ScrollViewer>
     </Grid>
 </UserControl>
