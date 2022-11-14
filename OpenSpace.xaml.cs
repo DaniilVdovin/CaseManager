@@ -125,6 +125,7 @@ namespace CaseManager
             var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
             if (tt.X > 0) tt.X = 0;
             if (tt.Y > 0) tt.Y = 0;
+            if (Canvas.GetLeft(Canvas) > 0) Canvas.SetLeft(Canvas, 0d);
             if (Math.Abs(tt.X) > Canvas.Width - CanvasViewer.Width) tt.X = -(Canvas.Width - CanvasViewer.Width);
             if (Math.Abs(tt.Y) > Canvas.Height - CanvasViewer.Height) tt.Y = -(Canvas.Height - CanvasViewer.Height);
         }
@@ -179,10 +180,25 @@ namespace CaseManager
                 TransformGroup transformGroup = (TransformGroup)Canvas.RenderTransform;
                 ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
                 double zoom = e.Delta > 0 ? .2 : -.2;
-                if (!(e.Delta > 0) && (transform.ScaleX < .4 || transform.ScaleY < .4))
+                if ((transform.ScaleX <= .4d || transform.ScaleY <= .4d) || (transform.ScaleX >= 1.8d || transform.ScaleY >= 1.8d))
+                {
+                    if (transform.ScaleX < 1.0d)
+                        transform.ScaleX = transform.ScaleY = .4d;
+                    else
+                        transform.ScaleX = transform.ScaleY = 1.8d;
+                    Corect_Size();
                     return;
-                transform.ScaleX += zoom;
-                transform.ScaleY += zoom;
+                }
+                else
+                {
+                    Point mouse = e.GetPosition(Canvas);
+                    transform.CenterX = mouse.X;
+                    transform.CenterY = mouse.Y;
+                    transform.ScaleY = transform.ScaleX += zoom;
+                    Console.WriteLine($"Zoom:{transform.ScaleX}");
+                    Corect_Size();
+                }
+                
             }
         }
     }
