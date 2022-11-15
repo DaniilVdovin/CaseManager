@@ -40,7 +40,7 @@ namespace CaseManager
             SetVisible(true);
             Canvas.SetLeft(text, point.X+10); 
             Canvas.SetTop(text, point.Y+10);
-            text.Text = $"[{point.X},{point.Y}]";
+            //text.Text = $"[{point.X},{point.Y}]";
             line1.X1 = line1.X2 = point.X;
             line1.Y1 = 0; line1.Y2 = canvas.Height;
             line2.Y1 = line2.Y2 = point.Y;
@@ -71,9 +71,10 @@ namespace CaseManager
             ScaleTransform xform = new ScaleTransform();
             group.Children.Add(xform);
             TranslateTransform tt = new TranslateTransform();
+            //tt.X = -(Canvas.Width / 2);
+            //tt.Y = -(Canvas.Height / 2);
             group.Children.Add(tt);
             Canvas.RenderTransform = group;
-
         }
         public void Add_Element(UIElement uIElement)
         {
@@ -88,14 +89,32 @@ namespace CaseManager
         private void UserControl_Initialized(object sender, EventArgs e)
         {
             
-            Canvas.MouseWheel           += image_MouseWheel;
-            Canvas.MouseLeftButtonDown  += image_MouseLeftButtonDown;
-            Canvas.MouseLeftButtonUp    += image_MouseLeftButtonUp;
-            Canvas.MouseMove            += image_MouseMove;
+            Canvas.MouseWheel           += Canvas_MouseWheel;
+            Canvas.MouseLeftButtonDown  += Canvas_MouseLeftButtonDown;
+            Canvas.MouseLeftButtonUp    += Canvas_MouseLeftButtonUp;
+            Canvas.MouseMove            += Canvas_MouseMove;
+            Canvas.MouseLeave           += Canvas_MouseLeave;
+            
+            os_root.SizeChanged         += Os_root_SizeChanged;
+
+            CanvasViewer.MouseWheel         += CanvasViewer_MouseWheel;
+            CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
             InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
+
         }
-        private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+
+        private void Canvas_MouseLeave(object sender, MouseEventArgs e)
+        {
+            canvas_Cursor.SetVisible(false);
+        }
+
+        private void Os_root_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Corect_Size();
+        }
+
+        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if(sender is Canvas)
                 Canvas.ReleaseMouseCapture();
@@ -111,7 +130,7 @@ namespace CaseManager
             {
                 Line line = new Line();
                 line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 1;
+                line.StrokeThickness = 0.5d;
                 line.X1 = 0;
                 line.X2 = Canvas.Width;
                 line.Y1 = line.Y2 = i;
@@ -121,7 +140,7 @@ namespace CaseManager
             {
                 Line line = new Line();
                 line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 1;
+                line.StrokeThickness = 0.5d;
                 line.Y1 = 0;
                 line.Y2 = Canvas.Height;
                 line.X1 = line.X2 = i;
@@ -131,12 +150,12 @@ namespace CaseManager
         private void Corect_Size()
         {
             var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            Console.WriteLine($"Start:{tt.X},{tt.Y}\nCanvas:{Canvas.Width},{Canvas.Height}\nCanvasViewer:{CanvasViewer.ActualWidth},{CanvasViewer.ActualHeight}");
-            if (tt.X > 0 && tt.X < Canvas.ActualWidth - CanvasViewer.ActualWidth) tt.X = 0;
-            if (tt.Y > 0 && tt.Y < Canvas.ActualHeight - CanvasViewer.ActualHeight) tt.Y = 0;
-            Console.WriteLine($"End  :{tt.X},{tt.Y}\nCanvas:{Canvas.Width},{Canvas.Height}\nCanvasViewer:{CanvasViewer.ActualWidth},{CanvasViewer.ActualHeight}");
+            if (tt.X > 0) tt.X = 0;
+            else if (tt.X < -(Canvas.ActualWidth - CanvasViewer.ActualWidth)) tt.X = -(Canvas.ActualWidth - CanvasViewer.ActualWidth);
+            if (tt.Y > 0) tt.Y = 0;
+            else if (tt.Y < -(Canvas.ActualHeight - CanvasViewer.ActualHeight)) tt.Y = -(Canvas.ActualHeight - CanvasViewer.ActualHeight);
         }
-        private void image_MouseMove(object sender, MouseEventArgs e)
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_isAdding)
             {
@@ -148,7 +167,7 @@ namespace CaseManager
                     Vector v = start - e.GetPosition(CanvasViewer);
                     tt.X = origin.X - v.X;
                     tt.Y = origin.Y - v.Y;
-                    Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
+                    //Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
                 }
                 else
@@ -160,11 +179,13 @@ namespace CaseManager
             {
                 canvas_Cursor.SetVisible(false);
                 Point point = e.GetPosition(Canvas);
-                Canvas.SetLeft(Adding, point.X-Adding.DesiredSize.Width/2);
-                Canvas.SetTop(Adding, point.Y-Adding.DesiredSize.Height/2);
+                if (point.X - Adding.DesiredSize.Width / 2 > 0 && point.X + Adding.DesiredSize.Width / 2< Canvas.ActualWidth)
+                    Canvas.SetLeft(Adding, point.X - Adding.DesiredSize.Width / 2);
+                if (point.Y - Adding.DesiredSize.Height / 2 > 0 && point.Y + Adding.DesiredSize.Height / 2 < Canvas.ActualHeight)
+                    Canvas.SetTop(Adding, point.Y - Adding.DesiredSize.Height / 2);
             }
         }
-        private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!_isAdding)
             {
@@ -178,7 +199,7 @@ namespace CaseManager
                     tt.X = start.X - canvas_origin.X;
                     tt.Y = start.Y - canvas_origin.Y;
                     origin = new Point(tt.X , tt.Y);
-                    Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}\ncanvas_origin:{canvas_origin.X},{canvas_origin.Y}");
+                    //Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}\ncanvas_origin:{canvas_origin.X},{canvas_origin.Y}");
                     Corect_Size();
                 }
             }
@@ -189,7 +210,7 @@ namespace CaseManager
                 Adding = null;
             }
         }
-        private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (sender is Canvas)
             {
@@ -202,7 +223,7 @@ namespace CaseManager
                     transform.CenterX = mouse.X;
                     transform.CenterY = mouse.Y;
                     transform.ScaleY = transform.ScaleX += zoom;
-                    Console.WriteLine($"Zoom:{transform.ScaleX}");
+                    //Console.WriteLine($"Zoom:{transform.ScaleX}");
                     Corect_Size();
                 }
                 else
