@@ -8,8 +8,8 @@
         Title="Case Manager" Height="726" Width="1283">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="68*"/>
+            <RowDefinition Height="30.002"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="271*"/>
