@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CaseManager"
              mc:Ignorable="d" 
-             Width="250" Height="356">
+             Width="250" Height="356" Focusable="True">
     <Grid>
         <GroupBox Header="Person UI" BorderBrush="#E55A5A5A" Foreground="#FFE4E4E4" Cursor="Arrow" Margin="10,10,10,10">
             <GroupBox.Background>
@@ -14,9 +14,6 @@
                     <GradientStop Color="#CC313131" Offset="0.986"/>
                 </LinearGradientBrush>
             </GroupBox.Background>
-            <GroupBox.Effect>
-                <DropShadowEffect/>
-            </GroupBox.Effect>
             <StackPanel>
                 <Image Height="200" VerticalAlignment="Top" Margin="2,5,2,0" Source="/blank_head_profile.jpg" Width="200"/>
                 <TextBlock TextWrapping="Wrap" Text="Daniil Vdovin" Margin="10,2,10,0" FontWeight="Bold"/>

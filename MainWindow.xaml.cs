@@ -20,14 +20,20 @@ namespace CaseManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        bool _isAdding = false;
         public MainWindow()
         {
             InitializeComponent();
 
-
             os_bt_create.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
 
+            c_ui_person.MouseLeftButtonDown += (s, e) => _isAdding = true;
+            c_ui_person.MouseLeftButtonUp += (s, e) => _isAdding = false;
+            c_ui_person.MouseLeave += (s, e) =>
+            {
+                if (_isAdding)
+                    Op_Sp.Add_Element(new PersonUI());
+            };
         }
     }
 }
