@@ -59,6 +59,7 @@ namespace CaseManager
     public partial class OpenSpace : UserControl
     {
         private Point origin;
+        private Point canvas_origin;
         private Point start;
         private bool _isAdding = false;
         private UIElement Adding = null;
@@ -66,7 +67,6 @@ namespace CaseManager
         public OpenSpace()
         {
             InitializeComponent();
-
             TransformGroup group = new TransformGroup();
             ScaleTransform xform = new ScaleTransform();
             group.Children.Add(xform);
@@ -131,12 +131,10 @@ namespace CaseManager
         private void Corect_Size()
         {
             var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            if (tt.X > 0) tt.X = 0;
-            if (tt.Y > 0) tt.Y = 0;
-            if (Canvas.GetLeft(Canvas) > 0) Canvas.SetLeft(Canvas, 0d);
-            if (Canvas.GetTop(Canvas) > 0) Canvas.SetTop(Canvas, 0d);
-            if (Math.Abs(tt.X) > Canvas.Width - CanvasViewer.Width) tt.X = -(Canvas.Width - CanvasViewer.Width);
-            if (Math.Abs(tt.Y) > Canvas.Height - CanvasViewer.Height) tt.Y = -(Canvas.Height - CanvasViewer.Height);
+            Console.WriteLine($"Start:{tt.X},{tt.Y}\nCanvas:{Canvas.Width},{Canvas.Height}\nCanvasViewer:{CanvasViewer.ActualWidth},{CanvasViewer.ActualHeight}");
+            if (tt.X > 0 && tt.X < Canvas.ActualWidth - CanvasViewer.ActualWidth) tt.X = 0;
+            if (tt.Y > 0 && tt.Y < Canvas.ActualHeight - CanvasViewer.ActualHeight) tt.Y = 0;
+            Console.WriteLine($"End  :{tt.X},{tt.Y}\nCanvas:{Canvas.Width},{Canvas.Height}\nCanvasViewer:{CanvasViewer.ActualWidth},{CanvasViewer.ActualHeight}");
         }
         private void image_MouseMove(object sender, MouseEventArgs e)
         {
@@ -150,7 +148,7 @@ namespace CaseManager
                     Vector v = start - e.GetPosition(CanvasViewer);
                     tt.X = origin.X - v.X;
                     tt.Y = origin.Y - v.Y;
-                    Console.WriteLine($"MouseMove\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
+                    Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
                 }
                 else
@@ -172,12 +170,15 @@ namespace CaseManager
             {
                 if (sender is Canvas)
                 {
+
+                    canvas_origin = e.GetPosition(Canvas);
                     Canvas.CaptureMouse();
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                     start = e.GetPosition(CanvasViewer);
-                    Point start_at = e.GetPosition(Canvas);
-                    origin = new Point(tt.X + start_at.X, tt.Y + start_at.Y);
-                    Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
+                    tt.X = start.X - canvas_origin.X;
+                    tt.Y = start.Y - canvas_origin.Y;
+                    origin = new Point(tt.X , tt.Y);
+                    Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}\ncanvas_origin:{canvas_origin.X},{canvas_origin.Y}");
                     Corect_Size();
                 }
             }
