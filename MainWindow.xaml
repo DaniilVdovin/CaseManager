@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="Case Manager" Height="726" Width="1283">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="68*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="271*"/>
             <ColumnDefinition Width="1004*"/>
@@ -17,12 +21,11 @@
                 <GradientStop Color="#FF252525" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <local:OpenSpace x:Name="Op_Sp" Grid.Column="1"/>
-        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1"/>
-        <StackPanel Margin="0">
-            <ListBox Background="{x:Null}" Margin="10">
-                <ListBoxItem x:Name="c_ui_person" Content="Персона" Height="30" Background="#FF404040" Foreground="#FFEEEEEE"/>
-            </ListBox>
-        </StackPanel>
+        <Menu Grid.ColumnSpan="2" Background="#FF181818">
+            <MenuItem Foreground="#FFEFEFEF" Height="20" Header="Файл"/>
+        </Menu>
+        <local:OpenSpace x:Name="Op_Sp" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1" Grid.Row="1"/>
+        <StackPanel Margin="0,30,0,0" Grid.RowSpan="2"/>
     </Grid>
 </Window>
