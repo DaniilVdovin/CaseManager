@@ -6,14 +6,76 @@
         xmlns:local="clr-namespace:CaseManager"
         mc:Ignorable="d"
         Title="Case Manager" Height="726" Width="1283">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="btv" />
+
+        <!-- style a top level menu item -->
+        <ControlTemplate x:Key="MainMenuTop" TargetType="MenuItem">
+            <StackPanel TextBlock.FontSize="15px" Height="40">
+                <!-- label, icons, etc. -->
+                <Label Content="{TemplateBinding Header}" Margin="5" Foreground="White" />
+                <!-- sub items -->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False">
+                    <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
+                        <StackPanel IsItemsHost="True" />
+                    </Border>
+                </Popup>
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"  Value="True">
+                                <Setter Property="Background" Value="Gray"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+        </ControlTemplate>
+
+        <!-- style a non-top level menu item -->
+        <ControlTemplate x:Key="VsMenuSub" TargetType="MenuItem">
+            <DockPanel TextBlock.FontSize="15px" x:Name="panel">
+                <!-- label, icons, etc. -->
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="20" Margin="5,0" />
+                <Label Content="{TemplateBinding Header}" Foreground="Black" Margin="0,5,5,5" />
+
+                <!-- draw the right arrow only if this menu item has sub items -->
+                <Image Source="icon_right.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                <!-- sub items -->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" Placement="Right" >
+                    <Border BorderThickness="1" Background="White" BorderBrush="#E0E0E0">
+                        <StackPanel IsItemsHost="True" />
+                    </Border>
+                </Popup>
+            </DockPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" TargetName="panel" Value="#EFF6FC" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- style the separator -->
+        <ControlTemplate x:Key="VsMenuSep" TargetType="Separator">
+            <Border Height="1" Background="#E0E0E0" />
+        </ControlTemplate>
+        
+        <!-- some base stuff -->
+        <Style TargetType="Menu">
+            <Setter Property="Background" Value="#FF212121" />
+            <Setter Property="Height" Value="40px" />
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30.002"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="271*"/>
-            <ColumnDefinition Width="1004*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="1083*"/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -22,12 +84,33 @@
             </LinearGradientBrush>
         </Grid.Background>
         <DockPanel Grid.ColumnSpan="2">
-            <Menu Background="#FF181818">
-                <MenuItem Foreground="#FFEFEFEF" Height="20" Header="Файл"/>
+            <Menu IsMainMenu="True">
+                <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_О приложении" Template="{StaticResource VsMenuSub}" />
+                </MenuItem>
+                <MenuItem Header="_Code" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Files" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Commits" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Pushes" Template="{StaticResource VsMenuSub}" />
+                </MenuItem>
+                <MenuItem Header="_Work" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Backlogs" Template="{StaticResource VsMenuSub}" Icon="icon_backlogs.png" />
+                    <MenuItem Header="_Queries" Template="{StaticResource VsMenuSub}" Icon="icon_queries.png" />
+                    <Separator Template="{StaticResource VsMenuSep}" />
+                    <MenuItem Header="_New Work Item" Template="{StaticResource VsMenuSub}">
+                        <MenuItem Header="_Epic" Template="{StaticResource VsMenuSub}" Icon="icon_epic.png" />
+                        <MenuItem Header="_Feature" Template="{StaticResource VsMenuSub}" Icon="icon_feature.png" />
+                        <MenuItem Header="_Issue" Template="{StaticResource VsMenuSub}" Icon="icon_issue.png" />
+                        <MenuItem Header="_Task" Template="{StaticResource VsMenuSub}" Icon="icon_task.png" />
+                        <MenuItem Header="_Test Case" Template="{StaticResource VsMenuSub}" Icon="icon_testcase.png" />
+                        <MenuItem Header="_User Story" Template="{StaticResource VsMenuSub}" Icon="icon_userstory.png" />
+                    </MenuItem>
+                    <MenuItem Header="_Bug" Template="{StaticResource VsMenuSub}" Icon="icon_bug.png" />
+                </MenuItem>
             </Menu>
         </DockPanel>
-        <local:OpenSpace x:Name="Op_Sp" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <local:OpenSpace x:Name="Op_Sp" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1" Grid.Row="1"/>
-        <StackPanel Margin="0,30,0,0" Grid.RowSpan="2"/>
+        <StackPanel Grid.Row="1"/>
     </Grid>
 </Window>
