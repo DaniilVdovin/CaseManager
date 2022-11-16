@@ -16,10 +16,10 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="0">
-            <Canvas x:Name="left_tape" Margin="0" Background="#FFAEAEAE"/>
+            <Canvas x:Name="left_tape" Margin="0" Background="#FF212121"/>
         </ScrollViewer>
         <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1">
-            <Canvas x:Name="top_tape" Margin="0" Background="#FFAEAEAE"/>
+            <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
         </ScrollViewer>
         <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1">
             <Canvas x:Name="Canvas" Width="5000" Height="5000"/>

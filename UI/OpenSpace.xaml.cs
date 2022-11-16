@@ -65,6 +65,7 @@ namespace CaseManager
         public int Size_OneDecimal = 10;
         public int Size_OneWhole = 15;
 
+        Brush brush;
         public Canvas_Ruler(Canvas canvas, Canvas left, Canvas top, Control view)
         {
             this.canvas = canvas;
@@ -75,6 +76,8 @@ namespace CaseManager
             left.Height = canvas.Height;
             top.Width = canvas.Width;
 
+            brush = new SolidColorBrush(Colors.Gray); 
+
             Create_Cursor_Line();
             Dimension();
         }
@@ -82,7 +85,7 @@ namespace CaseManager
         {
             line_left = new Line(); line_top = new Line();
             left.Children.Add(line_left); top.Children.Add(line_top);
-            line_left.Stroke = line_top.Stroke = new SolidColorBrush(Colors.Black);
+            line_left.Stroke = line_top.Stroke = new SolidColorBrush(Colors.White);
             line_left.StrokeThickness = line_top.StrokeThickness = 2d;
         }
         private void Dimension()
@@ -92,18 +95,18 @@ namespace CaseManager
                 if (i % OneWhole == 0)
                 {
                     Line line = new Line();
-                    line.X1 = line.X2 = i;
+                    line.X1 = line.X2 = i+10;
                     line.Y1 = 0; line.Y2 = Size_OneWhole;
-                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     top.Children.Add(line);
                 }
                 else 
                 if (i % OneDecimal == 0) {
                     Line line = new Line();
-                    line.X1 = line.X2 = i;
+                    line.X1 = line.X2 = i+10;
                     line.Y1 = 0; line.Y2 = Size_OneDecimal;
-                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     top.Children.Add(line);
                 }
@@ -115,8 +118,8 @@ namespace CaseManager
                 {
                     Line line = new Line();
                     line.X1 = 0; line.X2 = Size_OneWhole;
-                    line.Y1 = line.Y2 = i;
-                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.Y1 = line.Y2 = i+10;
+                    line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     left.Children.Add(line);
                 }
@@ -125,8 +128,8 @@ namespace CaseManager
                 {
                     Line line = new Line();
                     line.X1 = 0; line.X2 = Size_OneDecimal;
-                    line.Y1 = line.Y2 = i;
-                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.Y1 = line.Y2 = i+10;
+                    line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     left.Children.Add(line);
                 }
@@ -275,8 +278,9 @@ namespace CaseManager
             {
                 if (sender is Canvas)
                 {
-                    canvas_Cursor.SetPosition(e.GetPosition(Canvas));
-                    canvas_Ruler.SetMousePosition(e.GetPosition(Canvas));
+                    Point point = e.GetPosition(Canvas);
+                    canvas_Cursor.SetPosition(point);
+                    canvas_Ruler.SetMousePosition(point);
                     if (!Canvas.IsMouseCaptured) return;
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                     Vector v = start - e.GetPosition(CanvasViewer);
@@ -296,6 +300,7 @@ namespace CaseManager
             {
                 canvas_Cursor.SetVisible(false);
                 Point point = e.GetPosition(Canvas);
+                canvas_Ruler.SetMousePosition(point);
                 if (point.X - Adding.DesiredSize.Width / 2 > 0 && point.X + Adding.DesiredSize.Width / 2< Canvas.ActualWidth)
                     Canvas.SetLeft(Adding, point.X - Adding.DesiredSize.Width / 2);
                 if (point.Y - Adding.DesiredSize.Height / 2 > 0 && point.Y + Adding.DesiredSize.Height / 2 < Canvas.ActualHeight)
@@ -316,6 +321,7 @@ namespace CaseManager
                     tt.X = start.X - canvas_origin.X;
                     tt.Y = start.Y - canvas_origin.Y;
                     origin = new Point(tt.X , tt.Y);
+                    canvas_Ruler.SetOffset(origin);
                     //Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}\ncanvas_origin:{canvas_origin.X},{canvas_origin.Y}");
                     Corect_Size();
                 }
