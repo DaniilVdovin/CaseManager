@@ -1,0 +1,29 @@
+﻿<UserControl x:Name="os_root" x:Class="CaseManager.OpenSpace"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CaseManager"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="0">
+            <Canvas x:Name="left_tape" Margin="0" Background="#FFAEAEAE"/>
+        </ScrollViewer>
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1">
+            <Canvas x:Name="top_tape" Margin="0" Background="#FFAEAEAE"/>
+        </ScrollViewer>
+        <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1">
+            <Canvas x:Name="Canvas" Width="5000" Height="5000"/>
+        </ScrollViewer>
+        <Rectangle Fill="#FF616161"/>
+    </Grid>
+</UserControl>

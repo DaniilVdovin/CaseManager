@@ -21,9 +21,11 @@
                 <GradientStop Color="#FF252525" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Menu Grid.ColumnSpan="2" Background="#FF181818">
-            <MenuItem Foreground="#FFEFEFEF" Height="20" Header="Файл"/>
-        </Menu>
+        <DockPanel Grid.ColumnSpan="2">
+            <Menu Background="#FF181818">
+                <MenuItem Foreground="#FFEFEFEF" Height="20" Header="Файл"/>
+            </Menu>
+        </DockPanel>
         <local:OpenSpace x:Name="Op_Sp" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1" Grid.Row="1"/>
         <StackPanel Margin="0,30,0,0" Grid.RowSpan="2"/>

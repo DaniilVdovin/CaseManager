@@ -53,6 +53,117 @@ namespace CaseManager
             line2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
     }
+    public class Canvas_Ruler
+    {
+        Canvas canvas, left, top;
+        Control view;
+        Line line_left, line_top;
+
+        public int OneDecimal = 10;
+        public int OneWhole = 50;
+
+        public int Size_OneDecimal = 10;
+        public int Size_OneWhole = 15;
+
+        public Canvas_Ruler(Canvas canvas, Canvas left, Canvas top, Control view)
+        {
+            this.canvas = canvas;
+            this.left = left;
+            this.top = top;
+            this.view = view;
+
+            left.Height = canvas.Height;
+            top.Width = canvas.Width;
+
+            Create_Cursor_Line();
+            Dimension();
+        }
+        private void Create_Cursor_Line()
+        {
+            line_left = new Line(); line_top = new Line();
+            left.Children.Add(line_left); top.Children.Add(line_top);
+            line_left.Stroke = line_top.Stroke = new SolidColorBrush(Colors.Black);
+            line_left.StrokeThickness = line_top.StrokeThickness = 2d;
+        }
+        private void Dimension()
+        {
+            for (int i = 10; i < top.Width; i++)
+            {
+                if (i % OneWhole == 0)
+                {
+                    Line line = new Line();
+                    line.X1 = line.X2 = i;
+                    line.Y1 = 0; line.Y2 = Size_OneWhole;
+                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.StrokeThickness = 1d;
+                    top.Children.Add(line);
+                }
+                else 
+                if (i % OneDecimal == 0) {
+                    Line line = new Line();
+                    line.X1 = line.X2 = i;
+                    line.Y1 = 0; line.Y2 = Size_OneDecimal;
+                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.StrokeThickness = 1d;
+                    top.Children.Add(line);
+                }
+                
+            }
+            for (int i = 10; i < left.Height; i++)
+            {
+                if (i % OneWhole == 0)
+                {
+                    Line line = new Line();
+                    line.X1 = 0; line.X2 = Size_OneWhole;
+                    line.Y1 = line.Y2 = i;
+                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.StrokeThickness = 1d;
+                    left.Children.Add(line);
+                }
+                else
+                if (i % OneDecimal == 0)
+                {
+                    Line line = new Line();
+                    line.X1 = 0; line.X2 = Size_OneDecimal;
+                    line.Y1 = line.Y2 = i;
+                    line.Stroke = new SolidColorBrush(Colors.Gray);
+                    line.StrokeThickness = 1d;
+                    left.Children.Add(line);
+                }
+            }
+        }
+        public void SetVisible(bool visible)
+        {
+            line_left.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+            line_top.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+        }
+        public void SetOffset(Point point)
+        {
+            TranslateTransform tt_t = new TranslateTransform();
+            tt_t.X = point.X;
+            top.RenderTransform = tt_t;
+            TranslateTransform tt_l = new TranslateTransform();
+            tt_l.Y = point.Y;
+            left.RenderTransform = tt_l;
+        }
+        public void SetMousePosition(Point point)
+        {
+            SetVisible(true);
+
+            line_left.X1 = 0; line_left.X2 = left.ActualWidth;
+            line_left.Y1 = line_left.Y2 = point.Y;
+            line_top.Y1 = 0; line_top.Y2 = top.ActualHeight;
+            line_top.X1 = line_top.X2 = point.X;
+        }
+        public void Change_Dimension(Point tt)
+        {
+            left.Children.Clear();
+            top.Children.Clear();
+            left.Children.Add(line_left); top.Children.Add(line_top);
+            Dimension();
+        }
+
+    }
     /// <summary>
     /// Логика взаимодействия для OpenSpace.xaml
     /// </summary>
@@ -64,6 +175,7 @@ namespace CaseManager
         private bool _isAdding = false;
         private UIElement Adding = null;
         public Canvas_Cursor canvas_Cursor;
+        public Canvas_Ruler canvas_Ruler;
         public OpenSpace()
         {
             InitializeComponent();
@@ -101,6 +213,7 @@ namespace CaseManager
             CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
             InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
+            canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
 
         }
 
@@ -154,6 +267,7 @@ namespace CaseManager
             else if (tt.X < -(Canvas.ActualWidth - CanvasViewer.ActualWidth)) tt.X = -(Canvas.ActualWidth - CanvasViewer.ActualWidth);
             if (tt.Y > 0) tt.Y = 0;
             else if (tt.Y < -(Canvas.ActualHeight - CanvasViewer.ActualHeight)) tt.Y = -(Canvas.ActualHeight - CanvasViewer.ActualHeight);
+
         }
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
@@ -162,6 +276,7 @@ namespace CaseManager
                 if (sender is Canvas)
                 {
                     canvas_Cursor.SetPosition(e.GetPosition(Canvas));
+                    canvas_Ruler.SetMousePosition(e.GetPosition(Canvas));
                     if (!Canvas.IsMouseCaptured) return;
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                     Vector v = start - e.GetPosition(CanvasViewer);
@@ -169,10 +284,12 @@ namespace CaseManager
                     tt.Y = origin.Y - v.Y;
                     //Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
+                    canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
                 }
                 else
                 {
                     canvas_Cursor.SetVisible(false);
+                    canvas_Ruler.SetVisible(false);
                 }
             }
             else
