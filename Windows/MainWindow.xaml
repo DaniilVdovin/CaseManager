@@ -1,19 +1,20 @@
-﻿<Window x:Class="CaseManager.MainWindow"
+﻿<Window 
+        x:Name="Window"
+        x:Class="CaseManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CaseManager"
         mc:Ignorable="d"
-        Title="Case Manager" Height="726" Width="1283">
+        Title="Case Manager" Height="726" Width="1283" Foreground="#FF676767" Icon="/Source/kkzd22zpllj11.png" WindowStyle="None" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" AllowsTransparency="True">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
-
         <!-- style a top level menu item -->
         <ControlTemplate x:Key="MainMenuTop" TargetType="MenuItem">
-            <StackPanel TextBlock.FontSize="15px" Height="40">
+            <StackPanel TextBlock.FontSize="12px" Height="40">
                 <!-- label, icons, etc. -->
-                <Label Content="{TemplateBinding Header}" Margin="5" Foreground="White" />
+                <Label Content="{TemplateBinding Header}" Margin="5" Foreground="LightGray" />
                 <!-- sub items -->
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False">
                     <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
@@ -24,21 +25,34 @@
                     <Style TargetType="StackPanel">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver"  Value="True">
-                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Background" Value="#4CA9A9A9"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
             </StackPanel>
         </ControlTemplate>
-
+        <!-- style a icon level menu item -->
+        <ControlTemplate x:Key="MainMenuIcon" TargetType="MenuItem">
+            <StackPanel Height="40" Width="40">
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Margin="12"/>
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"  Value="True">
+                                <Setter Property="Background" Value="#4CA9A9A9"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+        </ControlTemplate>
         <!-- style a non-top level menu item -->
         <ControlTemplate x:Key="VsMenuSub" TargetType="MenuItem">
             <DockPanel TextBlock.FontSize="15px" x:Name="panel">
                 <!-- label, icons, etc. -->
-                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="20" Margin="5,0" />
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="40" Height="40"/>
                 <Label Content="{TemplateBinding Header}" Foreground="White" Margin="0,5,5,5" />
-
                 <!-- draw the right arrow only if this menu item has sub items -->
                 <Image Source="/CaseManager;component/Source/right_arrow.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" StretchDirection="UpOnly" Width="24" Height="24" />
 
@@ -51,23 +65,28 @@
             </DockPanel>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsHighlighted" Value="True">
-                    <Setter Property="Background" TargetName="panel" Value="Gray" />
+                    <Setter Property="Background" TargetName="panel" Value="#4CA9A9A9" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
         <!-- style the separator -->
         <ControlTemplate x:Key="VsMenuSep" TargetType="Separator">
             <Border Height="1" Background="#E0E0E0" />
         </ControlTemplate>
-        
+        <ControlTemplate x:Key="MainMenuImage" TargetType="MenuItem">
+            <StackPanel Height="40" Width="40">
+                <Image Source="/Source/icons/icons8-close-30.png" Margin="10,10,10,10"/>
+            </StackPanel>
+        </ControlTemplate>
         <!-- some base stuff -->
         <Style TargetType="Menu">
-            <Setter Property="Background" Value="#FF212121" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Height" Value="40px" />
         </Style>
-
     </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Color="#FF212121" Opacity="1"/>
+    </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -83,8 +102,10 @@
                 <GradientStop Color="#FF252525" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <DockPanel Grid.ColumnSpan="2">
-            <Menu IsMainMenu="True">
+        <Grid x:Name="ToolBar" Grid.ColumnSpan="2" AllowDrop="True">
+            <Rectangle x:Name="Window_move" Fill="#00000000"/>
+            <Menu IsMainMenu="True" HorizontalAlignment="Left">
+                <MenuItem Template="{StaticResource MainMenuImage}"/>
                 <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}">
                     <MenuItem Header="_Создать" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Открыть" Template="{StaticResource VsMenuSub}" />
@@ -112,7 +133,12 @@
                     <MenuItem Header="_Отчистить холст" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
             </Menu>
-        </DockPanel>
+            <Menu HorizontalAlignment="Right">
+                <MenuItem x:Name="Windows_min" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-shrink-50.png"/>
+                <MenuItem x:Name="Windows_max" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-screensharing-30.png"/>
+                <MenuItem x:Name="Windows_close" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-close-30.png"/>
+            </Menu>
+        </Grid>
         <local:OpenSpace x:Name="Op_Sp" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1" Grid.Row="1"/>
         <StackPanel Grid.Row="1"/>

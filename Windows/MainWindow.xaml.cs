@@ -25,6 +25,17 @@ namespace CaseManager
             InitializeComponent();
 
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
+
+            Windows_close.Click += (s, e) => Close();
+            Windows_min.Click   += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized;
+            Windows_max.Click   += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized?WindowState.Normal : WindowState.Maximized;
+            Point lm = new Point();
+            Window_move.MouseLeftButtonDown += (s, e) =>
+            {
+                base.OnMouseLeftButtonDown(e);
+                this.DragMove();
+                this.WindowState = WindowState.Normal;
+            };
         }
     }
 }

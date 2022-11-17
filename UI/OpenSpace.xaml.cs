@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
-
 namespace CaseManager
 {
     /// <summary>
@@ -192,10 +192,10 @@ namespace CaseManager
         private bool _isAdding_Move = false;
         private bool _isAdding_Hover = false;
         private UIElement Adding = null;
-        public Canvas_Cursor canvas_Cursor;
-        public Canvas_Ruler canvas_Ruler;
-        public Canvas_Propertis canvas_Propertis;
-        public OpenSpace()
+        public  Canvas_Cursor canvas_Cursor;
+        public  Canvas_Ruler canvas_Ruler;
+        public  Canvas_Propertis canvas_Propertis;
+        public  OpenSpace()
         {
             InitializeComponent();
             TransformGroup group = new TransformGroup();
@@ -207,7 +207,7 @@ namespace CaseManager
             group.Children.Add(tt);
             Canvas.RenderTransform = group;
         }
-        public void Add_Element(UIElement uIElement)
+        public  void Add_Element(UIElement uIElement)
         {
             if (!_isAdding)
             {
@@ -222,7 +222,6 @@ namespace CaseManager
                 _isAdding = true;
             }
         }
-
         private void Adding_MouseLeave(object sender, MouseEventArgs e)
         {
             canvas_Cursor.SetVisible(true);
@@ -230,14 +229,12 @@ namespace CaseManager
             _isAdding_Move = false;
             Console.WriteLine($"{sender.GetType().Name}:LEAVE");
         }
-
         private void Adding_MouseEnter(object sender, MouseEventArgs e)
         {
             canvas_Cursor.SetVisible(false);
             _isAdding_Hover = true;
             Console.WriteLine($"{sender.GetType().Name}:ENTER");
         }
-
         private void Adding_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isAdding_Move = false;
@@ -255,7 +252,6 @@ namespace CaseManager
         {
             _isAdding_Move = true;
         }
-
         private void UserControl_Initialized(object sender, EventArgs e)
         {
             
@@ -275,17 +271,14 @@ namespace CaseManager
             canvas_Propertis = new Canvas_Propertis(PropertisBar);
 
         }
-
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             canvas_Cursor.SetVisible(false);
         }
-
         private void Os_root_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Corect_Size();
         }
-
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_isAdding_Hover) return;
@@ -358,7 +351,7 @@ namespace CaseManager
                 Adding_Move(true,Adding,e.GetPosition(Canvas),e.GetPosition(CanvasViewer));
             }
         }
-        public void Adding_Move(bool first,UIElement obj,Point point,Point point_view)
+        public  void Adding_Move(bool first,UIElement obj,Point point,Point point_view)
         {
             canvas_Cursor.SetVisible(false);
             canvas_Ruler.SetMousePosition(point);

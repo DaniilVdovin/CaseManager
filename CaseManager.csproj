@@ -122,7 +122,13 @@
     <Resource Include="Source\blank_head_profile.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Source\icons\right_arrow.png" />
+    <Resource Include="Source\icons\icons8-close-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\icons\icons8-screensharing-30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\icons\icons8-shrink-50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
