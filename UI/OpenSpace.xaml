@@ -13,17 +13,29 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="193*"/>
+            <ColumnDefinition Width="67*"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="0">
             <Canvas x:Name="left_tape" Margin="0" Background="#FF212121"/>
         </ScrollViewer>
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1">
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
             <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
         </ScrollViewer>
-        <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1">
+        <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
             <Canvas x:Name="Canvas" Width="5000" Height="5000"/>
         </ScrollViewer>
         <Rectangle Fill="#FF616161"/>
+        <StackPanel x:Name="PropertisBar" Margin="7,5,5,5" Grid.Row="1" Grid.Column="2">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#E5252525" Offset="0"/>
+                    <GradientStop Color="#E51B1B1B" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <ToolBar Background="#FF3F4042" Foreground="#FFE4E0E0" VerticalContentAlignment="Stretch" Margin="-5,-2,-5,0" Height="20" UseLayoutRounding="False" Header="" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft">
+                <Button Content="Х" Height="15" VerticalAlignment="Center" Width="15" HorizontalAlignment="Right" HorizontalContentAlignment="Center" Padding="0" BorderBrush="#7FBBBBBB" Foreground="#FF6A6A6A" FontSize="8" IsCancel="True" Margin="0"/>
+            </ToolBar>
+        </StackPanel>
     </Grid>
 </UserControl>

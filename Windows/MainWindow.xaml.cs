@@ -20,12 +20,11 @@ namespace CaseManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool _isAdding = false;
         public MainWindow()
         {
             InitializeComponent();
 
-            os_bt_create.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
+            mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
         }
     }
 }

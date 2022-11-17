@@ -76,10 +76,10 @@ namespace CaseManager
             left.Height = canvas.Height;
             top.Width = canvas.Width;
 
-            brush = new SolidColorBrush(Colors.Gray); 
-
+            brush = new SolidColorBrush(Colors.Gray);
             Create_Cursor_Line();
             Dimension();
+            SetVisible(true);
         }
         private void Create_Cursor_Line()
         {
@@ -152,7 +152,6 @@ namespace CaseManager
         public void SetMousePosition(Point point)
         {
             SetVisible(true);
-
             line_left.X1 = 0; line_left.X2 = left.ActualWidth;
             line_left.Y1 = line_left.Y2 = point.Y;
             line_top.Y1 = 0; line_top.Y2 = top.ActualHeight;
@@ -167,6 +166,20 @@ namespace CaseManager
         }
 
     }
+    public class Canvas_Propertis
+    {
+        UIElement propertis;
+       public Canvas_Propertis(UIElement propertis)
+        {
+            this.propertis = propertis;
+            SetVisible(true);
+        } 
+
+        public void SetVisible(bool visible)
+        {
+            propertis.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+        }
+    }
     /// <summary>
     /// Логика взаимодействия для OpenSpace.xaml
     /// </summary>
@@ -176,9 +189,12 @@ namespace CaseManager
         private Point canvas_origin;
         private Point start;
         private bool _isAdding = false;
+        private bool _isAdding_Move = false;
+        private bool _isAdding_Hover = false;
         private UIElement Adding = null;
         public Canvas_Cursor canvas_Cursor;
         public Canvas_Ruler canvas_Ruler;
+        public Canvas_Propertis canvas_Propertis;
         public OpenSpace()
         {
             InitializeComponent();
@@ -186,8 +202,8 @@ namespace CaseManager
             ScaleTransform xform = new ScaleTransform();
             group.Children.Add(xform);
             TranslateTransform tt = new TranslateTransform();
-            //tt.X = -(Canvas.Width / 2);
-            //tt.Y = -(Canvas.Height / 2);
+            tt.X = -(Canvas.Width / 2);
+            tt.Y = -(Canvas.Height / 2);
             group.Children.Add(tt);
             Canvas.RenderTransform = group;
         }
@@ -197,10 +213,49 @@ namespace CaseManager
             {
                 Adding = uIElement;
                 Adding.IsEnabled= false;
+                Adding.MouseLeftButtonDown += Adding_MouseLeftButtonDown;
+                Adding.MouseLeftButtonUp += Adding_MouseLeftButtonUp;
+                Adding.MouseEnter += Adding_MouseEnter;
+                Adding.MouseLeave += Adding_MouseLeave;
+                Adding.MouseMove += Adding_MouseMove;
                 Canvas.Children.Add(uIElement);
                 _isAdding = true;
             }
         }
+
+        private void Adding_MouseLeave(object sender, MouseEventArgs e)
+        {
+            canvas_Cursor.SetVisible(true);
+            _isAdding_Hover = false;
+            _isAdding_Move = false;
+            Console.WriteLine($"{sender.GetType().Name}:LEAVE");
+        }
+
+        private void Adding_MouseEnter(object sender, MouseEventArgs e)
+        {
+            canvas_Cursor.SetVisible(false);
+            _isAdding_Hover = true;
+            Console.WriteLine($"{sender.GetType().Name}:ENTER");
+        }
+
+        private void Adding_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _isAdding_Move = false;
+            canvas_Propertis.SetVisible(true);
+        }
+        private void Adding_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isAdding_Move)
+            {
+                canvas_Propertis.SetVisible(false);
+                Adding_Move(false, sender as UIElement, e.GetPosition(Canvas), e.GetPosition(CanvasViewer));
+            }
+        }
+        private void Adding_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _isAdding_Move = true;
+        }
+
         private void UserControl_Initialized(object sender, EventArgs e)
         {
             
@@ -217,6 +272,7 @@ namespace CaseManager
             InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
+            canvas_Propertis = new Canvas_Propertis(PropertisBar);
 
         }
 
@@ -232,8 +288,11 @@ namespace CaseManager
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if(sender is Canvas)
+            if (_isAdding_Hover) return;
+            if (_isAdding_Move) return;
+            if (sender is Canvas)
                 Canvas.ReleaseMouseCapture();
+            canvas_Propertis.SetVisible(true);
         }
         private void InitializeSizes()
         {
@@ -274,6 +333,8 @@ namespace CaseManager
         }
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            if (_isAdding_Hover) return;
+            if (_isAdding_Move) return;
             if (!_isAdding)
             {
                 if (sender is Canvas)
@@ -288,27 +349,47 @@ namespace CaseManager
                     tt.Y = origin.Y - v.Y;
                     //Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
+                    canvas_Propertis.SetVisible(false);
                     canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
-                }
-                else
-                {
-                    canvas_Cursor.SetVisible(false);
-                    canvas_Ruler.SetVisible(false);
                 }
             }
             else
             {
-                canvas_Cursor.SetVisible(false);
-                Point point = e.GetPosition(Canvas);
-                canvas_Ruler.SetMousePosition(point);
-                if (point.X - Adding.DesiredSize.Width / 2 > 0 && point.X + Adding.DesiredSize.Width / 2< Canvas.ActualWidth)
-                    Canvas.SetLeft(Adding, point.X - Adding.DesiredSize.Width / 2);
-                if (point.Y - Adding.DesiredSize.Height / 2 > 0 && point.Y + Adding.DesiredSize.Height / 2 < Canvas.ActualHeight)
-                    Canvas.SetTop(Adding, point.Y - Adding.DesiredSize.Height / 2);
+                Adding_Move(true,Adding,e.GetPosition(Canvas),e.GetPosition(CanvasViewer));
             }
+        }
+        public void Adding_Move(bool first,UIElement obj,Point point,Point point_view)
+        {
+            canvas_Cursor.SetVisible(false);
+            canvas_Ruler.SetMousePosition(point);
+            canvas_Ruler.SetVisible(true);
+            if (!first)
+            {
+                var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
+                Console.WriteLine($"point_view:{point_view}\npoint:{point}");
+                Console.WriteLine($"tt.XCC:{point_view.X - (obj.DesiredSize.Width / 2)}");
+                if (point_view.X - (obj.DesiredSize.Width / 2) < 10)
+                    tt.X += 2;
+                if (point_view.Y - (obj.DesiredSize.Height / 2) < 10)
+                    tt.Y += 2;
+                if (point_view.X + (obj.DesiredSize.Width / 2) > CanvasViewer.ActualWidth - 10)
+                    tt.X -= 2;
+                if (point_view.Y + (obj.DesiredSize.Height / 2) > CanvasViewer.ActualHeight - 10)
+                    tt.Y -= 2;
+                Corect_Size();
+                origin = new Point(tt.X, tt.Y);
+                canvas_Ruler.SetOffset(origin);
+            }
+
+            if (point.X - obj.DesiredSize.Width / 2 > 0 && point.X + obj.DesiredSize.Width / 2 < Canvas.ActualWidth)
+                Canvas.SetLeft(obj, point.X - obj.DesiredSize.Width / 2);
+            if (point.Y - obj.DesiredSize.Height / 2 > 0 && point.Y + obj.DesiredSize.Height / 2 < Canvas.ActualHeight)
+                Canvas.SetTop(obj, point.Y - obj.DesiredSize.Height / 2);
         }
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (_isAdding_Hover) return;
+            if (_isAdding_Move) return;
             if (!_isAdding)
             {
                 if (sender is Canvas)

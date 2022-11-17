@@ -37,21 +37,21 @@
             <DockPanel TextBlock.FontSize="15px" x:Name="panel">
                 <!-- label, icons, etc. -->
                 <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="20" Margin="5,0" />
-                <Label Content="{TemplateBinding Header}" Foreground="Black" Margin="0,5,5,5" />
+                <Label Content="{TemplateBinding Header}" Foreground="White" Margin="0,5,5,5" />
 
                 <!-- draw the right arrow only if this menu item has sub items -->
-                <Image Source="icon_right.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" />
+                <Image Source="/CaseManager;component/Source/right_arrow.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" StretchDirection="UpOnly" Width="24" Height="24" />
 
                 <!-- sub items -->
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" Placement="Right" >
-                    <Border BorderThickness="1" Background="White" BorderBrush="#E0E0E0">
+                    <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
                         <StackPanel IsItemsHost="True" />
                     </Border>
                 </Popup>
             </DockPanel>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsHighlighted" Value="True">
-                    <Setter Property="Background" TargetName="panel" Value="#EFF6FC" />
+                    <Setter Property="Background" TargetName="panel" Value="Gray" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -86,26 +86,30 @@
         <DockPanel Grid.ColumnSpan="2">
             <Menu IsMainMenu="True">
                 <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Создать" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Открыть" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Сохранить" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Сохранить как..." Template="{StaticResource VsMenuSub}" />
+                    <Separator Template="{StaticResource VsMenuSep}" />
                     <MenuItem Header="_О приложении" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
-                <MenuItem Header="_Code" Template="{StaticResource MainMenuTop}">
-                    <MenuItem Header="_Files" Template="{StaticResource VsMenuSub}" />
-                    <MenuItem Header="_Commits" Template="{StaticResource VsMenuSub}" />
-                    <MenuItem Header="_Pushes" Template="{StaticResource VsMenuSub}" />
-                </MenuItem>
-                <MenuItem Header="_Work" Template="{StaticResource MainMenuTop}">
-                    <MenuItem Header="_Backlogs" Template="{StaticResource VsMenuSub}" Icon="icon_backlogs.png" />
-                    <MenuItem Header="_Queries" Template="{StaticResource VsMenuSub}" Icon="icon_queries.png" />
-                    <Separator Template="{StaticResource VsMenuSep}" />
-                    <MenuItem Header="_New Work Item" Template="{StaticResource VsMenuSub}">
-                        <MenuItem Header="_Epic" Template="{StaticResource VsMenuSub}" Icon="icon_epic.png" />
-                        <MenuItem Header="_Feature" Template="{StaticResource VsMenuSub}" Icon="icon_feature.png" />
-                        <MenuItem Header="_Issue" Template="{StaticResource VsMenuSub}" Icon="icon_issue.png" />
-                        <MenuItem Header="_Task" Template="{StaticResource VsMenuSub}" Icon="icon_task.png" />
-                        <MenuItem Header="_Test Case" Template="{StaticResource VsMenuSub}" Icon="icon_testcase.png" />
-                        <MenuItem Header="_User Story" Template="{StaticResource VsMenuSub}" Icon="icon_userstory.png" />
+                <MenuItem Header="_Объекты" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
+                        <MenuItem Header="_Изображение" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem Header="_Документ" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem Header="_Карта" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem Header="_Паспорт" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem Header="_СНИЛС" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
-                    <MenuItem Header="_Bug" Template="{StaticResource VsMenuSub}" Icon="icon_bug.png" />
+                    <MenuItem Header="_Исходные данные" Template="{StaticResource VsMenuSub}">
+                        <MenuItem x:Name="mm_ui_person" Header="_Личность" Template="{StaticResource VsMenuSub}"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Инструменты" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Удалить" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Пересоздать" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Отчистить холст" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
             </Menu>
         </DockPanel>
