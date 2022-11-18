@@ -25,6 +25,9 @@ namespace CaseManager
             InitializeComponent();
 
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
+            mm_ui_image.Click += (s, e) => Op_Sp.Add_Element(new ImageHolderUI());
+            mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
+
             Windows_close.Click += (s, e) => Close();
             Windows_min.Click += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized;
             Windows_max.Click += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;

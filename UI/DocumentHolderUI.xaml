@@ -1,0 +1,22 @@
+﻿<UserControl 
+             x:Name="root"
+             x:Class="CaseManager.DocumentHolderUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CaseManager"
+             mc:Ignorable="d" 
+             Width="344.221" Height="427.217" Focusable="True">
+    <Grid>
+        <GroupBox Header="Документ" BorderBrush="{x:Null}" Foreground="#FFEEEEEE" Cursor="Arrow" Margin="10,10,10,10" OpacityMask="{x:Null}">
+            <GroupBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF1D1D1D" Offset="0"/>
+                    <GradientStop Color="#F2313131" Offset="0.986"/>
+                </LinearGradientBrush>
+            </GroupBox.Background>
+            <DocumentViewer HorizontalAlignment="Left" VerticalAlignment="Top" Zoom="50"/>
+        </GroupBox>
+    </Grid>
+</UserControl>

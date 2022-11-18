@@ -19,13 +19,11 @@ namespace CaseManager
     /// <summary>
     /// Логика взаимодействия для PersonUI.xaml
     /// </summary>
-    public partial class PersonUI : UserControl
+    public partial class ImageHolderUI : UserControl
     {
-
-        public PersonUI()
+        public ImageHolderUI()
         {
             InitializeComponent();
         }
-
     }
 }

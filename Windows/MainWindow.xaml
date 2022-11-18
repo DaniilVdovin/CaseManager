@@ -87,9 +87,7 @@
             <Setter Property="Height" Value="40px" />
         </Style>
     </Window.Resources>
-    <Window.Effect>
-        <DropShadowEffect Color="Red" Opacity="1" ShadowDepth="0" BlurRadius="10"/>
-    </Window.Effect>
+
     <Window.Background>
         <SolidColorBrush Color="#FF212121" Opacity="1"/>
     </Window.Background>
@@ -108,8 +106,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="1083*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -117,7 +114,7 @@
                 <GradientStop Color="#FF252525" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Grid x:Name="ToolBar" Grid.ColumnSpan="2" AllowDrop="True">
+        <Grid x:Name="ToolBar" AllowDrop="True">
             <Rectangle x:Name="Window_move" Fill="#00000000" Visibility="Collapsed"/>
             <Menu IsMainMenu="True" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
                 <MenuItem Template="{StaticResource MainMenuImage}"/>
@@ -132,8 +129,8 @@
                 <MenuItem Header="_Объекты" Template="{StaticResource MainMenuTop}">
                     <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
-                        <MenuItem Header="_Изображение" Template="{StaticResource VsMenuSub}"/>
-                        <MenuItem Header="_Документ" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem x:Name="mm_ui_image" Header="_Изображение" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem x:Name="mm_ui_doc" Header="_Документ" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem Header="_Карта" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem Header="_Паспорт" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem Header="_СНИЛС" Template="{StaticResource VsMenuSub}"/>
@@ -154,8 +151,8 @@
                 <MenuItem x:Name="Windows_close" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-close-30.png"/>
             </Menu>
         </Grid>
-        <local:OpenSpace x:Name="Op_Sp" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Column="1" Grid.Row="1"/>
-        <StackPanel Grid.Row="1"/>
+        <local:OpenSpace x:Name="Op_Sp" Grid.Row="1"/>
+        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Row="1"/>
+        <StackPanel Grid.Row="1" Margin="0,0,1075,0"/>
     </Grid>
 </Window>
