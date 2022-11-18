@@ -53,13 +53,13 @@
         </ControlTemplate>
         <!-- style a non-top level menu item -->
         <ControlTemplate x:Key="VsMenuSub" TargetType="MenuItem">
-            <DockPanel TextBlock.FontSize="15px" x:Name="panel">
+            <DockPanel TextBlock.FontSize="12px" x:Name="panel">
                 <!--label, icons, etc.-->
-                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="40" Height="40"/>
+                <!--<Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="40" Height="40"/>-->
                 <Label Content="{TemplateBinding Header}" Foreground="White" Margin="0,5,5,5" />
-                <!--draw the right arrow only if this menu item has sub items-->
+                <!--draw the right arrow only if this menu item has sub items
                 <Image Source="/CaseManager;component/Source/icons/icons8-screensharing-30.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" StretchDirection="UpOnly" Width="24" Height="24" />
-                <!--sub items-->
+                sub items-->
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" Placement="Right" >
                     <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
                         <StackPanel IsItemsHost="True" />
