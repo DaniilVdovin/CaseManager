@@ -7,35 +7,61 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="193*"/>
-            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="0">
-            <Canvas x:Name="left_tape" Margin="0" Background="#FF212121"/>
-        </ScrollViewer>
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
-            <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
-        </ScrollViewer>
-        <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
-            <Canvas x:Name="Canvas" Width="5000" Height="5000"/>
-        </ScrollViewer>
-        <Rectangle Fill="#FF616161"/>
-        <StackPanel x:Name="PropertisBar" Margin="7,5,5,5" Grid.Column="2" Grid.RowSpan="2">
-            <StackPanel.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#E5252525" Offset="0"/>
-                    <GradientStop Color="#E51B1B1B" Offset="1"/>
-                </LinearGradientBrush>
-            </StackPanel.Background>
-            <ToolBar Background="#FF3F4042" Foreground="#FFE4E0E0" VerticalContentAlignment="Stretch" Margin="-5,-2,-5,0" Height="20" UseLayoutRounding="False" Header="" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" FlowDirection="RightToLeft">
-                <Button Content="Х" Height="15" VerticalAlignment="Center" Width="15" HorizontalAlignment="Right" HorizontalContentAlignment="Center" Padding="0" BorderBrush="#7FBBBBBB" Foreground="#FF6A6A6A" FontSize="8" IsCancel="True" Margin="0"/>
-            </ToolBar>
-        </StackPanel>
+        <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="0">
+                    <Canvas x:Name="left_tape" Margin="0" Background="#FF212121"/>
+                </ScrollViewer>
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1">
+                    <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
+                </ScrollViewer>
+                <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1">
+                    <Canvas x:Name="Canvas" Width="10000" Height="5000"/>
+                </ScrollViewer>
+                <Rectangle Fill="#FF616161"/>
+            </Grid>
+        </Border>
+        <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Column="1">
+            <Grid x:Name="PropertisBar" >
+                <Grid Height="20" VerticalAlignment="Top">
+                    <Label Content="Свойства" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="#FFC3BBBB" Padding="0"/>
+                    <Border HorizontalAlignment="Right" Height="20" Width="20">
+                        <Image Source="/Source/icons/icons8-close-30.png" Stretch="Fill" Margin="5"/>
+                    </Border>
+                </Grid>
+                <Grid Height="50" VerticalAlignment="Top" Margin="0,20,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="15*"/>
+                        <RowDefinition Height="15*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="241*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Height="30" Width="30" Grid.RowSpan="2" Source="/Source/logo/logo_white.png" Stretch="Fill" Margin="10,10,10,10" Opacity="0.8"/>
+                    <Label Grid.Column="1" Content="Имя" HorizontalAlignment="Left" Foreground="#FFC1C1C1"/>
+                    <TextBox Grid.Column="1" TextWrapping="Wrap" Text="&lt;Без имени&gt;" VerticalAlignment="Center" Margin="35,0,5,0" Background="#FF1A1A1A" Foreground="#FFC1C1C0" BorderBrush="#FF616161" UndoLimit="100" BorderThickness="1"/>
+                    <Label Content="Тип: Человек" Foreground="#FFC1C1C1" Grid.Column="1" Grid.Row="1"/>
+                </Grid>
+                <Separator Height="1" Margin="5,75,5,5" Background="#CCA0A0A0" VerticalAlignment="Top"/>
+                <ScrollViewer Margin="0,85,0,0" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel VerticalAlignment="Top" Margin="5,5,5,0">
+                        <Slider />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

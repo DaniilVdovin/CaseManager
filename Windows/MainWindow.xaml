@@ -9,16 +9,16 @@
         Title="Case Manager" 
         Height="725" Width="1283"
         MinHeight="725" MinWidth="1283"
-        Foreground="#FF676767" Icon="/CaseManager;component/Source/blank_head_profile.jpg"
+        Foreground="#FF676767" Icon="/Source/logo/logo_white.png"
         WindowStyle="None" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-        AllowsTransparency="True" ResizeMode="CanResize" BorderThickness="5">
+        AllowsTransparency="True" ResizeMode="CanResize" BorderThickness="10">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
         <!-- style a top level menu item -->
         <ControlTemplate x:Key="MainMenuTop" TargetType="MenuItem">
-            <StackPanel TextBlock.FontSize="12px" Height="40">
+            <StackPanel TextBlock.FontSize="12px" Height="30">
                 <!-- label, icons, etc. -->
-                <Label Content="{TemplateBinding Header}" Margin="5" Foreground="LightGray" />
+                <Label Content="{TemplateBinding Header}" Margin="5,1,5,2" Foreground="LightGray" />
                 <!-- sub items -->
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False">
                     <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
@@ -36,10 +36,10 @@
                 </StackPanel.Style>
             </StackPanel>
         </ControlTemplate>
-        <!-- style a icon level menu item -->
+        <!-- style a icon menu item -->
         <ControlTemplate x:Key="MainMenuIcon" TargetType="MenuItem">
-            <StackPanel Height="40" Width="40">
-                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Margin="12"/>
+            <StackPanel Height="30" Width="45">
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Margin="15,8,15,8"/>
                 <StackPanel.Style>
                     <Style TargetType="StackPanel">
                         <Style.Triggers>
@@ -76,25 +76,27 @@
         <ControlTemplate x:Key="VsMenuSep" TargetType="Separator">
             <Border Height="1" Background="#E0E0E0" />
         </ControlTemplate>
+        <!-- style a image menu item -->
         <ControlTemplate x:Key="MainMenuImage" TargetType="MenuItem">
-            <StackPanel Height="40" Width="40">
-                <Image Source="/CaseManager;component/Source/blank_head_profile.jpg" Margin="10,10,10,10"/>
+            <StackPanel Height="30" Width="30">
+                <Image Source="/CaseManager;component/Source/logo/logo_white.png" Margin="5" Opacity="0.8" />
             </StackPanel>
         </ControlTemplate>
         <!-- some base stuff -->
         <Style TargetType="Menu">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Height" Value="40px" />
+            <Setter Property="Height" Value="30px" />
         </Style>
     </Window.Resources>
-
+    <Window.Effect>
+        <DropShadowEffect Color="#FFFFA400" ShadowDepth="0" BlurRadius="10" Direction="0"/>
+    </Window.Effect>
     <Window.Background>
         <SolidColorBrush Color="#FF212121" Opacity="1"/>
     </Window.Background>
     <WindowChrome.WindowChrome>
         <WindowChrome 
-                              CaptionHeight="40"
-                              CornerRadius="5"
+                              CaptionHeight="30"
                               GlassFrameThickness="0"
                               NonClientFrameEdges="None"
                               ResizeBorderThickness="10"
@@ -102,8 +104,9 @@
     </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -118,7 +121,7 @@
             <Rectangle x:Name="Window_move" Fill="#00000000" Visibility="Collapsed"/>
             <Menu IsMainMenu="True" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
                 <MenuItem Template="{StaticResource MainMenuImage}"/>
-                <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}">
+                <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}" Padding="6,0,6,0">
                     <MenuItem Header="_Создать" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Открыть" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Сохранить" Template="{StaticResource VsMenuSub}" />
@@ -127,7 +130,9 @@
                     <MenuItem Header="_О приложении" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
                 <MenuItem Header="_Объекты" Template="{StaticResource MainMenuTop}">
-                    <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}">
+                        <MenuItem x:Name="mm_ui_line" Header="_Линия" Template="{StaticResource VsMenuSub}"/>
+                    </MenuItem>
                     <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
                         <MenuItem x:Name="mm_ui_image" Header="_Изображение" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem x:Name="mm_ui_doc" Header="_Документ" Template="{StaticResource VsMenuSub}"/>
@@ -152,7 +157,13 @@
             </Menu>
         </Grid>
         <local:OpenSpace x:Name="Op_Sp" Grid.Row="1"/>
-        <Button x:Name="os_bt_create" Content="+" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="30" Margin="0,0,10,10" Background="#994B4B4B" BorderBrush="#FF464646" Foreground="#FF2EAE12" FontWeight="Bold" FontSize="24" Height="30" FontFamily="Sitka Small" Grid.Row="1"/>
-        <StackPanel Grid.Row="1" Margin="0,0,1075,0"/>
+        <StatusBar Grid.Row="2" Background="#FF424242">
+            <StatusBarItem>
+                <Image Height="20" Width="20" Source="/Source/logo/logo_white.png" Stretch="Fill"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label Content="Готово" Foreground="#FFC3C3C3" Padding="0,0,0,0"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

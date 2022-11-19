@@ -78,7 +78,7 @@ namespace CaseManager
             Create_Cursor_Line();
             Dimension();
             CreateView();
-            SetCoefficient(new Point(5000, 5000), new Point(1283, 725));
+            SetCoefficient(new Point(10000, 5000), new Point(1283, 725));
             SetVisible(true);
         }
         public void CreateView()
@@ -86,7 +86,7 @@ namespace CaseManager
             view_rect_top = new Rectangle();
             view_rect_left = new Rectangle();
             view_rect_top.Stroke = view_rect_left.Stroke = view_rect_top.Fill = view_rect_left.Fill = new SolidColorBrush(Colors.Gray);
-            view_rect_top.Opacity = view_rect_left.Opacity = 0.3d;
+            view_rect_top.Opacity = view_rect_left.Opacity = 0.15d;
             view_rect_top.Height = view_rect_left.Width = 30;
             left.Children.Add(view_rect_left);
             top.Children.Add(view_rect_top);
@@ -112,7 +112,7 @@ namespace CaseManager
                 if (i % OneWhole == 0)
                 {
                     Line line = new Line();
-                    line.X1 = line.X2 = i+10;
+                    line.X1 = line.X2 = i;
                     line.Y1 = 0; line.Y2 = Size_OneWhole;
                     line.Stroke = brush;
                     line.StrokeThickness = 1d;
@@ -121,7 +121,7 @@ namespace CaseManager
                 else 
                 if (i % OneDecimal == 0) {
                     Line line = new Line();
-                    line.X1 = line.X2 = i+10;
+                    line.X1 = line.X2 = i;
                     line.Y1 = 0; line.Y2 = Size_OneDecimal;
                     line.Stroke = brush;
                     line.StrokeThickness = 1d;
@@ -135,7 +135,7 @@ namespace CaseManager
                 {
                     Line line = new Line();
                     line.X1 = 0; line.X2 = Size_OneWhole;
-                    line.Y1 = line.Y2 = i+10;
+                    line.Y1 = line.Y2 = i;
                     line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     left.Children.Add(line);
@@ -145,7 +145,7 @@ namespace CaseManager
                 {
                     Line line = new Line();
                     line.X1 = 0; line.X2 = Size_OneDecimal;
-                    line.Y1 = line.Y2 = i+10;
+                    line.Y1 = line.Y2 = i;
                     line.Stroke = brush;
                     line.StrokeThickness = 1d;
                     left.Children.Add(line);
@@ -194,13 +194,7 @@ namespace CaseManager
        public Canvas_Propertis(UIElement propertis)
         {
             this.propertis = propertis;
-            SetVisible(true);
         } 
-
-        public void SetVisible(bool visible)
-        {
-            propertis.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
-        }
     }
     /// <summary>
     /// Логика взаимодействия для OpenSpace.xaml
@@ -261,13 +255,11 @@ namespace CaseManager
         private void Adding_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isAdding_Move = false;
-            canvas_Propertis.SetVisible(true);
         }
         private void Adding_MouseMove(object sender, MouseEventArgs e)
         {
             if (_isAdding_Move)
             {
-                canvas_Propertis.SetVisible(false);
                 Point m_canvas = e.GetPosition(Canvas);
                 //Point m_obj = e.GetPosition(sender as UIElement);
                 //Console.WriteLine($"sender:{sender.GetType().Name}\nm_canvas:{m_canvas}\nm_obj:{m_obj}");
@@ -316,7 +308,6 @@ namespace CaseManager
             if (_isAdding_Move) return;
             if (sender is Canvas)
                 Canvas.ReleaseMouseCapture();
-            canvas_Propertis.SetVisible(true);
         }
         private void InitializeSizes()
         {
@@ -325,7 +316,29 @@ namespace CaseManager
             bacground.Height = Canvas.Height;
             bacground.Fill = new SolidColorBrush(Colors.Transparent);
             Canvas.Children.Add(bacground);
-            for (int i = 10; i < Canvas.Height; i+=50)
+            for (int i = 0; i < Canvas.Width; i += 10)
+            {
+                Line line = new Line();
+                line.Stroke = new SolidColorBrush(Colors.Gray);
+                line.StrokeThickness = 0.5d;
+                line.Opacity = 0.2d;
+                line.Y1 = 0;
+                line.Y2 = Canvas.Height;
+                line.X1 = line.X2 = i;
+                Canvas.Children.Add(line);
+            }
+            for (int i = 0; i < Canvas.Height; i += 10)
+            {
+                Line line = new Line();
+                line.Stroke = new SolidColorBrush(Colors.Gray);
+                line.StrokeThickness = 0.5d;
+                line.Opacity = 0.2d;
+                line.X1 = 0;
+                line.X2 = Canvas.Width;
+                line.Y1 = line.Y2 = i;
+                Canvas.Children.Add(line);
+            }
+            for (int i = 0; i < Canvas.Height; i+=50)
             {
                 Line line = new Line();
                 line.Stroke = new SolidColorBrush(Colors.Gray);
@@ -335,7 +348,7 @@ namespace CaseManager
                 line.Y1 = line.Y2 = i;
                 Canvas.Children.Add(line);
             }
-            for (int i = 10; i < Canvas.Width; i +=50)
+            for (int i = 0; i < Canvas.Width; i +=50)
             {
                 Line line = new Line();
                 line.Stroke = new SolidColorBrush(Colors.Gray);
@@ -373,7 +386,6 @@ namespace CaseManager
                     tt.Y = origin.Y - v.Y;
                     //Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
-                    canvas_Propertis.SetVisible(false);
                     canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
                 }
             }
