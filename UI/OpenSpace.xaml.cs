@@ -236,7 +236,7 @@ namespace CaseManager
         }
         public void close()
         {
-            propertis.Visibility = Visibility.Collapsed;
+            
         }
     }
     /// <summary>
