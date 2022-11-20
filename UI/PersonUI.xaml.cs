@@ -21,11 +21,19 @@ namespace CaseManager
     /// </summary>
     public partial class PersonUI : UserControl
     {
-
+        public List<Canvas_Propertis.Property> properties;
         public PersonUI()
         {
             InitializeComponent();
+            properties = new List<Canvas_Propertis.Property>
+            {
+                new Canvas_Propertis.Property("Имя", "Daniil", typeof(string),(v)=>{ t_name.Text = v.ToString(); }),
+                new Canvas_Propertis.Property("Возраст", 22, typeof(int),(v)=>{ t_age.Text = "Возраст: " + v.ToString(); })
+            };
         }
-
+        public new int GetHashCode()
+        {
+            return 1;
+        }
     }
 }

@@ -193,12 +193,26 @@ namespace CaseManager
     {
         public class Property
         {
+            public Action<object> ChangesValue;
             public string name { get; set; }
             private Type type;
-            public object value { get; set; }
-            public bool isEnabled { get; set; }
-            public Property(string name, object value, Type type)
+            public object _value;
+            public object value
             {
+                get => _value;
+                set
+                {
+                    if (value != _value)
+                    {
+                        _value = value;
+                        ChangesValue.Invoke(_value);
+                    }
+                }
+            }
+            public bool isEnabled { get; set; }
+            public Property(string name, object value, Type type, Action<object> action)
+            {
+                this.ChangesValue = action;
                 this.name = name;
                 this.value = value;
                 this.type = type;
@@ -213,8 +227,16 @@ namespace CaseManager
         } 
         public void LoadProperty(List<Property> list)
         {
-            this.dataGrid.Items.Clear();
             this.dataGrid.ItemsSource = list;
+        }
+        public void LoadByUIElement(UIElement element)
+        {
+            if(element is PersonUI)
+                this.LoadProperty((element as PersonUI).properties);
+        }
+        public void close()
+        {
+            propertis.Visibility = Visibility.Collapsed;
         }
     }
     /// <summary>
@@ -291,6 +313,7 @@ namespace CaseManager
         {
             _isAdding_Move = true;
             isAdding_Move_start = e.GetPosition(sender as UIElement);
+            canvas_Propertis.LoadByUIElement(sender as UIElement);
         }
         private void UserControl_Initialized(object sender, EventArgs e)
         {
@@ -310,12 +333,7 @@ namespace CaseManager
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid);
-            List<Canvas_Propertis.Property> properties = new List<Canvas_Propertis.Property>();
-            for (int i = 0; i < 100; i++)
-            {
-                properties.Add(new Canvas_Propertis.Property(name:$"name {i}","some",typeof(String)));
-            }
-            canvas_Propertis.LoadProperty(properties);
+            PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
