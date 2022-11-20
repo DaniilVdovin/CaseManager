@@ -27,7 +27,7 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="0" Grid.Column="1">
                     <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
                 </ScrollViewer>
-                <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1">
+                <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1" SizeChanged="CanvasViewer_SizeChanged">
                     <Canvas x:Name="Canvas" Width="10000" Height="5000"/>
                 </ScrollViewer>
                 <Rectangle Fill="#FF616161"/>
@@ -57,11 +57,31 @@
                 </Grid>
                 <Separator Height="1" Margin="5,75,5,5" Background="#CCA0A0A0" VerticalAlignment="Top"/>
                 <ScrollViewer Margin="0,85,0,0" VerticalScrollBarVisibility="Hidden">
-                    <StackPanel VerticalAlignment="Top" Margin="5,5,5,0">
-                        <Slider />
-                    </StackPanel>
+                    <DataGrid x:Name="propertisGrid" AutoGenerateColumns="False" HorizontalGridLinesBrush="DarkGray"
+                              RowBackground="#FF1A1A1A"  Background="#FF1A1A1A" BorderBrush="#FF212121" 
+                              RowHeight="25" 
+                              CanUserDeleteRows="False" 
+                              CanUserResizeRows="False" 
+                              CanUserAddRows="False"
+                              Foreground="#FFD1D1D1" 
+                              Focusable="False" 
+                              HeadersVisibility="None" 
+                              SelectionUnit="CellOrRowHeader"
+                              RowDetailsVisibilityMode="Collapsed">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="#FF212121" />
+                                <Setter Property="BorderBrush" Value="Black" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="" Binding="{Binding Path=name}" Width="180" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False"/>
+                            <DataGridTextColumn Header="" Binding="{Binding Path=value}" Width="100" Foreground="#FFD1D1D1" CanUserResize="False"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </ScrollViewer>
             </Grid>
         </Border>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="-2,3,0,3" Width="4" Background="Transparent"/>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -190,11 +191,31 @@ namespace CaseManager
     }
     public class Canvas_Propertis
     {
+        public class Property
+        {
+            public string name { get; set; }
+            private Type type;
+            public object value { get; set; }
+            public bool isEnabled { get; set; }
+            public Property(string name, object value, Type type)
+            {
+                this.name = name;
+                this.value = value;
+                this.type = type;
+            }
+        }
         UIElement propertis;
-       public Canvas_Propertis(UIElement propertis)
+        DataGrid dataGrid;
+        public Canvas_Propertis(UIElement propertis,DataGrid dataGrid)
         {
             this.propertis = propertis;
+            this.dataGrid = dataGrid;
         } 
+        public void LoadProperty(List<Property> list)
+        {
+            this.dataGrid.Items.Clear();
+            this.dataGrid.ItemsSource = list;
+        }
     }
     /// <summary>
     /// Логика взаимодействия для OpenSpace.xaml
@@ -288,8 +309,13 @@ namespace CaseManager
             InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
-            canvas_Propertis = new Canvas_Propertis(PropertisBar);
-
+            canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid);
+            List<Canvas_Propertis.Property> properties = new List<Canvas_Propertis.Property>();
+            for (int i = 0; i < 100; i++)
+            {
+                properties.Add(new Canvas_Propertis.Property(name:$"name {i}","some",typeof(String)));
+            }
+            canvas_Propertis.LoadProperty(properties);
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -479,6 +505,13 @@ namespace CaseManager
         private void CanvasViewer_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
+        }
+        private void CanvasViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Corect_Size();
+            canvas_Ruler.SetCoefficient(new Point(Canvas.ActualWidth, Canvas.ActualHeight), new Point(CanvasViewer.ActualWidth, CanvasViewer.ActualHeight));
+            var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
+            canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
         }
     }
 }
