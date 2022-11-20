@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaseManager.Windows;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
@@ -32,6 +33,8 @@ namespace CaseManager
             mm_ui_image.Click += (s, e) => Op_Sp.Add_Element(new ImageHolderUI());
             mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
             mm_ui_line.Click += (s, e) => Op_Sp.Add_Element(new BiezeUI());
+
+            mm_ui_imageprocessing.Click += (s, e) => new ImageProcessing().Show();
 
             Windows_close.Click += (s, e) => Close();
             Windows_min.Click += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized;

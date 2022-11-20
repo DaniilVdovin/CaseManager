@@ -146,6 +146,7 @@
                 </MenuItem>
                 <MenuItem Header="_Инструменты" Template="{StaticResource MainMenuTop}">
                     <MenuItem Header="_Удалить" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem x:Name="mm_ui_imageprocessing" Header="_Обработка изображения" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Пересоздать" Template="{StaticResource VsMenuSub}" />
                     <MenuItem Header="_Отчистить холст" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
