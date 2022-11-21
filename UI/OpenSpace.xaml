@@ -33,32 +33,41 @@
                 <Rectangle Fill="#FF616161"/>
             </Grid>
         </Border>
-        <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Column="1">
-            <Grid x:Name="PropertisBar" >
-                <Grid Height="20" VerticalAlignment="Top">
-                    <Label Content="Свойства" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="#FFC3BBBB" Padding="0"/>
-                    <Border x:Name="PropertisBar_close" HorizontalAlignment="Right" Height="20" Width="20">
-                        <Image Source="/Source/icons/icons8-close-30.png" Stretch="Fill" Margin="5"/>
-                    </Border>
-                </Grid>
-                <Grid Height="50" VerticalAlignment="Top" Margin="0,20,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="15*"/>
-                        <RowDefinition Height="15*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="241*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Height="30" Width="30" Grid.RowSpan="2" Source="/Source/logo/logo_white.png" Stretch="Fill" Margin="10,10,10,10" Opacity="0.8"/>
-                    <Label Grid.Column="1" Content="Имя" HorizontalAlignment="Left" Foreground="#FFC1C1C1"/>
-                    <TextBox Grid.Column="1" TextWrapping="Wrap" Text="&lt;Без имени&gt;" VerticalAlignment="Center" Margin="35,0,5,0" Background="#FF1A1A1A" Foreground="#FFC1C1C0" BorderBrush="#FF616161" UndoLimit="100" BorderThickness="1"/>
-                    <Label Content="Тип: Человек" Foreground="#FFC1C1C1" Grid.Column="1" Grid.Row="1"/>
-                </Grid>
-                <Separator Height="1" Margin="5,75,5,5" Background="#CCA0A0A0" VerticalAlignment="Top"/>
-                <ScrollViewer Margin="0,85,0,0" VerticalScrollBarVisibility="Hidden">
-                    <DataGrid x:Name="propertisGrid" AutoGenerateColumns="False" HorizontalGridLinesBrush="#FF1A1A1A"
-                              RowBackground="#FF1A1A1A"  Background="#FF1A1A1A" BorderBrush="#FF1A1A1A" 
+        <Grid  Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50*" MinHeight="100"/>
+                <RowDefinition Height="50*" MinHeight="200"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="0">
+            </Border>
+            <GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" Background="Transparent" Height="4" VerticalAlignment="Bottom" Margin="5,0,5,-3"/>
+            <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="1">
+                <Grid x:Name="PropertisBar" >
+                    <Grid Height="20" VerticalAlignment="Top">
+                        <Label Content="Свойства" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="#FFC3BBBB" Padding="0"/>
+                        <Border x:Name="PropertisBar_close" HorizontalAlignment="Right" Height="20" Width="20">
+                            <Image Source="/Source/icons/icons8-close-30.png" Stretch="Fill" Margin="5"/>
+                        </Border>
+                    </Grid>
+                    <Grid Height="50" VerticalAlignment="Top" Margin="0,20,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="15*"/>
+                            <RowDefinition Height="15*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="241*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Height="30" Width="30" Grid.RowSpan="2" Source="/Source/logo/logo_white.png" Stretch="Fill" Margin="10,10,10,10" Opacity="0.8"/>
+                        <Label Grid.Column="1" Content="Имя" HorizontalAlignment="Left" Foreground="#FFC1C1C1"/>
+                        <TextBox Grid.Column="1" TextWrapping="Wrap" Text="&lt;Без имени&gt;" VerticalAlignment="Center" Margin="35,0,5,0" Background="#FF1A1A1A" Foreground="#FFC1C1C0" BorderBrush="#FF616161" UndoLimit="100" BorderThickness="1"/>
+                        <Label Content="Тип: Человек" Foreground="#FFC1C1C1" Grid.Column="1" Grid.Row="1"/>
+                    </Grid>
+                    <Separator Height="1" Margin="5,75,5,5" Background="#CCA0A0A0" VerticalAlignment="Top"/>
+                    <Label Content="Нет данных для отображения" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFD2D2D2" Margin="0,100,0,0"/>
+                    <ScrollViewer Margin="0,85,0,0" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Top">
+                        <DataGrid x:Name="propertisGrid" AutoGenerateColumns="False" HorizontalGridLinesBrush="Transparent"
+                              RowBackground="Transparent"  Background="Transparent" BorderBrush="Transparent" 
                               RowHeight="25" 
                               CanUserDeleteRows="False" 
                               CanUserResizeRows="False" 
@@ -68,20 +77,22 @@
                               HeadersVisibility="None" 
                               SelectionUnit="CellOrRowHeader"
                               RowDetailsVisibilityMode="Collapsed">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="#FF212121" />
-                                <Setter Property="BorderBrush" Value="#FF212121" />
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="" Binding="{Binding Path=name}" Width="180" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False"/>
-                            <DataGridTextColumn Header="" Binding="{Binding Path=value}" Width="100" Foreground="#FFD1D1D1" CanUserResize="False"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </ScrollViewer>
-            </Grid>
-        </Border>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="#FF212121" />
+                                    <Setter Property="BorderBrush" Value="#FF212121" />
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                           
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="" Binding="{Binding Path=name}" Width="180" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False"/>
+                                <DataGridTextColumn Header="" Binding="{Binding Path=value}" Width="100" Foreground="#FFD1D1D1" CanUserResize="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="-2,3,0,3" Width="4" Background="Transparent"/>
     </Grid>
 </UserControl>
