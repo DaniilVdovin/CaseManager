@@ -297,7 +297,7 @@ namespace CaseManager
         }
     }
     /// <summary>
-    /// Логика взаимодействия для OpenSpace.xaml
+    /// Логика взаимодействия для OpenSpace
     /// </summary>
     public partial class OpenSpace : UserControl
     {
