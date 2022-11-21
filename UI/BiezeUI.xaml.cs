@@ -22,8 +22,7 @@ namespace CaseManager
     {
         UIElement start, end;
         Size start_size, end_size;
-        double
-                 start_left,
+        double   start_left,
                  start_top,
                  end_left,
                  end_top;
@@ -56,6 +55,7 @@ namespace CaseManager
             start_top = Canvas.GetTop(start);
             end_left = Canvas.GetLeft(end);
             end_top = Canvas.GetTop(end);
+
             Position();
         }
         private void Position()

@@ -412,7 +412,7 @@ namespace CaseManager
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
         }
-        public void Add_Constrain()
+        public  void Add_Constrain()
         {
             _isAdding_Add_Constrain = true;
             Console.WriteLine("_isAdding_Add_Constrain ACTIVATE");
@@ -566,6 +566,47 @@ namespace CaseManager
             }
             else
             {
+                if(false)
+                {
+                    Point point = new Point();
+                    point = e.GetPosition(Canvas);
+                    Line line = new Line();
+                    line.X1 = point.X + Adding.DesiredSize.Width / 2;
+                    line.X2 = point.X + Adding.DesiredSize.Width / 2;
+                    line.Y1 = point.Y - Adding.DesiredSize.Width * 1.5f;
+                    line.Y2 = point.Y + Adding.DesiredSize.Width * 1.5f;
+                    line.Stroke = new SolidColorBrush(Colors.Red);
+                    line.StrokeThickness = 1;
+                    line.IsHitTestVisible = false;
+                    Canvas.Children.Add(line);
+                    Line line1 = new Line();
+                    line1.X1 = point.X - Adding.DesiredSize.Width / 2;
+                    line1.X2 = point.X - Adding.DesiredSize.Width / 2;
+                    line1.Y1 = point.Y - Adding.DesiredSize.Width*1.5f;
+                    line1.Y2 = point.Y + Adding.DesiredSize.Width*1.5f;
+                    line1.Stroke = new SolidColorBrush(Colors.Red);
+                    line1.StrokeThickness = 1;
+                    line1.IsHitTestVisible = false;
+                    Canvas.Children.Add(line1);
+                    Line line2 = new Line();
+                    line2.X1 = point.X - Adding.DesiredSize.Width * 1.5f;
+                    line2.X2 = point.X + Adding.DesiredSize.Width * 1.5f;
+                    line2.Y1 = point.Y + Adding.DesiredSize.Height/2;
+                    line2.Y2 = point.Y + Adding.DesiredSize.Height/2;
+                    line2.Stroke = new SolidColorBrush(Colors.Red);
+                    line2.StrokeThickness = 1;
+                    line2.IsHitTestVisible = false;
+                    Canvas.Children.Add(line2);
+                    Line line3 = new Line();
+                    line3.X1 = point.X - Adding.DesiredSize.Width * 1.5f;
+                    line3.X2 = point.X + Adding.DesiredSize.Width * 1.5f;
+                    line3.Y1 = point.Y - Adding.DesiredSize.Height / 2;
+                    line3.Y2 = point.Y - Adding.DesiredSize.Height / 2;
+                    line3.Stroke = new SolidColorBrush(Colors.Red);
+                    line3.StrokeThickness = 1;
+                    line3.IsHitTestVisible = false;
+                    Canvas.Children.Add(line3);
+                }
                 _isAdding = false;
                 Adding.IsEnabled = true;
                 Adding = null;
