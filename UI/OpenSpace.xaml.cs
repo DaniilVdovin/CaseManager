@@ -236,7 +236,64 @@ namespace CaseManager
         }
         public void close()
         {
-            
+            propertis.Visibility = Visibility.Collapsed;
+        }
+    }
+    public class Canvas_Constrain_Manager {
+        List<BiezeUI> _constrais;
+
+        public UIElement current_strat, current_end;
+        bool _isWaitEnd = false;
+        private Canvas canvas;
+
+        public Canvas_Constrain_Manager(Canvas canvas)
+        {
+            this.canvas = canvas;
+            constrains = new List<BiezeUI>();
+        }
+
+        public List<BiezeUI> constrains { get => _constrais; set
+            {
+                if(value != _constrais)
+                {
+                    _constrais = value;
+                    UpdateList();
+                }
+            } 
+        }
+        internal void SetStart(UIElement uIElement)
+        {
+            current_strat = uIElement;
+            _isWaitEnd = true;
+        }
+        internal void SetEnd(UIElement uIElement)
+        {
+            if (_isWaitEnd)
+                if (current_strat != null)
+                {
+                    current_end = uIElement;
+                    _isWaitEnd = false;
+                    Add_New(current_strat, current_end);
+                    current_strat = current_end = null;
+                }
+                else _isWaitEnd = false;
+        }
+        internal BiezeUI Add_New(UIElement start,UIElement end)
+        {
+            BiezeUI bieze = new BiezeUI(start, end);
+            constrains.Add(bieze);
+            canvas.Children.Add(bieze);
+            UpdateList();
+            return bieze;
+        }
+        internal void UpdateList()
+        {
+
+        }
+        internal void Current_Clear()
+        {
+            current_strat = current_end = null;
+            _isWaitEnd = false;
         }
     }
     /// <summary>
@@ -251,10 +308,12 @@ namespace CaseManager
         private bool _isAdding = false;
         private bool _isAdding_Move = false;
         private bool _isAdding_Hover = false;
+        private bool _isAdding_Add_Constrain = false;
         private UIElement Adding = null;
         public  Canvas_Cursor canvas_Cursor;
         public  Canvas_Ruler canvas_Ruler;
         public  Canvas_Propertis canvas_Propertis;
+        public  Canvas_Constrain_Manager constrain_Manager;
         public  OpenSpace()
         {
             InitializeComponent();
@@ -297,7 +356,18 @@ namespace CaseManager
         }
         private void Adding_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _isAdding_Move = false;
+            if (_isAdding_Add_Constrain)
+            {
+                if (constrain_Manager.current_strat != sender as UIElement)
+                {
+                    constrain_Manager.SetEnd(sender as UIElement);
+                    Console.WriteLine($"SetEnd({sender.GetType().Name})");
+                    _isAdding_Add_Constrain = false;
+                }
+                else constrain_Manager.Current_Clear();
+            }
+            else
+                _isAdding_Move = false;
         }
         private void Adding_MouseMove(object sender, MouseEventArgs e)
         {
@@ -311,9 +381,17 @@ namespace CaseManager
         }
         private void Adding_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _isAdding_Move = true;
-            isAdding_Move_start = e.GetPosition(sender as UIElement);
-            canvas_Propertis.LoadByUIElement(sender as UIElement);
+            if (_isAdding_Add_Constrain)
+            {
+                Console.WriteLine($"SetStart({sender.GetType().Name})");
+                constrain_Manager.SetStart(sender as UIElement);
+            }
+            else
+            {
+                _isAdding_Move = true;
+                isAdding_Move_start = e.GetPosition(sender as UIElement);
+                canvas_Propertis.LoadByUIElement(sender as UIElement);
+            }
         }
         private void UserControl_Initialized(object sender, EventArgs e)
         {
@@ -324,8 +402,6 @@ namespace CaseManager
             Canvas.MouseMove            += Canvas_MouseMove;
             Canvas.MouseLeave           += Canvas_MouseLeave;
             
-            os_root.SizeChanged         += Os_root_SizeChanged;
-
             //CanvasViewer.MouseWheel         += CanvasViewer_MouseWheel;
             //CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
 
@@ -333,18 +409,17 @@ namespace CaseManager
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid);
+            constrain_Manager = new Canvas_Constrain_Manager(Canvas);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
+        }
+        public void Add_Constrain()
+        {
+            _isAdding_Add_Constrain = true;
+            Console.WriteLine("_isAdding_Add_Constrain ACTIVATE");
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             canvas_Cursor.SetVisible(false);
-        }
-        private void Os_root_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Corect_Size();
-            canvas_Ruler.SetCoefficient(new Point(Canvas.ActualWidth, Canvas.ActualHeight), new Point(CanvasViewer.ActualWidth, CanvasViewer.ActualHeight));
-            var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            canvas_Ruler.SetOffset(new Point(tt.X,tt.Y));
         }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

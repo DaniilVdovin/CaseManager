@@ -32,7 +32,7 @@ namespace CaseManager
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
             mm_ui_image.Click += (s, e) => Op_Sp.Add_Element(new ImageHolderUI());
             mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
-            mm_ui_line.Click += (s, e) => Op_Sp.Add_Element(new BiezeUI());
+            mm_ui_line.Click += (s, e) => Op_Sp.Add_Constrain();
 
             mm_ui_imageprocessing.Click += (s, e) => new ImageProcessing().Show();
 

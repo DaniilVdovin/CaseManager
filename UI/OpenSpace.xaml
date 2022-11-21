@@ -41,8 +41,8 @@
             <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="0">
             </Border>
             <GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" Background="Transparent" Height="4" VerticalAlignment="Bottom" Margin="5,0,5,-3"/>
-            <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="1">
-                <Grid x:Name="PropertisBar" >
+            <Border x:Name="PropertisBar" BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="1">
+                <Grid>
                     <Grid Height="20" VerticalAlignment="Top">
                         <Label Content="Свойства" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="#FFC3BBBB" Padding="0"/>
                         <Border x:Name="PropertisBar_close" HorizontalAlignment="Right" Height="20" Width="20">
