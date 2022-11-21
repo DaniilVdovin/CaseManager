@@ -68,14 +68,23 @@ namespace CaseManager
             {
                 if(end_top + end_size.Height/2> start_top + start_size.Height / 2)
                 {
+                    
+                    if ((int)Math.Abs(end_top + end_size.Height/2 - start_top + start_size.Height / 2) == 50 || (int)Math.Abs(start_top + start_size.Height / 2 - end_top + end_size.Height / 2) == 50)
+                    {
+                        //RightToLeft();
+                        Console.WriteLine((int)Math.Abs(end_top - end_size.Height / 2 - start_top - start_size.Height / 2));
+                    }
+                    else
                     if (start_top + end_size.Height > end_top)
                         RightToLeft();
-                    else
-                        RightDownToLeft();
+                    else 
+                        DownToLeft();
                 }
                 else if (end_top + end_size.Height / 2 < start_top + start_size.Height / 2)
                 {
-                    if (start_top > end_top)
+                    if (start_top - end_size.Height > end_top)
+                        UPToLeft();
+                    else
                         RightUPToLeft();
 
                     Console.WriteLine("B:RightUPToLeft");
@@ -113,15 +122,25 @@ namespace CaseManager
             e_start.VerticalAlignment = VerticalAlignment.Bottom;
             e_end.VerticalAlignment = VerticalAlignment.Top;
         }
-        private void RightDownToLeft()
+        private void DownToLeft()
         {
             Canvas.SetLeft(this, start_left +start_size.Width/2);
             Canvas.SetTop(this, start_top + start_size.Height);
             u_root.Width = Width = end_left - start_left - start_size.Width/2;
             u_root.Height = Height = end_top - start_top - end_size.Height/2;
-            p_path.Data = Geometry.Parse($"M 7,7 C 0,{(int)Height} {(int)(Width)},{(int)(Height)} {(int)Width - 7},{(int)Height - 7}");
+            p_path.Data = Geometry.Parse($"M 7,7 C 0,{(int)Height} 0,{(int)(Height)} {(int)Width - 7},{(int)Height - 7}");
             e_start.VerticalAlignment = VerticalAlignment.Top;
             e_end.VerticalAlignment = VerticalAlignment.Bottom;
+        }
+        private void UPToLeft()
+        {
+            Canvas.SetLeft(this, start_left + start_size.Width / 2);
+            Canvas.SetTop(this, end_top + end_size.Height/2);
+            u_root.Width = Width = end_left - start_left - start_size.Width / 2;
+            u_root.Height = Height = start_top - end_top - start_size.Height/2;
+            p_path.Data = Geometry.Parse($"M 7,{(int)Height-7} C 0,0 0,0 {(int)Width - 7},7");
+            e_start.VerticalAlignment = VerticalAlignment.Bottom;
+            e_end.VerticalAlignment = VerticalAlignment.Top;
         }
         private void Resize()
         {
