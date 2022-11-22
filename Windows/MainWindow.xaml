@@ -11,7 +11,7 @@
         MinHeight="725" MinWidth="1283"
         Foreground="#FF676767" Icon="/Source/logo/logo_white.png"
         WindowStyle="None" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-        AllowsTransparency="True" ResizeMode="CanResize" BorderThickness="10">
+        AllowsTransparency="True" ResizeMode="CanResize" BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
         <!-- style a top level menu item -->
@@ -99,8 +99,8 @@
                               CaptionHeight="30"
                               GlassFrameThickness="0"
                               NonClientFrameEdges="None"
-                              ResizeBorderThickness="10"
-                              UseAeroCaptionButtons="False" />
+                              ResizeBorderThickness="5"
+                              UseAeroCaptionButtons="True" />
     </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>

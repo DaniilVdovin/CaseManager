@@ -29,6 +29,9 @@ namespace CaseManager
         {
             InitializeComponent();
 
+            this.MaxHeight = SystemParameters.WorkArea.Height + SystemParameters.WorkArea.Top + 12;
+            this.MaxWidth = SystemParameters.WorkArea.Width + SystemParameters.WorkArea.Left + 12;
+
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
             mm_ui_image.Click += (s, e) => Op_Sp.Add_Element(new ImageHolderUI());
             mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
@@ -37,8 +40,8 @@ namespace CaseManager
             mm_ui_imageprocessing.Click += (s, e) => new ImageProcessing().Show();
 
             Windows_close.Click += (s, e) => Close();
-            Windows_min.Click += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized;
-            Windows_max.Click += (s, e) => this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            Windows_min.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized);
+            Windows_max.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized);
         }
     }
 }

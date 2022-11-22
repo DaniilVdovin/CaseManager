@@ -68,13 +68,6 @@ namespace CaseManager
             {
                 if(end_top + end_size.Height/2> start_top + start_size.Height / 2)
                 {
-                    
-                    if ((int)Math.Abs(end_top + end_size.Height/2 - start_top + start_size.Height / 2) == 50 || (int)Math.Abs(start_top + start_size.Height / 2 - end_top + end_size.Height / 2) == 50)
-                    {
-                        //RightToLeft();
-                        Console.WriteLine((int)Math.Abs(end_top - end_size.Height / 2 - start_top - start_size.Height / 2));
-                    }
-                    else
                     if (start_top + end_size.Height > end_top)
                         RightToLeft();
                     else 
@@ -108,7 +101,7 @@ namespace CaseManager
             Canvas.SetTop(this, start_top + start_size.Height / 2);
             u_root.Width = Width = end_left - start_left - start_size.Width;
             u_root.Height = Height =end_top - start_top;
-            p_path.Data = Geometry.Parse($"M 7,7 C {(int)Width},0 0,{(int)Height} {(int)Width - 7},{(int)Height - 7}");
+            p_path.Data = Geometry.Parse($"M 7,7 C {(int)Width-(int)Height/2},0 {(int)Height / 2},{(int)Height} {(int)Width - 7},{(int)Height - 7}");
             e_start.VerticalAlignment = VerticalAlignment.Top;
             e_end.VerticalAlignment = VerticalAlignment.Bottom;
         }
@@ -118,7 +111,7 @@ namespace CaseManager
             Canvas.SetTop(this, end_top + end_size.Height/2);
             u_root.Width = Width = end_left - start_left - start_size.Width;
             u_root.Height = Height = start_top - end_top;
-            p_path.Data = Geometry.Parse($"M 7,{(int)Height - 7} C {(int)Width},{(int)Height} 0,0  {(int)Width - 7},7");
+            p_path.Data = Geometry.Parse($"M 7,{(int)Height - 7} C {(int)Width-(int)Height/2},{(int)Height} {(int)Height / 2},0  {(int)Width - 7},7");
             e_start.VerticalAlignment = VerticalAlignment.Bottom;
             e_end.VerticalAlignment = VerticalAlignment.Top;
         }

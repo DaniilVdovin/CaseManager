@@ -171,6 +171,10 @@ namespace CaseManager
             tt_v_t.X = -(point.X + (point.X/Coefficient.X));
             view_rect_top.RenderTransform = tt_v_t;
         }
+        public void SetScale(double point)
+        {
+            
+        }
         public void SetMousePosition(Point point)
         {
             SetVisible(true);
@@ -296,6 +300,30 @@ namespace CaseManager
             _isWaitEnd = false;
         }
     }
+    public class Canvas_Grid : Canvas
+    {
+        Pen brush2,bg;
+        SolidColorBrush solidColorBrush2,bgbrush;
+        public Canvas_Grid()
+        {
+            solidColorBrush2 = new SolidColorBrush(Colors.Gray);
+            bgbrush = new SolidColorBrush(Colors.Transparent);
+            solidColorBrush2.Opacity = 0.3d;
+            solidColorBrush2.Freeze();
+            brush2 = new Pen(solidColorBrush2, 0.5d);
+            bg = new Pen(bgbrush,0);
+        }
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+            for (int i = 50; i < this.Height; i += 50)
+            {
+                drawingContext.DrawLine(brush2, new Point(0, i), new Point(this.Width, i));
+                drawingContext.DrawLine(brush2, new Point(i, 0), new Point(i, this.Height));
+            }
+            drawingContext.DrawRectangle(bgbrush, bg, new Rect(this.DesiredSize));
+        }
+    }
     /// <summary>
     /// Логика взаимодействия для OpenSpace
     /// </summary>
@@ -305,6 +333,7 @@ namespace CaseManager
         private Point canvas_origin;
         private Point start;
         private Point isAdding_Move_start;
+        private double zoom_scale = 1.1d;
         private bool _isAdding = false;
         private bool _isAdding_Move = false;
         private bool _isAdding_Hover = false;
@@ -321,9 +350,11 @@ namespace CaseManager
             ScaleTransform xform = new ScaleTransform();
             group.Children.Add(xform);
             TranslateTransform tt = new TranslateTransform();
+            MatrixTransform matrix = new MatrixTransform();
             tt.X = -(Canvas.Width / 2);
             tt.Y = -(Canvas.Height / 2);
-            group.Children.Add(tt);
+            group.Children.Add(tt); 
+            group.Children.Add(matrix);
             Canvas.RenderTransform = group;
         }
         public  void Add_Element(UIElement uIElement)
@@ -405,7 +436,6 @@ namespace CaseManager
             //CanvasViewer.MouseWheel         += CanvasViewer_MouseWheel;
             //CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
 
-            InitializeSizes();
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid);
@@ -428,55 +458,9 @@ namespace CaseManager
             if (sender is Canvas)
                 Canvas.ReleaseMouseCapture();
         }
-        private void InitializeSizes()
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            Rectangle bacground = new Rectangle();
-            bacground.Width = Canvas.Width;
-            bacground.Height = Canvas.Height;
-            bacground.Fill = new SolidColorBrush(Colors.Transparent);
-            Canvas.Children.Add(bacground);
-            for (int i = 0; i < Canvas.Width; i += 10)
-            {
-                Line line = new Line();
-                line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 0.5d;
-                line.Opacity = 0.2d;
-                line.Y1 = 0;
-                line.Y2 = Canvas.Height;
-                line.X1 = line.X2 = i;
-                Canvas.Children.Add(line);
-            }
-            for (int i = 0; i < Canvas.Height; i += 10)
-            {
-                Line line = new Line();
-                line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 0.5d;
-                line.Opacity = 0.2d;
-                line.X1 = 0;
-                line.X2 = Canvas.Width;
-                line.Y1 = line.Y2 = i;
-                Canvas.Children.Add(line);
-            }
-            for (int i = 0; i < Canvas.Height; i+=50)
-            {
-                Line line = new Line();
-                line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 0.5d;
-                line.X1 = 0;
-                line.X2 = Canvas.Width;
-                line.Y1 = line.Y2 = i;
-                Canvas.Children.Add(line);
-            }
-            for (int i = 0; i < Canvas.Width; i +=50)
-            {
-                Line line = new Line();
-                line.Stroke = new SolidColorBrush(Colors.Gray);
-                line.StrokeThickness = 0.5d;
-                line.Y1 = 0;
-                line.Y2 = Canvas.Height;
-                line.X1 = line.X2 = i;
-                Canvas.Children.Add(line);
-            }
+            base.OnRender(drawingContext);
         }
         private void Corect_Size()
         {
@@ -501,8 +485,8 @@ namespace CaseManager
                     if (!Canvas.IsMouseCaptured) return;
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                     Vector v = start - e.GetPosition(CanvasViewer);
-                    tt.X = origin.X - v.X;
-                    tt.Y = origin.Y - v.Y;
+                    tt.X = (origin.X - v.X);
+                    tt.Y = (origin.Y - v.Y);
                     //Console.WriteLine($"MouseMove\nVector:{v.X},{v.Y}\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}");
                     Corect_Size();
                     canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
@@ -539,9 +523,9 @@ namespace CaseManager
             else { isAdding_Move_start = new Point((obj.DesiredSize.Width / 2), (obj.DesiredSize.Height / 2)); }
             
             if (point.X - isAdding_Move_start.X > 0 && point.X - isAdding_Move_start.X < Canvas.ActualWidth)
-                Canvas.SetLeft(obj, point.X - isAdding_Move_start.X);
+                System.Windows.Controls.Canvas.SetLeft(obj, point.X - isAdding_Move_start.X);
             if (point.Y - isAdding_Move_start.Y > 0 && point.Y - isAdding_Move_start.Y < Canvas.ActualHeight)
-                Canvas.SetTop(obj, point.Y - isAdding_Move_start.Y);
+                System.Windows.Controls.Canvas.SetTop(obj, point.Y - isAdding_Move_start.Y);
         }
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -556,57 +540,16 @@ namespace CaseManager
                     Canvas.CaptureMouse();
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                     start = e.GetPosition(CanvasViewer);
-                    tt.X = start.X - canvas_origin.X;
-                    tt.Y = start.Y - canvas_origin.Y;
-                    origin = new Point(tt.X , tt.Y);
-                    canvas_Ruler.SetOffset(origin);
+                    tt.X = (start.X - canvas_origin.X);
+                    tt.Y = (start.Y - canvas_origin.Y);
+                    origin = new Point(tt.X, tt.Y);
                     //Console.WriteLine($"MouseLeftButtonDown\nStart:{start.ToString()}\nOrigin:{origin.ToString()}\ntt:{tt.X},{tt.Y}\ncanvas_origin:{canvas_origin.X},{canvas_origin.Y}");
                     Corect_Size();
+                    canvas_Ruler.SetOffset(origin);
                 }
             }
             else
             {
-                if(false)
-                {
-                    Point point = new Point();
-                    point = e.GetPosition(Canvas);
-                    Line line = new Line();
-                    line.X1 = point.X + Adding.DesiredSize.Width / 2;
-                    line.X2 = point.X + Adding.DesiredSize.Width / 2;
-                    line.Y1 = point.Y - Adding.DesiredSize.Width * 1.5f;
-                    line.Y2 = point.Y + Adding.DesiredSize.Width * 1.5f;
-                    line.Stroke = new SolidColorBrush(Colors.Red);
-                    line.StrokeThickness = 1;
-                    line.IsHitTestVisible = false;
-                    Canvas.Children.Add(line);
-                    Line line1 = new Line();
-                    line1.X1 = point.X - Adding.DesiredSize.Width / 2;
-                    line1.X2 = point.X - Adding.DesiredSize.Width / 2;
-                    line1.Y1 = point.Y - Adding.DesiredSize.Width*1.5f;
-                    line1.Y2 = point.Y + Adding.DesiredSize.Width*1.5f;
-                    line1.Stroke = new SolidColorBrush(Colors.Red);
-                    line1.StrokeThickness = 1;
-                    line1.IsHitTestVisible = false;
-                    Canvas.Children.Add(line1);
-                    Line line2 = new Line();
-                    line2.X1 = point.X - Adding.DesiredSize.Width * 1.5f;
-                    line2.X2 = point.X + Adding.DesiredSize.Width * 1.5f;
-                    line2.Y1 = point.Y + Adding.DesiredSize.Height/2;
-                    line2.Y2 = point.Y + Adding.DesiredSize.Height/2;
-                    line2.Stroke = new SolidColorBrush(Colors.Red);
-                    line2.StrokeThickness = 1;
-                    line2.IsHitTestVisible = false;
-                    Canvas.Children.Add(line2);
-                    Line line3 = new Line();
-                    line3.X1 = point.X - Adding.DesiredSize.Width * 1.5f;
-                    line3.X2 = point.X + Adding.DesiredSize.Width * 1.5f;
-                    line3.Y1 = point.Y - Adding.DesiredSize.Height / 2;
-                    line3.Y2 = point.Y - Adding.DesiredSize.Height / 2;
-                    line3.Stroke = new SolidColorBrush(Colors.Red);
-                    line3.StrokeThickness = 1;
-                    line3.IsHitTestVisible = false;
-                    Canvas.Children.Add(line3);
-                }
                 _isAdding = false;
                 Adding.IsEnabled = true;
                 Adding = null;
@@ -615,31 +558,48 @@ namespace CaseManager
         private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-            return;
+            
             if (_isAdding_Move) return;
             if (sender is Canvas)
             {
-                TransformGroup transformGroup = (TransformGroup)Canvas.RenderTransform;
-                ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-                double zoom = e.Delta > 0 ? .1 : -.1;
-                transform.CenterX = transform.CenterY = 0;
-                transform.ScaleY = transform.ScaleX += zoom;
-                if (transform.ScaleX < .5d)
-                    transform.ScaleX = transform.ScaleY = .4d;
-                if (transform.ScaleX > 1.5d)
-                    transform.ScaleX = transform.ScaleY = 1.4d;
-                //Console.WriteLine($"Zoom:{transform.ScaleX}");
+                var _scaleTransform = (ScaleTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is ScaleTransform);
+                var _translateTransform = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
+                var position = e.GetPosition(Canvas);
+                
+                double oldCenterX = _scaleTransform.CenterX;
+                double oldCenterY = _scaleTransform.CenterY;
+
+                _scaleTransform.CenterX = position.X;
+                _scaleTransform.CenterY = position.Y;
+               
+
+                _translateTransform.X += (_scaleTransform.CenterX - oldCenterX) * (_scaleTransform.ScaleX - 1);
+                _translateTransform.Y += (_scaleTransform.CenterY - oldCenterY) * (_scaleTransform.ScaleY - 1);
+
+                if (e.Delta > 0)
+                {
+                    _scaleTransform.ScaleX+=.1;
+                    _scaleTransform.ScaleY+=.1;
+                }
+
+                if (e.Delta < 0)
+                {
+                    if (_scaleTransform.ScaleX > 1)
+                    {
+                        _scaleTransform.ScaleX-=.1;
+                        _scaleTransform.ScaleY-=.1;
+                    }
+                }
+                zoom_scale = _scaleTransform.ScaleX;
                 Corect_Size();
+                origin = new Point(_translateTransform.X, _translateTransform.Y);
+                canvas_Ruler.SetOffset(origin);
             }
         }
         /// <summary>
         /// Блокирует прокрутку для CanvasViewer.
         /// OpenSpace.xaml
         /// </summary>
-        private void CanvasViewer_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            e.Handled = true;
-        }
         private void CanvasViewer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Corect_Size();

@@ -28,7 +28,7 @@
                     <Canvas x:Name="top_tape" Margin="0" Background="#FF212121"/>
                 </ScrollViewer>
                 <ScrollViewer x:Name="CanvasViewer"  HorizontalScrollBarVisibility="Hidden"  VerticalScrollBarVisibility="Hidden" Cursor="Cross" Foreground="{x:Null}" Grid.Row="1" Grid.Column="1" SizeChanged="CanvasViewer_SizeChanged">
-                    <Canvas x:Name="Canvas" Width="10000" Height="5000"/>
+                    <local:Canvas_Grid x:Name="Canvas" Width="5000" Height="5000" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </ScrollViewer>
                 <Rectangle Fill="#FF616161"/>
             </Grid>
