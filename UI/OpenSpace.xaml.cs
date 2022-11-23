@@ -439,14 +439,35 @@ namespace CaseManager
     {
         Canvas canvas;
         List<UIElement> objects;
-        public Canvas_Object_Manager(Canvas canvas)
+        ListBox listBox;
+        OpenSpace openSpace;
+        public Canvas_Object_Manager(OpenSpace openSpace,Canvas canvas,ListBox listBox)
         {
+            this.openSpace = openSpace;
+            this.listBox = listBox;
             this.canvas = canvas;
             this.objects = new List<UIElement>();
+            listBox.Items.Clear();
         }
         internal void Add(UIElement element)
         {
+            ListBoxItem item = new ListBoxItem();
+            item.Selected += Item_Selected;
+            item.Content = element.GetType().Name;
+            canvas.Children.Add(element);
+            objects.Add(item);
+            Update();
+        }
 
+        private void Item_Selected(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        void Update()
+        {
+            listBox.ItemsSource = objects;
+            listBox.UpdateLayout();
         }
         internal void Remove(UIElement element)
         {
@@ -500,7 +521,7 @@ namespace CaseManager
                 Adding.MouseEnter += Adding_MouseEnter;
                 Adding.MouseLeave += Adding_MouseLeave;
                 Adding.MouseMove += Adding_MouseMove;
-                Canvas.Children.Add(uIElement);
+                canvas_Object_Manager.Add(uIElement);
                 _isAdding = true;
             }
         }
@@ -585,7 +606,7 @@ namespace CaseManager
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
             canvas_Focus = new Canvas_Focus(Canvas);
-            canvas_Object_Manager = new Canvas_Object_Manager(Canvas);
+            canvas_Object_Manager = new Canvas_Object_Manager(this,Canvas,object_manager_list);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
         }
         public  void Add_Constrain()
@@ -753,6 +774,7 @@ namespace CaseManager
                 Corect_Size();
                 origin = new Point(_translateTransform.X, _translateTransform.Y);
                 canvas_Ruler.SetOffset(origin);
+                t_zoom_p.Content = $"{(int)(zoom_scale * 100)}%";
             }
         }
         /// <summary>

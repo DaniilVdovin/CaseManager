@@ -31,6 +31,9 @@
                     <local:Canvas_Grid x:Name="Canvas" Width="5000" Height="5000" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </ScrollViewer>
                 <Rectangle Fill="#FF616161"/>
+                <Border IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" CornerRadius="6" BorderBrush="#FF5B5B5B" BorderThickness="1" Height="30" Width="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Background="#33000000">
+                    <Label x:Name="t_zoom_p" Content="100%" Foreground="#FFA09D9D" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                </Border>
             </Grid>
         </Border>
         <Grid  Grid.Column="1">
@@ -97,7 +100,13 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander MaxWidth="280" IsExpanded="True" Background="Transparent" BorderBrush="#FF424141" Foreground="#FFD1D1D1" BorderThickness="1,1,1,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0">
+                                                    <Expander MaxWidth="280" IsExpanded="True" Background="Transparent" Foreground="#FFD1D1D1" BorderThickness="1,1,1,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0">
+                                                        <Expander.BorderBrush>
+                                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                <GradientStop Color="#FF646464" Offset="0"/>
+                                                                <GradientStop Color="Transparent" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Expander.BorderBrush>
                                                         <Expander.Header>
                                                             <DockPanel>
                                                                 <TextBlock Text="{Binding Path=Name}" Margin="5,0,0,0"/>
