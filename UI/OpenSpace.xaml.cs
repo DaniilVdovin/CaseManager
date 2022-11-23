@@ -201,6 +201,7 @@ namespace CaseManager
             public Action<object> ChangesValue;
             public string name { get; set; }
             public string type { get; set; }
+            public string category { get; set; }
             public object _value;
             public object value
             {
@@ -215,8 +216,9 @@ namespace CaseManager
                 }
             }
             public bool isEnabled { get; set; }
-            public Property(string name, object value, string type, Action<object> action)
+            public Property(string category, string name, object value, string type, Action<object> action)
             {
+                this.category = category;
                 this.ChangesValue = action;
                 this.name = name;
                 this.value = value;
@@ -234,7 +236,10 @@ namespace CaseManager
         } 
         public void LoadProperty(List<Property> list)
         {
-            this.dataGrid.ItemsSource = list;
+            System.ComponentModel.ICollectionView data =
+                             System.Windows.Data.CollectionViewSource.GetDefaultView(list);
+            data.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription("category"));
+            dataGrid.ItemsSource = data;
             this.dataGrid.Visibility = Visibility.Visible;
         }
         public void ClearProperty()

@@ -20,7 +20,7 @@
                 <Image x:Name="i_image" Height="200" VerticalAlignment="Top" Margin="2,5,2,0" Source="/CaseManager;component/Source/blank_head_profile.jpg" Width="200"/>
                 <TextBlock x:Name="t_name" TextWrapping="Wrap" Text="Daniil Vdovin" Margin="10,2,10,0" FontWeight="Bold"/>
                 <TextBlock x:Name="t_age" TextWrapping="Wrap" Text="Возраст: 18" Margin="10,5,10,0"/>
-                <TextBlock TextWrapping="Wrap" Text="Рост: 182 см" Margin="10,0,10,0"/>
+                <TextBlock x:Name="t_Height" TextWrapping="Wrap" Text="Рост: 182 см" Margin="10,0,10,0"/>
             </StackPanel>
         </GroupBox>
     </Grid>

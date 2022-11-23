@@ -28,9 +28,10 @@ namespace CaseManager
             InitializeComponent();
             properties = new List<Canvas_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Имя", "Daniil", "string",(v)=>{ t_name.Text = v.ToString(); }),
-                new Canvas_Propertis.Property("Возраст", 22, "string",(v)=>{ t_age.Text = "Возраст: " + v.ToString(); }),
-                new Canvas_Propertis.Property("Изображение", "-","File",(v)=>{LoadImage(v.ToString());})
+                new Canvas_Propertis.Property("Основное","Имя", "Daniil", "string",(v)=>{ t_name.Text = v.ToString(); }),
+                new Canvas_Propertis.Property("Основное","Изображение", "-","File",(v)=>{LoadImage(v.ToString());}),
+                new Canvas_Propertis.Property("Параметры","Возраст", 22, "string",(v)=>{ t_age.Text = "Возраст: " + v.ToString(); }),
+                new Canvas_Propertis.Property("Параметры","Рост", 182, "string",(v)=>{ t_Height.Text = "Рост: " + v.ToString(); }),
             };
             image_default = i_image.Source;
         }
