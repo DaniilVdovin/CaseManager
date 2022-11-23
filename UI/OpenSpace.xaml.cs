@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -199,7 +200,7 @@ namespace CaseManager
         {
             public Action<object> ChangesValue;
             public string name { get; set; }
-            private Type type;
+            public string type { get; set; }
             public object _value;
             public object value
             {
@@ -214,7 +215,7 @@ namespace CaseManager
                 }
             }
             public bool isEnabled { get; set; }
-            public Property(string name, object value, Type type, Action<object> action)
+            public Property(string name, object value, string type, Action<object> action)
             {
                 this.ChangesValue = action;
                 this.name = name;
@@ -224,19 +225,36 @@ namespace CaseManager
         }
         UIElement propertis;
         DataGrid dataGrid;
-        public Canvas_Propertis(UIElement propertis,DataGrid dataGrid)
+        Label nonData;
+        public Canvas_Propertis(UIElement propertis,DataGrid dataGrid,Label nonData)
         {
             this.propertis = propertis;
             this.dataGrid = dataGrid;
+            this.nonData = nonData;
         } 
         public void LoadProperty(List<Property> list)
         {
             this.dataGrid.ItemsSource = list;
+            this.dataGrid.Visibility = Visibility.Visible;
+        }
+        public void ClearProperty()
+        {
+            this.dataGrid.ItemsSource = null;
+            this.dataGrid.Visibility = Visibility.Collapsed;
         }
         public void LoadByUIElement(UIElement element)
         {
-            if(element is PersonUI)
-                this.LoadProperty((element as PersonUI).properties);
+            nonData.Visibility = Visibility.Collapsed;
+            switch (element.GetType().Name)
+            {
+                case "PersonUI":
+                    this.LoadProperty((element as PersonUI).properties);
+                    break;
+                default:
+                    nonData.Visibility = Visibility.Visible;
+                    ClearProperty();
+                    break;
+            }
         }
         public void close()
         {
@@ -299,6 +317,23 @@ namespace CaseManager
             current_strat = current_end = null;
             _isWaitEnd = false;
         }
+        internal void Remove(UIElement element)
+        {
+            List<BiezeUI> _onDelete = new List<BiezeUI>();
+            foreach (BiezeUI b in _constrais)
+            {
+                if (b.start == element || b.end == element)
+                {
+                    canvas.Children.Remove(b);
+                    _onDelete.Add(b);
+                }
+            }
+            foreach (BiezeUI b in _onDelete)
+            {
+                _constrais.Remove(b);
+            }
+            _onDelete.Clear();
+        }
     }
     public class Canvas_Grid : Canvas
     {
@@ -324,6 +359,95 @@ namespace CaseManager
             drawingContext.DrawRectangle(bgbrush, bg, new Rect(this.DesiredSize));
         }
     }
+    public class Canvas_Focus
+    {
+        private UIElement _curent_Focus;
+        public UIElement curent_Focus
+        {
+            get => _curent_Focus; set
+            {
+                if (_curent_Focus != value)
+                {
+                    _curent_Focus = value;
+                    ChangeFocusUI();
+                }
+            }
+        }
+        Canvas canvas;
+        Rectangle rectangle;
+        TranslateTransform tt;
+        public Canvas_Focus(Canvas canvas)
+        {
+            this.canvas = canvas;
+            rectangle = new Rectangle();
+            rectangle.Visibility = Visibility.Collapsed;
+            rectangle.Fill = new SolidColorBrush(Colors.Transparent);
+            rectangle.IsHitTestVisible = false;
+            rectangle.Stroke = new SolidColorBrush(Colors.OrangeRed);
+            rectangle.StrokeThickness = 3;
+            rectangle.RadiusX = rectangle.RadiusY = 10;
+            tt = new TranslateTransform();
+            rectangle.RenderTransform = tt;
+            rectangle.Effect = new System.Windows.Media.Effects.DropShadowEffect
+            {
+                Color = Colors.OrangeRed,
+                Direction = 270,
+                ShadowDepth = 0,
+                Opacity = 1,
+                BlurRadius = 20
+            };
+            canvas.Children.Add(rectangle);
+        }
+        public void SetFocus(UIElement uI)
+        {
+            curent_Focus = uI;
+        }
+        public void CleadFocus()
+        {
+            curent_Focus.MouseMove -= UI_MouseMove;
+            rectangle.Visibility = Visibility.Collapsed;
+            curent_Focus = null;
+        }
+        private void ChangeFocusUI()
+        {
+            if (curent_Focus != null)
+            {
+                curent_Focus.MouseMove += UI_MouseMove;
+                rectangle.Visibility = Visibility.Visible;
+                rectangle.Width = curent_Focus.DesiredSize.Width;
+                rectangle.Height = curent_Focus.DesiredSize.Height;
+                tt.X = Canvas.GetLeft(curent_Focus);
+                tt.Y = Canvas.GetTop(curent_Focus);
+                Console.WriteLine("BIND FOCUS");
+            }
+        }
+        private void UI_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (curent_Focus != null)
+            {
+                tt.X = Canvas.GetLeft(curent_Focus);
+                tt.Y = Canvas.GetTop(curent_Focus);
+            }
+        }
+    }
+    public class Canvas_Object_Manager
+    {
+        Canvas canvas;
+        List<UIElement> objects;
+        public Canvas_Object_Manager(Canvas canvas)
+        {
+            this.canvas = canvas;
+            this.objects = new List<UIElement>();
+        }
+        internal void Add(UIElement element)
+        {
+
+        }
+        internal void Remove(UIElement element)
+        {
+            canvas.Children.Remove(element);
+        }
+    }
     /// <summary>
     /// Логика взаимодействия для OpenSpace
     /// </summary>
@@ -343,6 +467,8 @@ namespace CaseManager
         public  Canvas_Ruler canvas_Ruler;
         public  Canvas_Propertis canvas_Propertis;
         public  Canvas_Constrain_Manager constrain_Manager;
+        public  Canvas_Focus canvas_Focus;
+        public  Canvas_Object_Manager canvas_Object_Manager;
         private Line Constrain_Line;
         public  OpenSpace()
         {
@@ -433,6 +559,7 @@ namespace CaseManager
                 isAdding_Move_start = e.GetPosition(sender as UIElement);
                 canvas_Propertis.LoadByUIElement(sender as UIElement);
             }
+            canvas_Focus.SetFocus(sender as UIElement);
         }
         private void UserControl_Initialized(object sender, EventArgs e)
         {
@@ -442,14 +569,18 @@ namespace CaseManager
             Canvas.MouseLeftButtonUp    += Canvas_MouseLeftButtonUp;
             Canvas.MouseMove            += Canvas_MouseMove;
             Canvas.MouseLeave           += Canvas_MouseLeave;
+
+            CanvasViewer.KeyDown        += CanvasViewer_KeyDown;
             
             //CanvasViewer.MouseWheel         += CanvasViewer_MouseWheel;
             //CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
 
             canvas_Cursor = new Canvas_Cursor(Canvas);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
-            canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid);
+            canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
+            canvas_Focus = new Canvas_Focus(Canvas);
+            canvas_Object_Manager = new Canvas_Object_Manager(Canvas);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
         }
         public  void Add_Constrain()
@@ -629,6 +760,44 @@ namespace CaseManager
             canvas_Ruler.SetCoefficient(new Point(Canvas.ActualWidth, Canvas.ActualHeight), new Point(CanvasViewer.ActualWidth, CanvasViewer.ActualHeight));
             var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
             canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
+        }
+        private void Property_Action(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg|All files (*.*)|*.*";
+            openFileDialog.FileOk += (s, o) =>
+            {
+                if (openFileDialog.FileName != "")
+                {
+                    TextBox tb = (((sender as Button).Parent as StackPanel).Children[0] as TextBox);
+                    tb.BeginChange();
+                    tb.Text = openFileDialog.FileName;
+                    tb.AcceptsReturn = true;
+                    tb.EndChange();
+                    tb.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                }
+            };
+            openFileDialog.ShowDialog();
+        }
+        private void DeleteElement(UIElement element)
+        {
+            if (element != null)
+            {
+                if (canvas_Focus.curent_Focus != null)
+                    canvas_Focus.CleadFocus();
+                constrain_Manager.Remove(element);
+                canvas_Propertis.ClearProperty();
+                canvas_Object_Manager.Remove(element);
+            }
+        }
+        private void CanvasViewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Delete:
+                    DeleteElement(canvas_Focus.curent_Focus);
+                    break;
+            }
         }
     }
 }

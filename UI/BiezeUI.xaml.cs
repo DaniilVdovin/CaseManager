@@ -20,7 +20,7 @@ namespace CaseManager
     /// </summary>
     public partial class BiezeUI : UserControl
     {
-        UIElement start, end;
+        public UIElement start, end;
         Size start_size, end_size;
         double   start_left,
                  start_top,
