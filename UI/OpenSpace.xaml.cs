@@ -343,6 +343,7 @@ namespace CaseManager
         public  Canvas_Ruler canvas_Ruler;
         public  Canvas_Propertis canvas_Propertis;
         public  Canvas_Constrain_Manager constrain_Manager;
+        private Line Constrain_Line;
         public  OpenSpace()
         {
             InitializeComponent();
@@ -396,6 +397,8 @@ namespace CaseManager
                     _isAdding_Add_Constrain = false;
                 }
                 else constrain_Manager.Current_Clear();
+                Canvas.Children.Remove(Constrain_Line);
+                Constrain_Line = null;
             }
             else
                 _isAdding_Move = false;
@@ -416,6 +419,13 @@ namespace CaseManager
             {
                 Console.WriteLine($"SetStart({sender.GetType().Name})");
                 constrain_Manager.SetStart(sender as UIElement);
+                Constrain_Line = new Line();
+                Constrain_Line.Stroke = new SolidColorBrush(Colors.White);
+                Constrain_Line.StrokeThickness = 1;
+                Constrain_Line.IsHitTestVisible = false;
+                Constrain_Line.X2 = Constrain_Line.X1 = (System.Windows.Controls.Canvas.GetLeft(sender as UIElement) + (sender as UIElement).DesiredSize.Width/2);
+                Constrain_Line.Y2 = Constrain_Line.Y1 = (System.Windows.Controls.Canvas.GetTop(sender as UIElement) + (sender as UIElement).DesiredSize.Height/2);
+                Canvas.Children.Add(Constrain_Line);
             }
             else
             {
@@ -475,6 +485,16 @@ namespace CaseManager
         {
             if (_isAdding_Hover) return;
             if (_isAdding_Move) return;
+            if (_isAdding_Add_Constrain)
+            {
+                if (Constrain_Line != null)
+                {
+                    Point point = e.GetPosition(Canvas);
+                    Constrain_Line.X2 = point.X;
+                    Constrain_Line.Y2 = point.Y;
+                    return;
+                }
+            }
             if (!_isAdding)
             {
                 if (sender is Canvas)
