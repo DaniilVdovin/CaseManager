@@ -7,6 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml.Linq;
+using static CaseManager.Canvas_Object_Manager;
+
 namespace CaseManager
 {
     /// <summary>
@@ -236,8 +239,10 @@ namespace CaseManager
         } 
         public void LoadProperty(List<Property> list)
         {
+            ClearProperty();
             System.ComponentModel.ICollectionView data =
                              System.Windows.Data.CollectionViewSource.GetDefaultView(list);
+            data.GroupDescriptions.Clear();
             data.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription("category"));
             dataGrid.ItemsSource = data;
             this.dataGrid.Visibility = Visibility.Visible;
@@ -420,10 +425,10 @@ namespace CaseManager
                 curent_Focus.MouseMove += UI_MouseMove;
                 rectangle.Visibility = Visibility.Visible;
                 rectangle.Width = curent_Focus.DesiredSize.Width;
-                rectangle.Height = curent_Focus.DesiredSize.Height;
+                rectangle.Height = curent_Focus.DesiredSize.Height-10;
                 tt.X = Canvas.GetLeft(curent_Focus);
-                tt.Y = Canvas.GetTop(curent_Focus);
-                Console.WriteLine("BIND FOCUS");
+                tt.Y = Canvas.GetTop(curent_Focus)+10;
+                //Console.WriteLine("BIND FOCUS");
             }
         }
         private void UI_MouseMove(object sender, MouseEventArgs e)
@@ -431,14 +436,38 @@ namespace CaseManager
             if (curent_Focus != null)
             {
                 tt.X = Canvas.GetLeft(curent_Focus);
-                tt.Y = Canvas.GetTop(curent_Focus);
+                tt.Y = Canvas.GetTop(curent_Focus)+10;
             }
         }
     }
     public class Canvas_Object_Manager
     {
+        public class ObjectItem
+        {
+            public ListBoxItem List_Item { get; set; }
+            public UIElement UI_Item { get; set; }
+
+            public ObjectItem(int i,UIElement uI_Item,RoutedEventHandler action)
+            {
+                UI_Item = uI_Item;
+                List_Item = new ListBoxItem();
+                List_Item.Content = $"Объект ({i})";
+                List_Item.Selected += action;
+            }
+            public override bool Equals(object obj)
+            {
+                if(obj is ListBoxItem)
+                    return List_Item == obj as ListBoxItem;
+                if(obj is UIElement)
+                    return UI_Item == obj as UIElement;
+                if(obj is ObjectItem)
+                    return this == obj as ObjectItem;
+                return false;
+            }
+        }
+        int index = 1;
+        List<ObjectItem> ObjectItems;
         Canvas canvas;
-        List<UIElement> objects;
         ListBox listBox;
         OpenSpace openSpace;
         public Canvas_Object_Manager(OpenSpace openSpace,Canvas canvas,ListBox listBox)
@@ -446,32 +475,48 @@ namespace CaseManager
             this.openSpace = openSpace;
             this.listBox = listBox;
             this.canvas = canvas;
-            this.objects = new List<UIElement>();
+            ObjectItems = new List<ObjectItem>();
             listBox.Items.Clear();
         }
         internal void Add(UIElement element)
         {
-            ListBoxItem item = new ListBoxItem();
-            item.Selected += Item_Selected;
-            item.Content = element.GetType().Name;
-            canvas.Children.Add(element);
-            objects.Add(item);
-            Update();
+            ObjectItem item = new ObjectItem(index++, element, List_Item_Selected);
+            ObjectItems.Add(item);
+            canvas.Children.Add(item.UI_Item);
+            listBox.Items.Add(item.List_Item);
         }
 
-        private void Item_Selected(object sender, RoutedEventArgs e)
+        private void List_Item_Selected(object sender, RoutedEventArgs e)
         {
-            
+            ObjectItem oi = FindItemByListBoxItem(sender as ListBoxItem);
+            if (oi != null)
+            {
+                openSpace.canvas_Focus.SetFocus(oi.UI_Item);
+                openSpace.canvas_Propertis.LoadByUIElement(oi.UI_Item);
+            }
         }
 
-        void Update()
+        ObjectItem FindItemByUIelement(UIElement element)
         {
-            listBox.ItemsSource = objects;
-            listBox.UpdateLayout();
+            foreach (ObjectItem item in ObjectItems)
+                if (item.Equals(element))
+                    return item;
+            return null;
+        }
+        ObjectItem FindItemByListBoxItem(ListBoxItem element)
+        {
+            foreach (ObjectItem item in ObjectItems)
+                if (item.Equals(element))
+                    return item;
+            return null;
         }
         internal void Remove(UIElement element)
         {
-            canvas.Children.Remove(element);
+            ObjectItem item = FindItemByUIelement(element);
+            if(item == null) return;
+            ObjectItems.Remove(item);
+            listBox.Items.Remove(item.List_Item);
+            canvas.Children.Remove(item.UI_Item);
         }
     }
     /// <summary>

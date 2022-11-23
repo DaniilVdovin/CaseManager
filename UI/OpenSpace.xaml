@@ -42,17 +42,17 @@
                 <RowDefinition Height="50*" MinHeight="200"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="0">
-                <StackPanel Orientation="Vertical">
+                <Grid>
                     <Grid Height="20" VerticalAlignment="Top">
                         <Label Content="Объекты" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="#FFC3BBBB" Padding="0"/>
                         <Border x:Name="object_manager_close" HorizontalAlignment="Right" Height="20" Width="20">
                             <Image Source="/Source/icons/icons8-close-30.png" Stretch="Fill" Margin="5"/>
                         </Border>
                     </Grid>
-                    <ListBox x:Name="object_manager_list" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFD2D2D2" VerticalAlignment="Top">
+                    <ListBox x:Name="object_manager_list" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFD2D2D2" Margin="0,20,0,0">
                         <ListBoxItem Content="PersonUI"/>
                     </ListBox>
-                </StackPanel>
+                </Grid>
             </Border>
             <GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" Background="Transparent" Height="4" VerticalAlignment="Bottom" Margin="5,0,5,-3"/>
             <Border x:Name="PropertisBar" BorderBrush="#7FA9A9A9" Margin="3,3,3,3" BorderThickness="1" Grid.Row="1">
