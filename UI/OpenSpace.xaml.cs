@@ -578,13 +578,16 @@ namespace CaseManager
 
                 if (e.Delta > 0)
                 {
-                    _scaleTransform.ScaleX+=.1;
-                    _scaleTransform.ScaleY+=.1;
+                    if (_scaleTransform.ScaleX < 1.5d)
+                    {
+                        _scaleTransform.ScaleX += .1;
+                        _scaleTransform.ScaleY += .1;
+                    }
                 }
 
                 if (e.Delta < 0)
                 {
-                    if (_scaleTransform.ScaleX > 1)
+                    if (_scaleTransform.ScaleX > .5)
                     {
                         _scaleTransform.ScaleX-=.1;
                         _scaleTransform.ScaleY-=.1;
