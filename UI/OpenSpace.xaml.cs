@@ -409,7 +409,7 @@ namespace CaseManager
         public void SetFocus(UIElement uI)
         {
             curent_Focus = uI;
-            openSpace.canvas_Object_Manager.Select(uI);
+            //openSpace.canvas_Object_Manager.Select(uI);
         }
         public void MoveToFocus()
         {
