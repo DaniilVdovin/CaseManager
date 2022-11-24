@@ -255,6 +255,7 @@ namespace CaseManager
         public void LoadByUIElement(UIElement element)
         {
             nonData.Visibility = Visibility.Collapsed;
+            propertis.Visibility = Visibility.Visible;
             switch (element.GetType().Name)
             {
                 case "PersonUI":
@@ -384,10 +385,12 @@ namespace CaseManager
             }
         }
         Canvas canvas;
+        OpenSpace openSpace;
         Rectangle rectangle;
         TranslateTransform tt;
-        public Canvas_Focus(Canvas canvas)
+        public Canvas_Focus(OpenSpace openSpace, Canvas canvas)
         {
+            this.openSpace = openSpace;
             this.canvas = canvas;
             rectangle = new Rectangle();
             rectangle.Visibility = Visibility.Collapsed;
@@ -411,6 +414,7 @@ namespace CaseManager
         public void SetFocus(UIElement uI)
         {
             curent_Focus = uI;
+            openSpace.canvas_Object_Manager.Select(uI);
         }
         public void CleadFocus()
         {
@@ -446,12 +450,11 @@ namespace CaseManager
         {
             public ListBoxItem List_Item { get; set; }
             public UIElement UI_Item { get; set; }
-
             public ObjectItem(int i,UIElement uI_Item,RoutedEventHandler action)
             {
                 UI_Item = uI_Item;
                 List_Item = new ListBoxItem();
-                List_Item.Content = $"Объект ({i})";
+                List_Item.Content = $"{uI_Item.GetType().Name} ({i})";
                 List_Item.Selected += action;
             }
             public override bool Equals(object obj)
@@ -517,6 +520,10 @@ namespace CaseManager
             ObjectItems.Remove(item);
             listBox.Items.Remove(item.List_Item);
             canvas.Children.Remove(item.UI_Item);
+        }
+        internal void Select(UIElement uI)
+        {
+            listBox.SelectedItem = FindItemByUIelement(uI).List_Item;
         }
     }
     /// <summary>
@@ -650,7 +657,7 @@ namespace CaseManager
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
-            canvas_Focus = new Canvas_Focus(Canvas);
+            canvas_Focus = new Canvas_Focus(this,Canvas);
             canvas_Object_Manager = new Canvas_Object_Manager(this,Canvas,object_manager_list);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.close(); };
         }
