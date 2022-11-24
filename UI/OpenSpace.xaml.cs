@@ -17,33 +17,28 @@ namespace CaseManager
     /// </summary>
     public class Canvas_Cursor {
         Line line1, line2;
-        TextBlock text;
         Canvas canvas;
-        public Canvas_Cursor(Canvas canvas)
+        UIElement View;
+        public Canvas_Cursor(Canvas canvas,UIElement View)
         {
+            this.View = View;
             this.canvas = canvas;
             line1 = new Line();line2 = new Line();
-            text = new TextBlock();
             canvas.Children.Add(line1);
             canvas.Children.Add(line2);
-            canvas.Children.Add(text);
-            line1.Stroke = line2.Stroke = text.Foreground = new SolidColorBrush(Colors.WhiteSmoke);
+            line1.Stroke = line2.Stroke = new SolidColorBrush(Colors.WhiteSmoke);
             line1.StrokeThickness = line2.StrokeThickness = 1d;
         }
         public void SetPosition(Point point)
         {
             SetVisible(true);
-            Canvas.SetLeft(text, point.X+10); 
-            Canvas.SetTop(text, point.Y+10);
-            //text.Text = $"[{point.X},{point.Y}]";
             line1.X1 = line1.X2 = point.X;
-            line1.Y1 = 0; line1.Y2 = canvas.Height;
+            line1.Y1 = point.Y-View.DesiredSize.Height; line1.Y2 = point.Y+View.DesiredSize.Height;
             line2.Y1 = line2.Y2 = point.Y;
-            line2.X1 = 0; line2.X2 = canvas.Width;
+            line2.X1 = point.X - View.DesiredSize.Width; line2.X2 = point.X + View.DesiredSize.Width;
         }
         public void SetVisible(bool visible)
         {
-            text.Visibility  = visible ? Visibility.Visible : Visibility.Hidden;
             line1.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
             line2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
@@ -416,6 +411,14 @@ namespace CaseManager
             curent_Focus = uI;
             openSpace.canvas_Object_Manager.Select(uI);
         }
+        public void MoveToFocus()
+        {
+            Size view = openSpace.CanvasViewer.DesiredSize;
+            var tt = (TranslateTransform)((TransformGroup)canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
+            tt.X = -(Canvas.GetLeft(curent_Focus) - view.Width/2 + curent_Focus.DesiredSize.Width/2);
+            tt.Y = -(Canvas.GetTop(curent_Focus) - view.Height/2 + curent_Focus.DesiredSize.Height/2);
+            openSpace.canvas_Ruler.SetOffset(new Point(tt.X, tt.Y));
+        }
         public void CleadFocus()
         {
             curent_Focus.MouseMove -= UI_MouseMove;
@@ -488,7 +491,6 @@ namespace CaseManager
             canvas.Children.Add(item.UI_Item);
             listBox.Items.Add(item.List_Item);
         }
-
         private void List_Item_Selected(object sender, RoutedEventArgs e)
         {
             ObjectItem oi = FindItemByListBoxItem(sender as ListBoxItem);
@@ -496,9 +498,9 @@ namespace CaseManager
             {
                 openSpace.canvas_Focus.SetFocus(oi.UI_Item);
                 openSpace.canvas_Propertis.LoadByUIElement(oi.UI_Item);
+                openSpace.canvas_Focus.MoveToFocus();
             }
         }
-
         ObjectItem FindItemByUIelement(UIElement element)
         {
             foreach (ObjectItem item in ObjectItems)
@@ -653,7 +655,7 @@ namespace CaseManager
             //CanvasViewer.MouseWheel         += CanvasViewer_MouseWheel;
             //CanvasViewer.PreviewMouseWheel  += CanvasViewer_MouseWheel;
 
-            canvas_Cursor = new Canvas_Cursor(Canvas);
+            canvas_Cursor = new Canvas_Cursor(Canvas,CanvasViewer);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape,CanvasViewer);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
