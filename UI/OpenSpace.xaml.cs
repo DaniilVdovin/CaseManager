@@ -27,18 +27,21 @@ namespace CaseManager
             }
         }
         public UIElement start, end;
-        Line debug_line;
+        public Line debug_line;
         Ellipse debug_elepse_start;
         Polygon debug_triangle_end;
+        List<Path> cross;
         RotateTransform rt;
         Canvas canvas;
         Size start_size, end_size;
         Point start_offset, end_offset;
         List<ControlPoint> start_control_points;
         List<ControlPoint> end_control_points;
+        Canvas_Constrain_Manager manager;
         bool _isEdit = false;
-        public Canvas_Constrain(Canvas canvas, UIElement start, UIElement end)
+        public Canvas_Constrain(Canvas_Constrain_Manager manager, Canvas canvas, UIElement start, UIElement end)
         {
+            this.manager = manager;
             this.canvas = canvas;
             this.start = start;
             this.end = end;
@@ -89,6 +92,9 @@ namespace CaseManager
             debug_line.Stroke = new SolidColorBrush(Colors.White);
             debug_line.StrokeThickness = 2;
             canvas.Children.Add(debug_line);
+
+            cross = new List<Path>();
+
             Position();
         }
         private void Position()
@@ -135,12 +141,48 @@ namespace CaseManager
             rt.Angle = (Math.Atan2(debug_line.Y2 - debug_line.Y1, debug_line.X2 - debug_line.X1) * 180 / Math.PI);
             Canvas.SetLeft(debug_elepse_start, debug_line.X1 - 5);
             Canvas.SetTop(debug_elepse_start, debug_line.Y1 - 5);
+            /*
+            foreach (var item in cross)
+            {
+                canvas.Children.Remove(item);
+            }
+            cross.Clear();
+
+            foreach (Canvas_Constrain item in manager.constrains)
+            {
+                Point IntersectionPoint = GetIntersection(
+                    new Point(item.debug_line.X1, item.debug_line.Y1),
+                    new Point(item.debug_line.X2, item.debug_line.Y2),
+                    new Point(this.debug_line.X1, this.debug_line.Y1),
+                    new Point(this.debug_line.X2, this.debug_line.Y2));
+                Path n = new Path() { Fill = new SolidColorBrush(Colors.White) };
+                n.Data = new RectangleGeometry() {
+                    Rect = new Rect(new Point(IntersectionPoint.X+10, IntersectionPoint.Y-10),new Point(IntersectionPoint.X-10, IntersectionPoint.Y+10)),
+                };
+                cross.Add(n);
+                canvas.Children.Add(n);
+            }*/
         }
         public void Clear()
         {
             canvas.Children.Remove(debug_line);
             canvas.Children.Remove(debug_triangle_end);
             canvas.Children.Remove(debug_elepse_start);
+        }
+        private Point GetIntersection(Point p1, Point p2, Point p3, Point p4)
+        {
+            Point IntersectionPoint = new Point();
+            double a1 = 1e+10, a2 = 1e+10;
+            double b1, b2;
+            if ((p2.X - p1.X) != 0)
+                a1 = (p2.Y - p1.Y) / (p2.X - p1.X);
+            if ((p4.X - p3.X) != 0)
+                a2 = (p4.Y - p3.Y) / (p4.X - p3.X);
+            b1 = p1.Y - a1 * p1.X;
+            b2 = p3.Y - a2 * p3.X;
+            IntersectionPoint.X = (b2 - b1) / (a1 - a2);
+            IntersectionPoint.Y = a2 * IntersectionPoint.X + b2;
+            return IntersectionPoint;
         }
     }
     public class Canvas_Cursor {
@@ -436,11 +478,12 @@ namespace CaseManager
         }
         internal Canvas_Constrain Add_New(UIElement start,UIElement end)
         {
-            Canvas_Constrain bieze = new Canvas_Constrain(canvas,start, end);
+            Canvas_Constrain bieze = new Canvas_Constrain(this,canvas,start, end);
             constrains.Add(bieze);
             UpdateList();
             return bieze;
         }
+       
         internal void UpdateList()
         {
 
