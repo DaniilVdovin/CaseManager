@@ -12,9 +12,137 @@ using static CaseManager.Canvas_Object_Manager;
 
 namespace CaseManager
 {
-    /// <summary>
-    /// Курсор для Canvas
-    /// </summary>
+    public class Canvas_Constrain
+    {
+        public class ControlPoint
+        {
+            public Point position;
+            public ControlPoint(Point point)
+            {
+                this.position = point;
+            }
+            public void SetPosition(Point point)
+            {
+                this.position = point;
+            }
+        }
+        public UIElement start, end;
+        Line debug_line;
+        Ellipse debug_elepse_start;
+        Polygon debug_triangle_end;
+        RotateTransform rt;
+        Canvas canvas;
+        Size start_size, end_size;
+        Point start_offset, end_offset;
+        List<ControlPoint> start_control_points;
+        List<ControlPoint> end_control_points;
+        bool _isEdit = false;
+        public Canvas_Constrain(Canvas canvas, UIElement start, UIElement end)
+        {
+            this.canvas = canvas;
+            this.start = start;
+            this.end = end;
+            MouseEventHandler action = (s, e) => {
+                if (_isEdit)
+                    Position();
+            };
+            MouseButtonEventHandler down = (s, e) => {
+                _isEdit = true;
+            };
+            MouseButtonEventHandler up = (s, e) => {
+                _isEdit = false;
+            };
+            start.MouseMove += action;
+            end.MouseMove += action;
+            start.MouseLeftButtonDown += down;
+            end.MouseLeftButtonDown += down;
+            start.MouseLeftButtonUp += up;
+            end.MouseLeftButtonUp += up;
+
+            start_size = start.DesiredSize;
+            end_size = end.DesiredSize;
+            start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
+            end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
+            start_control_points = new List<ControlPoint>();
+            start_control_points.Add(new ControlPoint(start_offset));
+            start_control_points.Add(new ControlPoint(start_offset));
+            start_control_points.Add(new ControlPoint(start_offset));
+            start_control_points.Add(new ControlPoint(start_offset));
+            end_control_points = new List<ControlPoint>();
+            end_control_points.Add(new ControlPoint(end_offset));
+            end_control_points.Add(new ControlPoint(end_offset));
+            end_control_points.Add(new ControlPoint(end_offset));
+            end_control_points.Add(new ControlPoint(end_offset));
+
+            debug_elepse_start = new Ellipse();
+            debug_triangle_end = new Polygon();
+            debug_triangle_end.Points.Add(new Point(50, 150));
+            debug_triangle_end.Points.Add(new Point(150, 50));
+            debug_triangle_end.Points.Add(new Point(250, 150));
+            debug_elepse_start.Width = debug_elepse_start.Height = 10;
+            debug_elepse_start.Fill = debug_triangle_end.Fill = new SolidColorBrush(Colors.White);
+            debug_triangle_end.RenderTransform = rt = new RotateTransform();
+            canvas.Children.Add(debug_elepse_start);
+            canvas.Children.Add(debug_triangle_end);
+
+            debug_line = new Line();
+            debug_line.Stroke = new SolidColorBrush(Colors.White);
+            debug_line.StrokeThickness = 2;
+            canvas.Children.Add(debug_line);
+            Position();
+        }
+        private void Position()
+        {
+            start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
+            end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
+            start_control_points[0].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2)); //Right
+            start_control_points[1].SetPosition(new Point(start_offset.X, start_offset.Y + start_size.Height / 2));                  //left
+            start_control_points[2].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + 10));               //Up
+            start_control_points[3].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + start_size.Height));//down
+            end_control_points[0].SetPosition(new Point(end_offset.X + end_size.Width, end_offset.Y + end_size.Height / 2));    //Right
+            end_control_points[1].SetPosition(new Point(end_offset.X, end_offset.Y + end_size.Height / 2));                     //Left
+            end_control_points[2].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + 10));                   //UP
+            end_control_points[3].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + end_size.Height));    //Down
+            int m_i = 0, m_j = 0;
+            Vector tottal_min = new Vector(10000, 10000);
+            for (int i = 0; i < start_control_points.Count; i++)
+            {
+                Vector min = new Vector(10000, 10000);
+                for (int j = 0; j < end_control_points.Count; j++)
+                {
+                    Vector now = end_control_points[j].position - start_control_points[i].position;
+                    if (min.Length > now.Length)
+                    {
+                        min = now;
+                        m_j = j;
+                    }
+                }
+                if (tottal_min.Length > min.Length)
+                {
+                    tottal_min = min;
+                    m_i = i;
+                }
+            }
+            debug_line.X1 = start_control_points[m_i].position.X;
+            debug_line.Y1 = start_control_points[m_i].position.Y;
+            debug_line.X2 = end_control_points[m_j].position.X;
+            debug_line.Y2 = end_control_points[m_j].position.Y;
+            debug_triangle_end.Points[0] = new Point(debug_line.X2 - 10, debug_line.Y2 - 10);
+            debug_triangle_end.Points[1] = new Point(debug_line.X2 - 10, debug_line.Y2 + 10);
+            debug_triangle_end.Points[2] = new Point(debug_line.X2 + 5, debug_line.Y2);
+            rt.CenterX = debug_line.X2;
+            rt.CenterY = debug_line.Y2;
+            rt.Angle = (Math.Atan2(debug_line.Y2 - debug_line.Y1, debug_line.X2 - debug_line.X1) * 180 / Math.PI);
+            Canvas.SetLeft(debug_elepse_start, debug_line.X1 - 5);
+            Canvas.SetTop(debug_elepse_start, debug_line.Y1 - 5);
+        }
+        public void Clear()
+        {
+            canvas.Children.Remove(debug_line);
+            canvas.Children.Remove(debug_triangle_end);
+            canvas.Children.Remove(debug_elepse_start);
+        }
+    }
     public class Canvas_Cursor {
         Line line1, line2;
         Canvas canvas;
@@ -268,7 +396,7 @@ namespace CaseManager
         }
     }
     public class Canvas_Constrain_Manager {
-        List<BiezeUI> _constrais;
+        List<Canvas_Constrain> _constrais;
 
         public UIElement current_strat, current_end;
         bool _isWaitEnd = false;
@@ -277,10 +405,10 @@ namespace CaseManager
         public Canvas_Constrain_Manager(Canvas canvas)
         {
             this.canvas = canvas;
-            constrains = new List<BiezeUI>();
+            constrains = new List<Canvas_Constrain>();
         }
 
-        public List<BiezeUI> constrains { get => _constrais; set
+        public List<Canvas_Constrain> constrains { get => _constrais; set
             {
                 if(value != _constrais)
                 {
@@ -296,21 +424,20 @@ namespace CaseManager
         }
         internal void SetEnd(UIElement uIElement)
         {
+            if(uIElement == null)return;
             if (_isWaitEnd)
                 if (current_strat != null)
                 {
                     current_end = uIElement;
-                    _isWaitEnd = false;
                     Add_New(current_strat, current_end);
-                    current_strat = current_end = null;
+                    Current_Clear();
                 }
-                else _isWaitEnd = false;
+                else Current_Clear();
         }
-        internal BiezeUI Add_New(UIElement start,UIElement end)
+        internal Canvas_Constrain Add_New(UIElement start,UIElement end)
         {
-            BiezeUI bieze = new BiezeUI(start, end);
+            Canvas_Constrain bieze = new Canvas_Constrain(canvas,start, end);
             constrains.Add(bieze);
-            canvas.Children.Add(bieze);
             UpdateList();
             return bieze;
         }
@@ -325,16 +452,16 @@ namespace CaseManager
         }
         internal void Remove(UIElement element)
         {
-            List<BiezeUI> _onDelete = new List<BiezeUI>();
-            foreach (BiezeUI b in _constrais)
+            List<Canvas_Constrain> _onDelete = new List<Canvas_Constrain>();
+            foreach (Canvas_Constrain b in _constrais)
             {
                 if (b.start == element || b.end == element)
                 {
-                    canvas.Children.Remove(b);
+                    b.Clear();
                     _onDelete.Add(b);
                 }
             }
-            foreach (BiezeUI b in _onDelete)
+            foreach (Canvas_Constrain b in _onDelete)
             {
                 _constrais.Remove(b);
             }
@@ -528,9 +655,6 @@ namespace CaseManager
             listBox.SelectedItem = FindItemByUIelement(uI).List_Item;
         }
     }
-    /// <summary>
-    /// Логика взаимодействия для OpenSpace
-    /// </summary>
     public partial class OpenSpace : UserControl
     {
         private Point origin;
@@ -676,6 +800,15 @@ namespace CaseManager
         {
             if (_isAdding_Hover) return;
             if (_isAdding_Move) return;
+            if (_isAdding_Add_Constrain)
+            {
+                constrain_Manager.SetEnd(null);
+                Console.WriteLine($"SetEnd(LOST)");
+                _isAdding_Add_Constrain = false;
+                constrain_Manager.Current_Clear();
+                Canvas.Children.Remove(Constrain_Line);
+                Constrain_Line = null;
+            }
             if (sender is Canvas)
                 Canvas.ReleaseMouseCapture();
         }
