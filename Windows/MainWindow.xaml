@@ -130,12 +130,16 @@
                     <MenuItem Header="_О приложении" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
                 <MenuItem Header="_Объекты" Template="{StaticResource MainMenuTop}">
+                    <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}">
+                        <MenuItem x:Name="mm_ui_line" Header="_Линия" Template="{StaticResource VsMenuSub}"/>
+                    </MenuItem>
                     <MenuItem Header="_BPMN" Template="{StaticResource VsMenuSub}">
                         <MenuItem x:Name="mm_ui_bpmn_rect" Header="_Квадрат" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem x:Name="mm_ui_bpmn_ask" Header="_Если" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
-                    <MenuItem Header="_Классические" Template="{StaticResource VsMenuSub}">
-                        <MenuItem x:Name="mm_ui_line" Header="_Линия" Template="{StaticResource VsMenuSub}"/>
+                    <MenuItem Header="_AI" Template="{StaticResource VsMenuSub}">
+                        <MenuItem x:Name="mm_ui_ai_node" Header="_Нод" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem x:Name="mm_ui_ai_layer" Header="_Слой" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
                     <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
                         <MenuItem x:Name="mm_ui_image" Header="_Изображение" Template="{StaticResource VsMenuSub}"/>
