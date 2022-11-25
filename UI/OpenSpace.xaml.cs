@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CaseManager.UI.BPMN;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,6 +83,8 @@ namespace CaseManager
             debug_triangle_end.Points.Add(new Point(50, 150));
             debug_triangle_end.Points.Add(new Point(150, 50));
             debug_triangle_end.Points.Add(new Point(250, 150));
+            debug_triangle_end.IsHitTestVisible = false;
+            debug_elepse_start.IsHitTestVisible = false;
             debug_elepse_start.Width = debug_elepse_start.Height = 10;
             debug_elepse_start.Fill = debug_triangle_end.Fill = new SolidColorBrush(Colors.White);
             debug_triangle_end.RenderTransform = rt = new RotateTransform();
@@ -91,6 +94,7 @@ namespace CaseManager
             debug_line = new Line();
             debug_line.Stroke = new SolidColorBrush(Colors.White);
             debug_line.StrokeThickness = 2;
+            debug_line.IsHitTestVisible = false;
             canvas.Children.Add(debug_line);
 
             cross = new List<Path>();
@@ -425,6 +429,12 @@ namespace CaseManager
             {
                 case "PersonUI":
                     this.LoadProperty((element as PersonUI).properties);
+                    break;
+                case "BPMN_Rect":
+                    this.LoadProperty((element as BPMN_Rect).properties);
+                    break;
+                case "BPMN_ask":
+                    this.LoadProperty((element as BPMN_ask).properties);
                     break;
                 default:
                     nonData.Visibility = Visibility.Visible;

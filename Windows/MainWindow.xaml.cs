@@ -1,4 +1,5 @@
-﻿using CaseManager.Windows;
+﻿using CaseManager.UI.BPMN;
+using CaseManager.Windows;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -35,6 +36,9 @@ namespace CaseManager
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
             mm_ui_image.Click += (s, e) => Op_Sp.Add_Element(new ImageHolderUI());
             mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
+            mm_ui_bpmn_rect.Click += (s, e) => Op_Sp.Add_Element(new BPMN_Rect());
+            mm_ui_bpmn_ask.Click += (s, e) => Op_Sp.Add_Element(new BPMN_ask());
+
             mm_ui_line.Click += (s, e) => Op_Sp.Add_Constrain();
 
             mm_ui_imageprocessing.Click += (s, e) => new ImageProcessing().Show();

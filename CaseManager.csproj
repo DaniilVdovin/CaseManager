@@ -64,6 +64,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UI\BPMN\BPMN_ask.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\BPMN\BPMN_Rect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DocumentHolderUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -83,6 +91,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\BPMN\BPMN_ask.xaml.cs">
+      <DependentUpon>BPMN_ask.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BPMN\BPMN_Rect.xaml.cs">
+      <DependentUpon>BPMN_Rect.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DocumentHolderUI.xaml.cs">
       <DependentUpon>DocumentHolderUI.xaml</DependentUpon>
