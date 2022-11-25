@@ -95,14 +95,14 @@ namespace CaseManager
         {
             start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
             end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
-            start_control_points[0].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2)); //Right
-            start_control_points[1].SetPosition(new Point(start_offset.X, start_offset.Y + start_size.Height / 2));                  //left
-            start_control_points[2].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + 10));               //Up
-            start_control_points[3].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + start_size.Height));//down
-            end_control_points[0].SetPosition(new Point(end_offset.X + end_size.Width, end_offset.Y + end_size.Height / 2));    //Right
-            end_control_points[1].SetPosition(new Point(end_offset.X, end_offset.Y + end_size.Height / 2));                     //Left
-            end_control_points[2].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + 10));                   //UP
-            end_control_points[3].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + end_size.Height));    //Down
+            start_control_points[0].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2));  //Right
+            start_control_points[1].SetPosition(new Point(start_offset.X, start_offset.Y + start_size.Height / 2));                     //left
+            start_control_points[2].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + 10));                 //Up
+            start_control_points[3].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + start_size.Height));  //down
+            end_control_points[0].SetPosition(new Point(end_offset.X + end_size.Width, end_offset.Y + end_size.Height / 2));            //Right
+            end_control_points[1].SetPosition(new Point(end_offset.X, end_offset.Y + end_size.Height / 2));                             //Left
+            end_control_points[2].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + 10));                         //UP
+            end_control_points[3].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + end_size.Height));            //Down
             int m_i = 0, m_j = 0;
             Vector tottal_min = new Vector(10000, 10000);
             for (int i = 0; i < start_control_points.Count; i++)
