@@ -138,8 +138,7 @@
                         <MenuItem x:Name="mm_ui_bpmn_ask" Header="_Если" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
                     <MenuItem Header="_AI" Template="{StaticResource VsMenuSub}">
-                        <MenuItem x:Name="mm_ui_ai_node" Header="_Нод" Template="{StaticResource VsMenuSub}"/>
-                        <MenuItem x:Name="mm_ui_ai_layer" Header="_Слой" Template="{StaticResource VsMenuSub}"/>
+                        <MenuItem x:Name="mm_ui_ai_block" Header="_Блок" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
                     <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
                         <MenuItem x:Name="mm_ui_image" Header="_Изображение" Template="{StaticResource VsMenuSub}"/>

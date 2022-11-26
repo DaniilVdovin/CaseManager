@@ -22,7 +22,7 @@ namespace CaseManager
     public partial class PersonUI : UserControl
     {
         public List<Canvas_Propertis.Property> properties;
-        ImageSource image_default;
+        private readonly ImageSource image_default;
         public PersonUI()
         {
             InitializeComponent();

@@ -64,10 +64,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="UI\AI\AI_LayerUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\AI\AI_NodeUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,9 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UI\AI\AI_LayerUI.xaml.cs">
-      <DependentUpon>AI_LayerUI.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="UI\AI\AI_blockUI.cs" />
     <Compile Include="UI\AI\AI_NodeUI.xaml.cs">
       <DependentUpon>AI_NodeUI.xaml</DependentUpon>
     </Compile>

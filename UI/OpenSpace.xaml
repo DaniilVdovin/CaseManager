@@ -130,28 +130,28 @@
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="" Binding="{Binding Path=name}" Width="120" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False"/>
-                            <DataGridTemplateColumn Header="" Width="155" CanUserResize="False">
+                            <DataGridTextColumn Header="" Binding="{Binding Path=Name}" Width="120" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False" d:IsHidden="True"/>
+                            <DataGridTemplateColumn Header="" Width="155" CanUserResize="False" d:IsHidden="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Path=value}" Foreground="#FFD1D1D1" Width="160"/>
+                                            <TextBlock Text="{Binding Path=Value}" Foreground="#FFD1D1D1" Width="160"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBox Text="{Binding Path=value}" Foreground="#FFD1D1D1" Background="Transparent">
+                                            <TextBox Text="{Binding Path=Value}" Foreground="#FFD1D1D1" Background="Transparent">
                                                 <TextBox.Resources>
                                                     <Style TargetType="TextBox">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=type}"
+                                                            <DataTrigger Binding="{Binding Path=Type}"
                                                                     Value="File">
                                                                 <Setter Property="Width"
                                                                                   Value="140" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=type}"
+                                                            <DataTrigger Binding="{Binding Path=Type}"
                                                                     Value="string">
                                                                 <Setter Property="Width"
                                                                                    Value="160" />
@@ -164,12 +164,12 @@
                                                 <Button.Resources>
                                                     <Style TargetType="Button">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=type}"
+                                                            <DataTrigger Binding="{Binding Path=Type}"
                                                                     Value="File">
                                                                 <Setter Property="Visibility"
                                                                                   Value="Visible" />
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=type}"
+                                                            <DataTrigger Binding="{Binding Path=Type}"
                                                                     Value="string">
                                                                 <Setter Property="Visibility"
                                                                                    Value="Hidden" />

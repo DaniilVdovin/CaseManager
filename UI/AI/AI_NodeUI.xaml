@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CaseManager.UI.AI"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Width="50" Height="50">
+             Width="55" Height="65" Padding="5,15,5,5">
     <Grid IsHitTestVisible="True">
         <Ellipse Fill="#FFDCDBDB" Stroke="#FF616060" StrokeThickness="2"/>
         <Label Content="1.8w" HorizontalAlignment="Center" VerticalAlignment="Center"/>
