@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CaseManager.UI.BPMN"
              mc:Ignorable="d" d:DesignWidth="100" Width="200" Height="201">
     <Grid>
-        <Rectangle Fill="#FFB8B7B7" Stroke="#FF464545" Width="60" Height="60" RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" Margin="0,25,0,0">
+        <Rectangle Fill="#FFB8B7B7" Stroke="#FF464545" Width="60" Height="60" VerticalAlignment="Top" Margin="0,25,0,0">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

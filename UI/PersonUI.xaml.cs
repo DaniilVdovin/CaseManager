@@ -43,7 +43,7 @@ namespace CaseManager
                 { 
                     i_image.Source = new BitmapImage(new Uri(path));
                 }
-                catch(Exception e)
+                catch
                 {
                     i_image.Source = image_default;
                 }
