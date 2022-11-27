@@ -145,27 +145,6 @@ namespace CaseManager
             rt.Angle = (Math.Atan2(debug_line.Y2 - debug_line.Y1, debug_line.X2 - debug_line.X1) * 180 / Math.PI);
             Canvas.SetLeft(debug_elepse_start, debug_line.X1 - 5);
             Canvas.SetTop(debug_elepse_start, debug_line.Y1 - 5);
-            /*
-            foreach (var item in cross)
-            {
-                canvas.Children.Remove(item);
-            }
-            cross.Clear();
-
-            foreach (Canvas_Constrain item in manager.constrains)
-            {
-                Point IntersectionPoint = GetIntersection(
-                    new Point(item.debug_line.X1, item.debug_line.Y1),
-                    new Point(item.debug_line.X2, item.debug_line.Y2),
-                    new Point(this.debug_line.X1, this.debug_line.Y1),
-                    new Point(this.debug_line.X2, this.debug_line.Y2));
-                Path n = new Path() { Fill = new SolidColorBrush(Colors.White) };
-                n.Data = new RectangleGeometry() {
-                    Rect = new Rect(new Point(IntersectionPoint.X+10, IntersectionPoint.Y-10),new Point(IntersectionPoint.X-10, IntersectionPoint.Y+10)),
-                };
-                cross.Add(n);
-                canvas.Children.Add(n);
-            }*/
         }
         public void Clear()
         {

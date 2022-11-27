@@ -57,6 +57,7 @@ namespace CaseManager.UI.AI
         private bool _isAdding = false;
         private int max = 0,layers_count = 0;
         private TitleElement rectangle;
+        private bool _isMove=false;
         public AI_blockUI(OpenSpace os)
         {
             this.os = os;
@@ -68,19 +69,29 @@ namespace CaseManager.UI.AI
         }
         public UIElement GetResult() 
         {
-            /*Rectangle rectangle = new Rectangle()
-            {
-                Fill = new SolidColorBrush(Colors.White),
-                Width = 30,
-                Height = 30,
-                RadiusX = 3,
-                RadiusY = 3
-            };
-            rectangle.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;*/
             rectangle = new TitleElement(ReGenerate);
             rectangle.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;
+            rectangle.MouseLeftButtonDown += Rectangle_MouseLeftButtonDown;
+            rectangle.MouseMove += Rectangle_MouseMove;
+
             return rectangle;
         }
+
+        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _isMove = false;
+        }
+        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isMove)
+                UpdateOffset(new Point(Canvas.GetLeft(sender as UIElement), Canvas.GetTop(sender as UIElement)));
+        }
+
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _isMove = true;
+        }
+
         internal void ReGenerate(object v)
         {
 
@@ -93,10 +104,6 @@ namespace CaseManager.UI.AI
                 if (offset != new_offset)
                     UpdateOffset(new_offset);
             }
-        }
-        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            UpdateOffset(new Point(Canvas.GetLeft(sender as UIElement), Canvas.GetTop(sender as UIElement)));
         }
         internal void UpdateOffset(Point new_offset)
         {
