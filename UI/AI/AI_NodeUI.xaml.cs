@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +21,15 @@ namespace CaseManager.UI.AI
     /// </summary>
     public partial class AI_NodeUI : UserControl
     {
+        public List<Canvas_Propertis.Property> properties;
         public AI_NodeUI()
         {
             InitializeComponent();
+            properties = new List<Canvas_Propertis.Property>
+            {
+                new Canvas_Propertis.Property("Основное","Вес", "1,8", "string",(v)=>{ node_text.Content = v.ToString()+"w"; }),
+                new Canvas_Propertis.Property("Основное","Цвет", "White","string",(v)=>{ node_color.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(v.ToString())); })
+            };
         }
     }
 }

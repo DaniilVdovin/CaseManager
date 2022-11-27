@@ -50,7 +50,6 @@
                         </Border>
                     </Grid>
                     <ListBox x:Name="object_manager_list" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFD2D2D2" Margin="0,20,0,0">
-                        <ListBoxItem Content="PersonUI"/>
                     </ListBox>
                 </Grid>
             </Border>
@@ -130,8 +129,8 @@
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="" Binding="{Binding Path=Name}" Width="120" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False" d:IsHidden="True"/>
-                            <DataGridTemplateColumn Header="" Width="155" CanUserResize="False" d:IsHidden="True">
+                            <DataGridTextColumn Header="" Binding="{Binding Path=Name}" Width="120" Foreground="#FFD1D1D1" CanUserResize="False" IsReadOnly="True" Selector.IsSelected="False"/>
+                            <DataGridTemplateColumn Header="" Width="155" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">

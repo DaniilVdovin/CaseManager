@@ -459,6 +459,9 @@ namespace CaseManager
                 case "TitleElement":
                     this.LoadProperty((element as TitleElement).properties);
                     break;
+                 case "AI_NodeUI":
+                    this.LoadProperty((element as AI_NodeUI).properties);
+                    break;
                 default:
                     nonData.Visibility = Visibility.Visible;
                     ClearProperty();
