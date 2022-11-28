@@ -30,7 +30,6 @@ namespace CaseManager.UI.AI
                 new Canvas_Propertis.Property("Основное","Данные", "1,2,2,1", "string",update)
             };
         }
-
         protected override void OnRender(DrawingContext drawingContext)
         {
             drawingContext.DrawRoundedRectangle(
@@ -41,7 +40,7 @@ namespace CaseManager.UI.AI
                 new FormattedText("AI Блок",
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,new Typeface("normal"),
-                10,new SolidColorBrush(Colors.Black)), new Point(Width/2-20, Height / 2 - 5));
+                10,new SolidColorBrush(Colors.Black),1.5d), new Point(Width/2-20, Height / 2 - 5));
         }
     }
     /// <summary>
