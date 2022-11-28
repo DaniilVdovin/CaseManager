@@ -832,6 +832,7 @@ namespace CaseManager
                 _isAdding_Move = false;
                 Panel.SetZIndex(sender as UIElement, 1);
             }
+            Mouse.OverrideCursor = Cursors.Cross;
         }
         internal void Adding_MouseMove(object sender, MouseEventArgs e)
         {
@@ -858,10 +859,13 @@ namespace CaseManager
                 Constrain_Line.X2 = Constrain_Line.X1 = (System.Windows.Controls.Canvas.GetLeft(sender as UIElement) + (sender as UIElement).DesiredSize.Width/2);
                 Constrain_Line.Y2 = Constrain_Line.Y1 = (System.Windows.Controls.Canvas.GetTop(sender as UIElement) + (sender as UIElement).DesiredSize.Height/2);
                 Canvas.Children.Add(Constrain_Line);
+                Mouse.OverrideCursor = Cursors.Pen;
             }
             else
             {
                 _isAdding_Move = true;
+
+                Mouse.OverrideCursor = Cursors.Hand;
                 isAdding_Move_start = e.GetPosition(sender as UIElement);
                 canvas_Propertis.LoadByUIElement(sender as UIElement);
             }
@@ -885,10 +889,14 @@ namespace CaseManager
             canvas_Focus = new Canvas_Focus(this,Canvas);
             canvas_Object_Manager = new Canvas_Object_Manager(this,Canvas,object_manager_list);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.Close(); };
+            bt_line_add.MouseLeftButtonDown += (s, b) => Add_Constrain();
+
+            Mouse.OverrideCursor = Cursors.Cross;
         }
         public  void Add_Constrain()
         {
             _isAdding_Add_Constrain = true;
+            Mouse.OverrideCursor = Cursors.Pen;
             Console.WriteLine("_isAdding_Add_Constrain ACTIVATE");
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
@@ -910,6 +918,7 @@ namespace CaseManager
             }
             if (sender is Canvas)
                 Canvas.ReleaseMouseCapture();
+            Mouse.OverrideCursor = Cursors.Cross;
         }
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -969,13 +978,13 @@ namespace CaseManager
                 var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
                 //Console.WriteLine($"point_view:{point_view}\npoint:{point}");
                 //Console.WriteLine($"tt.XCC:{point_view.X - (obj.DesiredSize.Width / 2)}");
-                if (point_view.X - (obj.DesiredSize.Width / 2) < 10)
+                if (point_view.X - 100 < 10)
                     tt.X += 5;
-                if (point_view.Y - (obj.DesiredSize.Height / 2) < 10)
+                if (point_view.Y - 100 < 10)
                     tt.Y += 5;
-                if (point_view.X + (obj.DesiredSize.Width / 2) > CanvasViewer.ActualWidth - 10)
+                if (point_view.X + 100 > CanvasViewer.ActualWidth - 10)
                     tt.X -= 5;
-                if (point_view.Y + (obj.DesiredSize.Height / 2) > CanvasViewer.ActualHeight - 10)
+                if (point_view.Y + 100 > CanvasViewer.ActualHeight - 10)
                     tt.Y -= 5;
                 
                 Corect_Size();
@@ -1007,6 +1016,7 @@ namespace CaseManager
                     tt.Y = (start.Y - canvas_origin.Y);
                     origin = new Point(tt.X, tt.Y);
                     Corect_Size();
+                    Mouse.OverrideCursor = Cursors.Hand;
                 }
             }
             else

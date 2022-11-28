@@ -72,7 +72,6 @@ namespace CaseManager.UI.AI
             rectangle.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;
             rectangle.MouseLeftButtonDown += Rectangle_MouseLeftButtonDown;
             rectangle.MouseMove += Rectangle_MouseMove;
-
             return rectangle;
         }
 

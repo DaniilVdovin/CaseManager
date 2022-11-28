@@ -34,6 +34,9 @@
                 <Border IsHitTestVisible="False" Grid.Row="1" Grid.Column="1" CornerRadius="6" BorderBrush="#FF5B5B5B" BorderThickness="1" Height="30" Width="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" Background="#33000000">
                     <Label x:Name="t_zoom_p" Content="100%" Foreground="#FFA09D9D" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                 </Border>
+                <Border x:Name="bt_line_add" IsHitTestVisible="True" Grid.Row="1" Grid.Column="1" CornerRadius="6" BorderBrush="#FF5B5B5B" BorderThickness="1" Height="30" Width="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,50" Background="#33000000">
+                    <Image Source="/Source/icons/icons8-circled-down-left-96.png" Margin="2,2,2,2"/>
+                </Border>
             </Grid>
         </Border>
         <Grid  Grid.Column="1">

@@ -179,5 +179,8 @@
     <Resource Include="Source\logo\logo_black.png" />
     <Resource Include="Source\logo\logo_white.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\icons\icons8-circled-down-left-96.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
