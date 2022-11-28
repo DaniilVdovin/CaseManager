@@ -79,7 +79,7 @@
         <!-- style a image menu item -->
         <ControlTemplate x:Key="MainMenuImage" TargetType="MenuItem">
             <StackPanel Height="30" Width="30">
-                <Image Source="/CaseManager;component/Source/logo/logo_white.png" Margin="5" Opacity="0.8" />
+                <Image Source="/Source/logo/logo_white.png" Margin="5" Opacity="0.8" />
             </StackPanel>
         </ControlTemplate>
         <!-- some base stuff -->
@@ -159,9 +159,9 @@
                 </MenuItem>
             </Menu>
             <Menu WindowChrome.IsHitTestVisibleInChrome="True" HorizontalAlignment="Right">
-                <MenuItem x:Name="Windows_min" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-shrink-50.png"/>
-                <MenuItem x:Name="Windows_max" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-screensharing-30.png"/>
-                <MenuItem x:Name="Windows_close" Template="{StaticResource MainMenuIcon}" Icon="/CaseManager;component/Source/icons/icons8-close-30.png"/>
+                <MenuItem x:Name="Windows_min" Template="{StaticResource MainMenuIcon}" Icon="/Source/icons/icons8-shrink-50.png"/>
+                <MenuItem x:Name="Windows_max" Template="{StaticResource MainMenuIcon}" Icon="/Source/icons/icons8-screensharing-30.png"/>
+                <MenuItem x:Name="Windows_close" Template="{StaticResource MainMenuIcon}" Icon="/Source/icons/icons8-close-30.png"/>
             </Menu>
         </Grid>
         <local:OpenSpace x:Name="Op_Sp" Grid.Row="1"/>

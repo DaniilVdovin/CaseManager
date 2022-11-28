@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CaseManager.UI.BPMN"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200" MinHeight="100" MinWidth="200" MaxWidth="300">
-    <Border Margin="5,15,5,5" x:Name="border" CornerRadius="10" BorderBrush="#FFA4A4A4" BorderThickness="2" Background="#FF464646">
+    <Border Margin="10,20,10,10" x:Name="border" CornerRadius="10" BorderBrush="#FFA4A4A4" BorderThickness="2" Background="#FF464646">
         <Label x:Name="context" Content="Some" Foreground="#FFE6E6E6" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Border>
 </UserControl>

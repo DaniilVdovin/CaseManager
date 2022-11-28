@@ -4,16 +4,17 @@ using CaseManager.UI.BPMN;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Xml.Linq;
-using static CaseManager.Canvas_Object_Manager;
 
 namespace CaseManager
 {
@@ -429,10 +430,10 @@ namespace CaseManager
         public void LoadProperty(List<Property> list)
         {
             ClearProperty();
-            System.ComponentModel.ICollectionView data =
-                             System.Windows.Data.CollectionViewSource.GetDefaultView(list);
+            ICollectionView data =
+                            CollectionViewSource.GetDefaultView(list);
             data.GroupDescriptions.Clear();
-            data.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription("Category"));
+            data.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
             dataGrid.ItemsSource = data;
             this.dataGrid.Visibility = Visibility.Visible;
         }
@@ -600,7 +601,7 @@ namespace CaseManager
             };
             tt = new TranslateTransform();
             rectangle.RenderTransform = tt;
-            rectangle.Effect = new System.Windows.Media.Effects.DropShadowEffect
+            rectangle.Effect = new DropShadowEffect
             {
                 Color = Colors.OrangeRed,
                 Direction = 270,

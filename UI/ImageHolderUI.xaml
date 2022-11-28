@@ -16,7 +16,7 @@
                     <GradientStop Color="#F2313131" Offset="0.986"/>
                 </LinearGradientBrush>
             </GroupBox.Background>
-            <Image x:Name="i_image" Source="/UI/setka-png.jpg"/>
+            <Image x:Name="i_image" Source="/Source/setka-png.jpg"/>
         </GroupBox>
     </Grid>
 </UserControl>
