@@ -17,9 +17,9 @@ using System.Windows.Shapes;
 
 namespace CaseManager.UI.AI
 {
-    public class TitleElement : FrameworkElement
+    public class TitleElement : FrameworkElement,IElement
     {
-        public List<Canvas_Propertis.Property> properties;
+        public List<Canvas_Propertis.Property> properties { get; set;}
         public TitleElement(Action<object> update)
         {
             Margin = new Thickness(5, 15, 5, 5);

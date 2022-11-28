@@ -7,7 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CaseManager"
              mc:Ignorable="d" 
-             Width="549.236" Height="351.103" Focusable="True">
+             Focusable="True" MaxHeight="500" MaxWidth="500">
     <Grid>
         <GroupBox Header="Изображение" BorderBrush="{x:Null}" Foreground="#FFEEEEEE" Cursor="Arrow" Margin="10,10,10,10" OpacityMask="{x:Null}">
             <GroupBox.Background>
@@ -16,7 +16,7 @@
                     <GradientStop Color="#F2313131" Offset="0.986"/>
                 </LinearGradientBrush>
             </GroupBox.Background>
-            <Image Margin="0" Stretch="Fill" Source="/CaseManager;component/Source/kkzd22zpllj11.png"/>
+            <Image x:Name="i_image" Source="/UI/setka-png.jpg"/>
         </GroupBox>
     </Grid>
 </UserControl>

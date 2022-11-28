@@ -112,6 +112,7 @@
     <Compile Include="UI\ImageHolderUI.xaml.cs">
       <DependentUpon>ImageHolderUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\IElement.cs" />
     <Compile Include="Windows\ImageProcessing.xaml.cs">
       <DependentUpon>ImageProcessing.xaml</DependentUpon>
     </Compile>
@@ -181,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Source\icons\icons8-circled-down-left-96.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\setka-png.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

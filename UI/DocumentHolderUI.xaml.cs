@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaseManager.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,13 @@ namespace CaseManager
     /// <summary>
     /// Логика взаимодействия для PersonUI.xaml
     /// </summary>
-    public partial class DocumentHolderUI : UserControl
+    public partial class DocumentHolderUI : UserControl, IElement
     {
+        public List<Canvas_Propertis.Property> properties { get; set; }
+
         public DocumentHolderUI()
         {
             InitializeComponent();
-        }
+        }        
     }
 }

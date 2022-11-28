@@ -18,9 +18,9 @@ namespace CaseManager.UI.BPMN
     /// <summary>
     /// Логика взаимодействия для BPMN_ask.xaml
     /// </summary>
-    public partial class BPMN_ask : UserControl
+    public partial class BPMN_ask : IElement
     {
-        public List<Canvas_Propertis.Property> properties;
+        public List<Canvas_Propertis.Property> properties { get; set; }
         public BPMN_ask()
         {
             InitializeComponent();

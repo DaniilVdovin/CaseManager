@@ -1,27 +1,18 @@
-﻿using System;
+﻿using CaseManager.UI;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CaseManager
 {
     /// <summary>
     /// Логика взаимодействия для PersonUI.xaml
     /// </summary>
-    public partial class PersonUI : UserControl
+    public partial class PersonUI : UserControl, IElement
     {
-        public List<Canvas_Propertis.Property> properties;
+        public List<Canvas_Propertis.Property> properties { get; set; }
         private readonly ImageSource image_default;
         public PersonUI()
         {

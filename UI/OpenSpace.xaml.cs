@@ -1,4 +1,5 @@
-﻿using CaseManager.UI.AI;
+﻿using CaseManager.UI;
+using CaseManager.UI.AI;
 using CaseManager.UI.BPMN;
 using Microsoft.Win32;
 using System;
@@ -444,29 +445,19 @@ namespace CaseManager
         {
             nonData.Visibility = Visibility.Collapsed;
             propertis.Visibility = Visibility.Visible;
-            
-            switch (element.GetType().Name)
+            //Console.WriteLine($"Element type:{element.GetType()}\nI_Type:{typeof(IElement)}\nIsAssignableFrom:{typeof(IElement).IsAssignableFrom(element.GetType())}");
+            if (typeof(IElement).IsAssignableFrom(element.GetType()))
             {
-                case "PersonUI":
-                    this.LoadProperty((element as PersonUI).properties);
-                    break;
-                case "BPMN_Rect":
-                    this.LoadProperty((element as BPMN_Rect).properties);
-                    break;
-                case "BPMN_ask":
-                    this.LoadProperty((element as BPMN_ask).properties);
-                    break;
-                case "TitleElement":
-                    this.LoadProperty((element as TitleElement).properties);
-                    break;
-                 case "AI_NodeUI":
-                    this.LoadProperty((element as AI_NodeUI).properties);
-                    break;
-                default:
-                    nonData.Visibility = Visibility.Visible;
-                    ClearProperty();
-                    break;
+                var pps = (element as IElement).properties;
+                if (pps != null) this.LoadProperty(pps);
+                else DontHaveData();
             }
+            else DontHaveData();
+        }
+        public void DontHaveData()
+        {
+            nonData.Visibility = Visibility.Visible;
+            ClearProperty();
         }
         public void Close()
         {

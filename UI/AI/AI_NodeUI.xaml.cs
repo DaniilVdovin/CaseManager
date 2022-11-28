@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CaseManager.UI.AI
+namespace CaseManager.UI
 {
     /// <summary>
     /// Логика взаимодействия для AI_NodeUI.xaml
     /// </summary>
-    public partial class AI_NodeUI : UserControl
+    public partial class AI_NodeUI : UserControl,IElement
     {
-        public List<Canvas_Propertis.Property> properties;
+        public List<Canvas_Propertis.Property> properties { get ; set; }
         public AI_NodeUI()
         {
             InitializeComponent();

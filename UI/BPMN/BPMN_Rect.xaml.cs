@@ -18,9 +18,9 @@ namespace CaseManager.UI.BPMN
     /// <summary>
     /// Логика взаимодействия для BPMN_Rect.xaml
     /// </summary>
-    public partial class BPMN_Rect : UserControl
+    public partial class BPMN_Rect : IElement
     {
-        public List<Canvas_Propertis.Property> properties;
+        public List<Canvas_Propertis.Property> properties { get; set; }
         public BPMN_Rect()
         {
             InitializeComponent();
