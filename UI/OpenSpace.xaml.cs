@@ -90,6 +90,7 @@ namespace CaseManager
             debug_elepse_start.Width = debug_elepse_start.Height = 10;
             debug_elepse_start.Fill = debug_triangle_end.Fill = new SolidColorBrush(Colors.White);
             debug_triangle_end.RenderTransform = rt = new RotateTransform();
+
             canvas.Children.Add(debug_elepse_start);
             canvas.Children.Add(debug_triangle_end);
 
@@ -395,7 +396,7 @@ namespace CaseManager
             public string Name { get; set; }
             public string Type { get; set; }
             public string Category { get; set; }
-            public object _value;
+            private object _value;
             public object Value
             {
                 get => _value;
@@ -581,14 +582,13 @@ namespace CaseManager
             }
         }
 
-        readonly Canvas canvas;
         readonly OpenSpace openSpace;
         readonly Rectangle rectangle;
         readonly TranslateTransform tt;
-        public Canvas_Focus(OpenSpace openSpace, Canvas canvas)
+        public Canvas_Focus(OpenSpace openSpace)
         {
             this.openSpace = openSpace;
-            this.canvas = canvas;
+
             rectangle = new Rectangle
             {
                 Visibility = Visibility.Collapsed,
@@ -609,7 +609,7 @@ namespace CaseManager
                 Opacity = 1,
                 BlurRadius = 20
             };
-            canvas.Children.Add(rectangle);
+            openSpace.Canvas.Children.Add(rectangle);
             Panel.SetZIndex(rectangle, 3);
         }
         public void SetFocus(UIElement uI)
@@ -620,7 +620,7 @@ namespace CaseManager
         public void MoveToFocus()
         {
             Size view = openSpace.CanvasViewer.DesiredSize;
-            var tt = (TranslateTransform)((TransformGroup)canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
+            var tt = (TranslateTransform)((TransformGroup)openSpace.Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
             tt.X = -(Canvas.GetLeft(Curent_Focus) - view.Width/2 + Curent_Focus.DesiredSize.Width/2);
             tt.Y = -(Canvas.GetTop(Curent_Focus) - view.Height/2 + Curent_Focus.DesiredSize.Height/2);
             openSpace.Corect_Size();
@@ -878,7 +878,7 @@ namespace CaseManager
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape);
             canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new Canvas_Constrain_Manager(Canvas);
-            canvas_Focus = new Canvas_Focus(this,Canvas);
+            canvas_Focus = new Canvas_Focus(this);
             canvas_Object_Manager = new Canvas_Object_Manager(this,Canvas,object_manager_list);
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.Close(); };
             bt_line_add.MouseLeftButtonDown += (s, b) => Add_Constrain();
@@ -894,6 +894,7 @@ namespace CaseManager
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
             canvas_Cursor.SetVisible(false);
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -943,6 +944,7 @@ namespace CaseManager
             {
                 if (sender is Canvas)
                 {
+                    Mouse.OverrideCursor = Cursors.Cross;
                     Point point = e.GetPosition(Canvas);
                     canvas_Cursor.SetPosition(point);
                     canvas_Ruler.SetMousePosition(point);

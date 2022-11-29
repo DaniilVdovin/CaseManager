@@ -14,7 +14,7 @@ namespace CaseManager.RecordSystem.RecordModel
     internal class PropertyRecord
     {
         public int Index;
-        public int Value;
+        public object Value;
     }
     internal class ElementRecord
     {
