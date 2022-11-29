@@ -111,7 +111,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RecordSystem\RecordModel\ElementRecord.cs" />
+    <Compile Include="RecordSystem\IOCore.cs" />
+    <Compile Include="RecordSystem\RecordModel\Record.cs" />
     <Compile Include="UI\AI\AI_blockUI.cs" />
     <Compile Include="UI\AI\AI_NodeUI.xaml.cs">
       <DependentUpon>AI_NodeUI.xaml</DependentUpon>

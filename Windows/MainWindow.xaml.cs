@@ -1,4 +1,5 @@
-﻿using CaseManager.UI.AI;
+﻿using CaseManager.RecordSystem;
+using CaseManager.UI.AI;
 using CaseManager.UI.BPMN;
 using CaseManager.Windows;
 using System;
@@ -48,6 +49,35 @@ namespace CaseManager
             Windows_close.Click += (s, e) => Close();
             Windows_min.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized);
             Windows_max.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized);
+
+            mm_ui_loadproject.Click += (s, e) => {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.FileOk += (b, i) =>
+                {
+                    if (openFileDialog.FileName != "")
+                    {
+                        IOCore.LoadProject(openFileDialog.FileName);
+                    }
+                };
+                openFileDialog.ShowDialog();
+            };
+            mm_ui_saveproject.Click += (s, e) => { IOCore.SaveProject(); };
+            mm_ui_saveasproject.Click += (s, e) =>
+            {
+                SaveFileDialog openFileDialog = new SaveFileDialog()
+                {
+                    FileName = "project",
+                    DefaultExt= ".xml"
+                };
+                openFileDialog.FileOk += (b, i) =>
+                {
+                    if (openFileDialog.FileName != "")
+                    {
+                        IOCore.Save(openFileDialog.FileName);
+                    }
+                };
+                openFileDialog.ShowDialog();
+            };
         }
     }
 }

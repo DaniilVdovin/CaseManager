@@ -122,10 +122,9 @@
             <Menu IsMainMenu="True" HorizontalAlignment="Left" WindowChrome.IsHitTestVisibleInChrome="True">
                 <MenuItem Template="{StaticResource MainMenuImage}"/>
                 <MenuItem Header="_Файлы" Template="{StaticResource MainMenuTop}" Padding="6,0,6,0">
-                    <MenuItem Header="_Создать" Template="{StaticResource VsMenuSub}" />
-                    <MenuItem Header="_Открыть" Template="{StaticResource VsMenuSub}" />
-                    <MenuItem Header="_Сохранить" Template="{StaticResource VsMenuSub}" />
-                    <MenuItem Header="_Сохранить как..." Template="{StaticResource VsMenuSub}" />
+                    <MenuItem x:Name="mm_ui_loadproject" Header="_Открыть" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem x:Name="mm_ui_saveproject" Header="_Сохранить" Template="{StaticResource VsMenuSub}" />
+                    <MenuItem x:Name="mm_ui_saveasproject" Header="_Сохранить как..." Template="{StaticResource VsMenuSub}" />
                     <Separator Template="{StaticResource VsMenuSep}" />
                     <MenuItem Header="_О приложении" Template="{StaticResource VsMenuSub}" />
                 </MenuItem>
@@ -167,10 +166,13 @@
         <local:OpenSpace x:Name="Op_Sp" Grid.Row="1"/>
         <StatusBar Grid.Row="2" Background="#FF424242">
             <StatusBarItem>
-                <Image Height="20" Width="20" Source="/Source/logo/logo_white.png" Stretch="Fill"/>
+                <Image Height="20" Width="20" Source="/Source/logo/logo_white.png" Stretch="Fill" Margin="5,0,0,0"/>
             </StatusBarItem>
             <StatusBarItem>
-                <Label Content="Готово" Foreground="#FFC3C3C3" Padding="0,0,0,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="status_name" Content="Готово" Foreground="#FFC3C3C3" Padding="0,0,0,0"/>
+                    <ProgressBar x:Name="status_progress" Width="200" Margin="10,0,0,0" />
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>
