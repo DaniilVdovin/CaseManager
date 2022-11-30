@@ -688,7 +688,7 @@ namespace CaseManager
             }
         }
         private int index = 1;
-        private readonly List<ObjectItem> ObjectItems;
+        public List<ObjectItem> ObjectItems;
         private readonly Canvas canvas;
         private readonly ListBox listBox;
         private readonly OpenSpace openSpace;

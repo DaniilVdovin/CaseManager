@@ -32,6 +32,8 @@ namespace CaseManager
         {
             InitializeComponent();
 
+            IOCore.OpenSpace = Op_Sp;
+
             this.MaxHeight = SystemParameters.WorkArea.Height + SystemParameters.WorkArea.Top + 12;
             this.MaxWidth = SystemParameters.WorkArea.Width + SystemParameters.WorkArea.Left + 12;
 
@@ -50,34 +52,9 @@ namespace CaseManager
             Windows_min.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Minimized);
             Windows_max.Click += (s, e) => this.WindowState = (this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized);
 
-            mm_ui_loadproject.Click += (s, e) => {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.FileOk += (b, i) =>
-                {
-                    if (openFileDialog.FileName != "")
-                    {
-                        IOCore.LoadProject(openFileDialog.FileName);
-                    }
-                };
-                openFileDialog.ShowDialog();
-            };
+            mm_ui_loadproject.Click += (s, e) => { IOCore.LoadProject(); };
             mm_ui_saveproject.Click += (s, e) => { IOCore.SaveProject(); };
-            mm_ui_saveasproject.Click += (s, e) =>
-            {
-                SaveFileDialog openFileDialog = new SaveFileDialog()
-                {
-                    FileName = "project",
-                    DefaultExt= ".xml"
-                };
-                openFileDialog.FileOk += (b, i) =>
-                {
-                    if (openFileDialog.FileName != "")
-                    {
-                        IOCore.Save(openFileDialog.FileName);
-                    }
-                };
-                openFileDialog.ShowDialog();
-            };
+            mm_ui_saveasproject.Click += (s, e) => { IOCore.SaveAaProject(); };
         }
     }
 }
