@@ -37,6 +37,14 @@ namespace CaseManager.RecordSystem.RecordModel
         [XmlArrayItem("Property")]
         public List<PropertyRecord> Property { get; set; }
     }
+    [XmlType("ConstrainRecord")]
+    public class ConstrainRecord
+    {
+        [XmlElement("StartIndex")]
+        public int StartIndex { get; set; }
+        [XmlElement("EndIndex")]
+        public int EndIndex { get; set; }
+    }
     //, XmlInclude(typeof(PropertyRecord)), XmlInclude(typeof(PointRecord))
     [XmlType("Record")]
     [XmlInclude(typeof(ElementRecord))] 
@@ -51,6 +59,9 @@ namespace CaseManager.RecordSystem.RecordModel
         [XmlArray("Elements")]
         [XmlArrayItem("ElementRecord")]
         public List<ElementRecord> elements { get; set; }
+        [XmlArray("Constrains")]
+        [XmlArrayItem("ConstrainRecord")]
+        public List<ConstrainRecord> constrains { get; set; }
     }
 
 }

@@ -1,4 +1,6 @@
-﻿using CaseManager.UI;
+﻿using CaseManager.RecordSystem;
+using CaseManager.RecordSystem.RecordModel;
+using CaseManager.UI;
 using CaseManager.UI.AI;
 using CaseManager.UI.BPMN;
 using Microsoft.Win32;
@@ -60,9 +62,10 @@ namespace CaseManager
             end.MouseLeftButtonDown += down;
             start.MouseLeftButtonUp += up;
             end.MouseLeftButtonUp += up;
+            start.LayoutUpdated += (s,e) => { Update(); };
+            end.LayoutUpdated += (s,e) => { Update(); };
 
-            start_size = start.DesiredSize;
-            end_size = end.DesiredSize;
+
             start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
             end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
             start_control_points = new List<ControlPoint>
@@ -102,10 +105,15 @@ namespace CaseManager
             };
             canvas.Children.Add(debug_line);
 
-            Position();
+            Update();
         }
-        internal void Position()
+        internal void Update()
         {
+            start_size = start.RenderSize;
+            end_size = end.RenderSize;
+        }
+        internal void Position() {
+            Update();
             start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
             end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
             start_control_points[0].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2));  //Right
@@ -467,7 +475,7 @@ namespace CaseManager
         }
     }
     public class Canvas_Constrain_Manager {
-        List<Canvas_Constrain> _constrais;
+        public List<Canvas_Constrain> _constrais;
 
         public UIElement current_strat, current_end;
         bool _isWaitEnd = false;
@@ -509,14 +517,16 @@ namespace CaseManager
         {
             Canvas_Constrain bieze = new Canvas_Constrain(canvas,start, end);
             Constrains.Add(bieze);
-            UpdateList();
-            bieze.Position();
             return bieze;
         }
        
         internal void UpdateList()
         {
-
+            foreach (Canvas_Constrain item in Constrains)
+            {
+                item.Update();
+                item.Position();
+            }
         }
         internal void Current_Clear()
         {
@@ -1104,6 +1114,33 @@ namespace CaseManager
                     DeleteElement(canvas_Focus.Curent_Focus);
                     break;
             }
+        }
+        public void LoadFromFile(Record record)
+        {
+            foreach (ElementRecord item in record.elements)
+            {
+                if (typeof(IElement).IsAssignableFrom(Type.GetType(item.Type)))
+                {
+                    if (typeof(TitleElement) == Type.GetType(item.Type)) continue;
+
+                    object obj = Activator.CreateInstance(Type.GetType(item.Type));
+                    System.Windows.Controls.Canvas.SetLeft((obj as UIElement), item.Point.X);
+                    System.Windows.Controls.Canvas.SetTop((obj as UIElement), item.Point.Y);
+                    foreach (PropertyRecord pr in item.Property)
+                    {
+                        (obj as IElement).properties[pr.Index].Value = pr.Value;
+                    }
+                    canvas_Object_Manager.Add((obj as UIElement));
+                }
+            }
+
+            foreach (ConstrainRecord constrain in record.constrains)
+            {
+                constrain_Manager.Add_New(canvas_Object_Manager.ObjectItems[constrain.StartIndex].UI_Item,
+                    canvas_Object_Manager.ObjectItems[constrain.EndIndex].UI_Item);
+            }
+            this.UpdateLayout();
+            constrain_Manager.UpdateList();
         }
     }
 }
