@@ -28,7 +28,7 @@ namespace CaseManager.RecordSystem
             SaveFileDialog openFileDialog = new SaveFileDialog()
             {
                 FileName = IOCore.CurrentProjectName,
-                DefaultExt = ".cml"
+                DefaultExt = ".cmp"
             };
             openFileDialog.FileOk += (b, i) =>
             {
@@ -43,7 +43,7 @@ namespace CaseManager.RecordSystem
         {
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                Filter = "CM Project (*.cmp)|*.cml"
+                Filter = "CM Project (*.cmp)|*.cmp"
             };
             openFileDialog.FileOk += (b, i) =>
             {

@@ -1,8 +1,6 @@
-﻿using CaseManager.RecordSystem;
-using CaseManager.RecordSystem.RecordModel;
+﻿using CaseManager.RecordSystem.RecordModel;
 using CaseManager.UI;
 using CaseManager.UI.AI;
-using CaseManager.UI.BPMN;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -11,12 +9,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-using System.Xml.Linq;
 
 namespace CaseManager
 {

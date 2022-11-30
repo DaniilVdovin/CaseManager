@@ -36,6 +36,44 @@ namespace CaseManager.RecordSystem.RecordModel
         [XmlArray("PropertyRecord")]
         [XmlArrayItem("Property")]
         public List<PropertyRecord> Property { get; set; }
+        /*
+        [XmlElement("Image")]
+        public byte[] ImageBuffer
+        {
+            get
+            {
+                byte[] imageBuffer = null;
+
+                if (Image != null)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        var encoder = new PngBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(Image));
+                        encoder.Save(stream);
+                        imageBuffer = stream.ToArray();
+                    }
+                }
+
+                return imageBuffer;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    Image = null;
+                }
+                else
+                {
+                    using (var stream = new MemoryStream(value))
+                    {
+                        var decoder = BitmapDecoder.Create(stream,
+                            BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                        Image = decoder.Frames[0];
+                    }
+                }
+            }
+        }*/
     }
     [XmlType("ConstrainRecord")]
     public class ConstrainRecord
