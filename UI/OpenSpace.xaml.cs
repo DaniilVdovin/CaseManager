@@ -513,9 +513,9 @@ namespace CaseManager
         {
             Canvas_Constrain bieze = new Canvas_Constrain(canvas,start, end);
             Constrains.Add(bieze);
+            bieze.Position();
             return bieze;
         }
-       
         internal void UpdateList()
         {
             foreach (Canvas_Constrain item in Constrains)
