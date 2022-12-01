@@ -23,12 +23,14 @@ namespace CaseManager
     /// </summary>
     public partial class ImageHolderUI : UserControl, IElement
     {
+        public bool CanDelite { get; set; }
         public List<Canvas_Propertis.Property> properties { get; set; }
         private readonly ImageSource image_default;
         public ImageHolderUI()
         {
             InitializeComponent();
             image_default = i_image.Source;
+            CanDelite = true;
             properties = new List<Canvas_Propertis.Property>
             {
                 new Canvas_Propertis.Property("Основное","Изображение", "-","File",(v)=>{LoadImage(v.ToString());})
@@ -47,6 +49,11 @@ namespace CaseManager
                     i_image.Source = image_default;
                 }
             }
+        }
+
+        public void Clear()
+        {
+            
         }
     }
 }

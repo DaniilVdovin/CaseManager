@@ -20,15 +20,22 @@ namespace CaseManager.UI.BPMN
     /// </summary>
     public partial class BPMN_Rect : IElement
     {
+        public bool CanDelite { get; set; }
         public List<Canvas_Propertis.Property> properties { get; set; }
         public BPMN_Rect()
         {
             InitializeComponent();
+            CanDelite = true;
             properties = new List<Canvas_Propertis.Property>
             {
                 new Canvas_Propertis.Property("Основное","Текст", "<Текст>", "string",(v)=>{ context.Content = v.ToString(); }),
                 new Canvas_Propertis.Property("Основное","Цвет", "Gray","string",(v)=>{border.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(v.ToString())); }),
             };
+        }
+
+        public void Clear()
+        {
+           
         }
     }
 }

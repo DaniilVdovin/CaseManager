@@ -84,6 +84,7 @@ namespace CaseManager.RecordSystem
             List<ElementRecord> elements = new List<ElementRecord>();
             foreach(Canvas_Object_Manager.ObjectItem objectItem in OpenSpace.canvas_Object_Manager.ObjectItems)
             {
+                if (objectItem.UI_Item.GetType() == typeof(AI_NodeUI)) continue;
                 elements.Add(new ElementRecord() {
                     Name = objectItem.UI_Item.Uid,
                     Point = new PointRecord()

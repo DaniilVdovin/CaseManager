@@ -22,11 +22,18 @@ namespace CaseManager
     /// </summary>
     public partial class DocumentHolderUI : UserControl, IElement
     {
+        public bool CanDelite { get; set; }
         public List<Canvas_Propertis.Property> properties { get; set; }
 
         public DocumentHolderUI()
         {
             InitializeComponent();
-        }        
+            CanDelite = true;
+        }
+
+        public void Clear()
+        {
+            
+        }
     }
 }

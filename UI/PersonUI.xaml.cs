@@ -12,11 +12,13 @@ namespace CaseManager
     /// </summary>
     public partial class PersonUI : UserControl, IElement
     {
+        public bool CanDelite { get; set; }
         public List<Canvas_Propertis.Property> properties { get; set; }
         private readonly ImageSource image_default;
         public PersonUI()
         {
             InitializeComponent();
+            CanDelite= false;
             properties = new List<Canvas_Propertis.Property>
             {
                 new Canvas_Propertis.Property("Основное","Имя", "Daniil", "string",(v)=>{ t_name.Text = v.ToString(); }),
@@ -40,9 +42,9 @@ namespace CaseManager
                 }
             }
         }
-        public new int GetHashCode()
+        public void Clear()
         {
-            return 1;
+            
         }
     }
 }

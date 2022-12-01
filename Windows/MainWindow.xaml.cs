@@ -42,7 +42,7 @@ namespace CaseManager
             mm_ui_doc.Click += (s, e) => Op_Sp.Add_Element(new Calendar());
             mm_ui_bpmn_rect.Click += (s, e) => Op_Sp.Add_Element(new BPMN_Rect());
             mm_ui_bpmn_ask.Click += (s, e) => Op_Sp.Add_Element(new BPMN_ask());
-            mm_ui_ai_block.Click += (s, e) => Op_Sp.Add_Element(new AI_blockUI(Op_Sp).GetResult());
+            mm_ui_ai_block.Click += (s, e) => Op_Sp.Add_Element(new AI_blockUI());
 
             mm_ui_line.Click += (s, e) => Op_Sp.Add_Constrain();
 

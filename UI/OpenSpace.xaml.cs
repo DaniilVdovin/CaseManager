@@ -48,19 +48,19 @@ namespace CaseManager
             this.start = start;
             this.end = end;
             void action(object s, MouseEventArgs e)
-            {if (_isEdit)Position();}
+            { if (_isEdit) Position(); }
             void down(object s, MouseButtonEventArgs e)
-            {_isEdit = true;}
+            { _isEdit = true; }
             void up(object s, MouseButtonEventArgs e)
-            {_isEdit = false;}
+            { _isEdit = false; }
             start.MouseMove += action;
             end.MouseMove += action;
             start.MouseLeftButtonDown += down;
             end.MouseLeftButtonDown += down;
             start.MouseLeftButtonUp += up;
             end.MouseLeftButtonUp += up;
-            start.LayoutUpdated += (s,e) => { Update(); };
-            end.LayoutUpdated += (s,e) => { Update(); };
+            start.LayoutUpdated += (s, e) => { Update(); };
+            end.LayoutUpdated += (s, e) => { Update(); };
 
 
             start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
@@ -645,21 +645,35 @@ namespace CaseManager
         {
             if (Curent_Focus == null) return;
             Curent_Focus.MouseMove -= UI_MouseMove;
+            Curent_Focus.LayoutUpdated -= Curent_Focus_LayoutUpdated;
             rectangle.Visibility = Visibility.Collapsed;
             Curent_Focus = null;
+        }
+        private void ChangeFocusSize()
+        {
+            if (Curent_Focus != null)
+            {
+                rectangle.Width = Curent_Focus.DesiredSize.Width;
+                rectangle.Height = Curent_Focus.DesiredSize.Height - 10;
+            }
         }
         private void ChangeFocusUI()
         {
             if (Curent_Focus != null)
             {
                 Curent_Focus.MouseMove += UI_MouseMove;
+                Curent_Focus.LayoutUpdated += Curent_Focus_LayoutUpdated;
                 rectangle.Visibility = Visibility.Visible;
-                rectangle.Width = Curent_Focus.DesiredSize.Width;
-                rectangle.Height = Curent_Focus.DesiredSize.Height-10;
+                ChangeFocusSize();
                 tt.X = Canvas.GetLeft(Curent_Focus);
                 tt.Y = Canvas.GetTop(Curent_Focus)+10;
                 //Console.WriteLine("BIND FOCUS");
             }
+        }
+
+        private void Curent_Focus_LayoutUpdated(object sender, EventArgs e)
+        {
+            ChangeFocusSize(); 
         }
         private void UI_MouseMove(object sender, MouseEventArgs e)
         {
@@ -674,14 +688,19 @@ namespace CaseManager
     {
         public class ObjectItem
         {
+
             public ListBoxItem List_Item { get; set; }
             public UIElement UI_Item { get; set; }
-            public ObjectItem(int i,UIElement uI_Item,RoutedEventHandler action)
+            public UIElement UI_Item_parent { get; set; }
+            public ObjectItem(int i,UIElement uI_Item,RoutedEventHandler action, UIElement UI_Item_parent =  null)
             {
+                this.UI_Item_parent = UI_Item_parent;
                 UI_Item = uI_Item;
+                string child = this.UI_Item_parent != null ? ">" : "";
                 List_Item = new ListBoxItem
                 {
-                    Content = $"{uI_Item.GetType().Name} ({i})"
+                    Content = $"{child} {uI_Item.GetType().Name} ({i})"
+                    ,Opacity = this.UI_Item_parent != null ? .5 : 1
                 };
                 List_Item.Selected += action;
             }
@@ -717,14 +736,17 @@ namespace CaseManager
             ObjectItems = new List<ObjectItem>();
             listBox.Items.Clear();
         }
-        internal void Add(UIElement element)
+        internal void Add(UIElement element, UIElement parent = null, bool can_move = true)
         {
-            ObjectItem item = new ObjectItem(index++, element, List_Item_Selected);
-            element.MouseLeftButtonDown += openSpace.Adding_MouseLeftButtonDown;
-            element.MouseLeftButtonUp += openSpace.Adding_MouseLeftButtonUp;
-            element.MouseEnter += openSpace.Adding_MouseEnter;
-            element.MouseLeave += openSpace.Adding_MouseLeave;
-            element.MouseMove += openSpace.Adding_MouseMove;
+            ObjectItem item = new ObjectItem(index++, element, List_Item_Selected, parent);
+            if (can_move)
+            {
+                element.MouseLeftButtonDown += openSpace.Adding_MouseLeftButtonDown;
+                element.MouseLeftButtonUp += openSpace.Adding_MouseLeftButtonUp;
+                element.MouseEnter += openSpace.Adding_MouseEnter;
+                element.MouseLeave += openSpace.Adding_MouseLeave;
+                element.MouseMove += openSpace.Adding_MouseMove;
+            }
             ObjectItems.Add(item);
             canvas.Children.Add(item.UI_Item);
             listBox.Items.Add(item.List_Item);
@@ -759,6 +781,7 @@ namespace CaseManager
             if(item == null) return;
             ObjectItems.Remove(item);
             listBox.Items.Remove(item.List_Item);
+            (item.UI_Item as IElement).Clear();
             canvas.Children.Remove(item.UI_Item);
         }
         internal void Select(UIElement uI)
@@ -911,7 +934,7 @@ namespace CaseManager
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.Close(); };
             bt_line_add.MouseLeftButtonDown += (s, b) => Add_Constrain();
 
-            Mouse.OverrideCursor = Cursors.Cross;
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
         public  void Add_Constrain()
         {
@@ -1117,19 +1140,24 @@ namespace CaseManager
         {
             if (element != null)
             {
-                if (canvas_Focus.Curent_Focus != null)
-                    canvas_Focus.CleadFocus();
-                constrain_Manager.Remove(element);
-                canvas_Propertis.ClearProperty();
-                canvas_Object_Manager.Remove(element);
+                if ((element as IElement).CanDelite)
+                {
+                    if (canvas_Focus.Curent_Focus != null)
+                        canvas_Focus.CleadFocus();
+                    constrain_Manager.Remove(element);
+                    canvas_Propertis.ClearProperty();
+                    canvas_Object_Manager.Remove(element);
+                }
             }
         }
         public void ClearAll()
         {
+            
             canvas_Focus.CleadFocus();
             canvas_Propertis.ClearProperty();
             canvas_Object_Manager.Clear();
             constrain_Manager.Clear();
+            this.UpdateLayout();
         }
         private void CanvasViewer_KeyDown(object sender, KeyEventArgs e)
         {
@@ -1147,8 +1175,6 @@ namespace CaseManager
             {
                 if (typeof(IElement).IsAssignableFrom(Type.GetType(item.Type)))
                 {
-                    if (typeof(TitleElement) == Type.GetType(item.Type)) continue;
-
                     object obj = Activator.CreateInstance(Type.GetType(item.Type));
                     System.Windows.Controls.Canvas.SetLeft((obj as UIElement), item.Point.X);
                     System.Windows.Controls.Canvas.SetTop((obj as UIElement), item.Point.Y);
