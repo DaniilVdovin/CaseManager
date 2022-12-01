@@ -39,7 +39,8 @@ namespace CaseManager.RecordSystem
             };
             openFileDialog.ShowDialog();
         }
-        public static void LoadProject()
+        public static void LoadProject() => LoadProject(()=>{});
+        public static void LoadProject(Action complite)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
@@ -49,7 +50,7 @@ namespace CaseManager.RecordSystem
             {
                 if (openFileDialog.FileName != "")
                 {
-                    IOCore.Load(openFileDialog.FileName);
+                    IOCore.Load(openFileDialog.FileName, complite);
                 }
             };
             openFileDialog.ShowDialog();
@@ -123,13 +124,26 @@ namespace CaseManager.RecordSystem
                 Console.WriteLine("Object has been serialized");
             }
         }
-        internal static void Load(string ProjectFile)
+        internal static void Load(string ProjectFile, Action complite)
         {
             using (FileStream fs = new FileStream(ProjectFile, FileMode.Open))
             {
                 Record record = xmlSerializer.Deserialize(fs) as Record;
                 Console.WriteLine($"Object has been deserialized");
                 OpenSpace.LoadFromFile(record);
+                complite.Invoke();
+            }
+        }
+        internal static void Create(string ProjectFolder,string ProjectName)
+        {
+            Record record = new Record();
+            record.Name = CurrentProjectName = ProjectName;
+            record.Path = CurrentProjectPath = ProjectFolder;
+            record.Version = "v" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            using (FileStream fs = new FileStream(ProjectFolder+"/"+ProjectName, FileMode.Create))
+            {
+                xmlSerializer.Serialize(fs, record);
+                Console.WriteLine("Object has been serialized");
             }
         }
     }

@@ -79,6 +79,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Windows\ProjectManager.xaml.cs">
+      <DependentUpon>ProjectManager.xaml</DependentUpon>
+    </Compile>
     <Page Include="UI\AI\AI_NodeUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,6 +148,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ProjectManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UI\OpenSpace.xaml.cs">
@@ -179,9 +186,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Source\kkzd22zpllj11.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Source\blank_head_profile.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +218,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\icons\icons8-opened-folder-500.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\icons\icons8-folder-512.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

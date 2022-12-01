@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -546,6 +547,15 @@ namespace CaseManager
             }
             _onDelete.Clear();
         }
+
+        internal void Clear()
+        {
+            foreach (Canvas_Constrain item in Constrains)
+            {
+                item.Clear();
+            }
+            Constrains.Clear();
+        }
     }
     public class Canvas_Grid : Canvas
     {
@@ -633,6 +643,7 @@ namespace CaseManager
         }
         public void CleadFocus()
         {
+            if (Curent_Focus == null) return;
             Curent_Focus.MouseMove -= UI_MouseMove;
             rectangle.Visibility = Visibility.Collapsed;
             Curent_Focus = null;
@@ -753,6 +764,17 @@ namespace CaseManager
         internal void Select(UIElement uI)
         {
             listBox.SelectedItem = FindItemByUIelement(uI).List_Item;
+        }
+
+        internal void Clear()
+        {
+            foreach (ObjectItem item in ObjectItems)
+            {
+                listBox.Items.Remove(item.List_Item);
+                canvas.Children.Remove(item.UI_Item);
+            }
+            ObjectItems.Clear();
+            index = 1;
         }
     }
     public partial class OpenSpace : UserControl
@@ -1102,6 +1124,13 @@ namespace CaseManager
                 canvas_Object_Manager.Remove(element);
             }
         }
+        public void ClearAll()
+        {
+            canvas_Focus.CleadFocus();
+            canvas_Propertis.ClearProperty();
+            canvas_Object_Manager.Clear();
+            constrain_Manager.Clear();
+        }
         private void CanvasViewer_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -1113,6 +1142,7 @@ namespace CaseManager
         }
         public void LoadFromFile(Record record)
         {
+            ClearAll();
             foreach (ElementRecord item in record.elements)
             {
                 if (typeof(IElement).IsAssignableFrom(Type.GetType(item.Type)))
