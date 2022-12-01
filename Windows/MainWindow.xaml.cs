@@ -2,23 +2,8 @@
 using CaseManager.UI.AI;
 using CaseManager.UI.BPMN;
 using CaseManager.Windows;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CaseManager
 {
@@ -32,7 +17,8 @@ namespace CaseManager
         {
             InitializeComponent();
 
-            IOCore.OpenSpace = Op_Sp;
+            IOCore.openSpace = Op_Sp;
+            IOCore.main = this;
 
             this.MaxHeight = SystemParameters.WorkArea.Height + SystemParameters.WorkArea.Top + 12;
             this.MaxWidth = SystemParameters.WorkArea.Width + SystemParameters.WorkArea.Left + 12;
@@ -63,6 +49,7 @@ namespace CaseManager
             project_manager.Loaded += (s, e) =>
             {
                 mm_ui.IsEnabled = false;
+
             };
             project_manager.Close += (s, e) =>
             {
@@ -71,10 +58,7 @@ namespace CaseManager
             };
             project_manager.Open += (s,e) =>
             {
-                IOCore.LoadProject(() =>
-                {
-                    project_manager.Close.Invoke(s, e);
-                });
+                IOCore.LoadProject(() =>{project_manager.Close.Invoke(s, e);});
             };
             project_manager.Create += (s, e) =>
             {

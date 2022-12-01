@@ -37,7 +37,7 @@ namespace CaseManager.UI.AI
         public AI_blockUI()
         {
             CanDelite = true;
-            this.os = IOCore.OpenSpace;
+            this.os = IOCore.openSpace;
 
             this.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;
             this.MouseLeftButtonDown += Rectangle_MouseLeftButtonDown;

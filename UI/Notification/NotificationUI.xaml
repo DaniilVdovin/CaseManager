@@ -1,11 +1,9 @@
-﻿<UserControl x:Class="CaseManager.UI.NotificationUI"
+﻿<UserControl x:Class="CaseManager.UI.Notification.NotificationUI"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CaseManager.UI"
+             xmlns:local="clr-namespace:CaseManager.UI.Notification"
              mc:Ignorable="d" Width="300" d:Height="500" IsHitTestVisible="false">
-    <StackPanel x:Name="NatifHistory" IsHitTestVisible="False" VerticalAlignment="Bottom">
-        
-    </StackPanel>
+    <StackPanel x:Name="NatifHistory" IsHitTestVisible="False"/>
 </UserControl>

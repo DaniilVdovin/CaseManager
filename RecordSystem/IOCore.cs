@@ -10,14 +10,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Xml.Serialization;
-using static CaseManager.Canvas_Object_Manager;
 
 namespace CaseManager.RecordSystem
 {
     public static class IOCore
     {
-        public static OpenSpace OpenSpace;
-        
+        public static OpenSpace openSpace;
+        public static MainWindow main;
+
         public static string CurrentProjectPath = "/../";
         public static string CurrentProjectName = "CaseManagerProject";
         internal static Type[] personTypes = { typeof(Record), typeof(ElementRecord), typeof(PointRecord), typeof(PropertyRecord) };
@@ -58,7 +58,7 @@ namespace CaseManager.RecordSystem
         internal static List<ConstrainRecord> GetConstrains()
         {
             List<ConstrainRecord> elements = new List<ConstrainRecord>();
-            foreach (Canvas_Constrain constrain in OpenSpace.constrain_Manager.Constrains)
+            foreach (Canvas_Constrain constrain in openSpace.constrain_Manager.Constrains)
             {
                 var p = GetConstrainConnectIndex(constrain);
                 elements.Add(new ConstrainRecord()
@@ -72,17 +72,17 @@ namespace CaseManager.RecordSystem
         internal static (int,int) GetConstrainConnectIndex(Canvas_Constrain constrain)
         {
             int start=0, end=0;
-            for (int i = 0; i < OpenSpace.canvas_Object_Manager.ObjectItems.Count; i++)
+            for (int i = 0; i < openSpace.canvas_Object_Manager.ObjectItems.Count; i++)
             {
-                if (OpenSpace.canvas_Object_Manager.ObjectItems[i].UI_Item == constrain.start) start = i;
-                if (OpenSpace.canvas_Object_Manager.ObjectItems[i].UI_Item == constrain.end) end = i;
+                if (openSpace.canvas_Object_Manager.ObjectItems[i].UI_Item == constrain.start) start = i;
+                if (openSpace.canvas_Object_Manager.ObjectItems[i].UI_Item == constrain.end) end = i;
             }
             return (start, end);
         }
         internal static List<ElementRecord> GetElements()
         {
             List<ElementRecord> elements = new List<ElementRecord>();
-            foreach(Canvas_Object_Manager.ObjectItem objectItem in OpenSpace.canvas_Object_Manager.ObjectItems)
+            foreach(Canvas_Object_Manager.ObjectItem objectItem in openSpace.canvas_Object_Manager.ObjectItems)
             {
                 if (objectItem.UI_Item.GetType() == typeof(AI_NodeUI)) continue;
                 elements.Add(new ElementRecord() {
@@ -122,7 +122,8 @@ namespace CaseManager.RecordSystem
             using (FileStream fs = new FileStream(ProjectFile, FileMode.Create))
             {
                 xmlSerializer.Serialize(fs, record);
-                Console.WriteLine("Object has been serialized");
+                //Console.WriteLine("Object has been serialized");
+                main.notifManager.Add(0, "Проект сохранен");
             }
         }
         internal static void Load(string ProjectFile, Action complite)
@@ -130,8 +131,9 @@ namespace CaseManager.RecordSystem
             using (FileStream fs = new FileStream(ProjectFile, FileMode.Open))
             {
                 Record record = xmlSerializer.Deserialize(fs) as Record;
-                Console.WriteLine($"Object has been deserialized");
-                OpenSpace.LoadFromFile(record);
+                //Console.WriteLine($"Object has been deserialized");
+                openSpace.LoadFromFile(record);
+                main.notifManager.Add(0, "Проект загружен");
                 complite.Invoke();
             }
         }
@@ -144,7 +146,8 @@ namespace CaseManager.RecordSystem
             using (FileStream fs = new FileStream(ProjectFolder+"/"+ProjectName, FileMode.Create))
             {
                 xmlSerializer.Serialize(fs, record);
-                Console.WriteLine("Object has been serialized");
+                //Console.WriteLine("Object has been serialized");
+                main.notifManager.Add(0, "Проект создан");
             }
         }
     }

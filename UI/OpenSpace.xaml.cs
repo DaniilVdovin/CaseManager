@@ -1,4 +1,5 @@
-﻿using CaseManager.RecordSystem.RecordModel;
+﻿using CaseManager.RecordSystem;
+using CaseManager.RecordSystem.RecordModel;
 using CaseManager.UI;
 using CaseManager.UI.AI;
 using Microsoft.Win32;
@@ -788,7 +789,6 @@ namespace CaseManager
         {
             listBox.SelectedItem = FindItemByUIelement(uI).List_Item;
         }
-
         internal void Clear()
         {
             foreach (ObjectItem item in ObjectItems)
@@ -841,7 +841,8 @@ namespace CaseManager
                 Adding.IsEnabled= false;
                 canvas_Object_Manager.Add(uIElement);
                 _isAdding = true;
-            }
+            }else
+                IOCore.main.notifManager.Add(2, "Добавить элемент сейчас невозможно");
         }
         internal void Adding_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -863,7 +864,7 @@ namespace CaseManager
                 if (constrain_Manager.current_strat != sender as UIElement)
                 {
                     constrain_Manager.SetEnd(sender as UIElement);
-                    Console.WriteLine($"SetEnd({sender.GetType().Name})");
+                    //Console.WriteLine($"SetEnd({sender.GetType().Name})");
                     _isAdding_Add_Constrain = false;
                 }
                 else constrain_Manager.Current_Clear();
@@ -891,7 +892,7 @@ namespace CaseManager
         {
             if (_isAdding_Add_Constrain)
             {
-                Console.WriteLine($"SetStart({sender.GetType().Name})");
+                //Console.WriteLine($"SetStart({sender.GetType().Name})");
                 constrain_Manager.SetStart(sender as UIElement);
                 Constrain_Line = new Line
                 {
@@ -940,7 +941,7 @@ namespace CaseManager
         {
             _isAdding_Add_Constrain = true;
             Mouse.OverrideCursor = Cursors.Pen;
-            Console.WriteLine("_isAdding_Add_Constrain ACTIVATE");
+            //Console.WriteLine("_isAdding_Add_Constrain ACTIVATE");
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -954,7 +955,7 @@ namespace CaseManager
             if (_isAdding_Add_Constrain)
             {
                 constrain_Manager.SetEnd(null);
-                Console.WriteLine($"SetEnd(LOST)");
+                //Console.WriteLine($"SetEnd(LOST)");
                 _isAdding_Add_Constrain = false;
                 constrain_Manager.Current_Clear();
                 Canvas.Children.Remove(Constrain_Line);
@@ -1140,19 +1141,33 @@ namespace CaseManager
         {
             if (element != null)
             {
-                if ((element as IElement).CanDelite)
+                if (typeof(IElement).IsAssignableFrom(element.GetType()))
                 {
-                    if (canvas_Focus.Curent_Focus != null)
-                        canvas_Focus.CleadFocus();
-                    constrain_Manager.Remove(element);
-                    canvas_Propertis.ClearProperty();
-                    canvas_Object_Manager.Remove(element);
+                    if ((element as IElement).CanDelite)
+                    {
+                        Delete(element);
+                    }
+                    else
+                        IOCore.main.notifManager.Add(2, "Объект нельзя удалять");
+                }
+                else
+                {
+                    Delete(element);
                 }
             }
+            else
+                IOCore.main.notifManager.Add(2, "Нет элемента в фокусе");
+        }
+        internal void Delete(UIElement element)
+        {
+            if (canvas_Focus.Curent_Focus != null)
+                canvas_Focus.CleadFocus();
+            constrain_Manager.Remove(element);
+            canvas_Propertis.ClearProperty();
+            canvas_Object_Manager.Remove(element);
         }
         public void ClearAll()
         {
-            
             canvas_Focus.CleadFocus();
             canvas_Propertis.ClearProperty();
             canvas_Object_Manager.Clear();

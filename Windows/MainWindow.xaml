@@ -1,10 +1,11 @@
-﻿<Window xmlns:Windows="clr-namespace:CaseManager.Windows"  x:Name="Window"
-        x:Class="CaseManager.MainWindow"
+﻿<Window xmlns:Windows="clr-namespace:CaseManager.Windows"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CaseManager"
+        xmlns:Notification="clr-namespace:CaseManager.UI.Notification"  x:Name="Window"
+        x:Class="CaseManager.MainWindow"
         mc:Ignorable="d"
         Title="Case Manager" 
         Height="725" Width="1283"
@@ -15,8 +16,17 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
         <!-- style a top level menu item -->
-        <ControlTemplate x:Key="MainMenuTop" TargetType="MenuItem">
+        <ControlTemplate x:Key="MainMenuTop" TargetType="{x:Type MenuItem}">
             <StackPanel TextBlock.FontSize="12px" Height="30">
+                <StackPanel.Style>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"  Value="True">
+                                <Setter Property="Background" Value="#4CA9A9A9"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
                 <!-- label, icons, etc. -->
                 <Label Content="{TemplateBinding Header}" Margin="5,1,5,2" Foreground="LightGray" />
                 <!-- sub items -->
@@ -25,23 +35,13 @@
                         <StackPanel IsItemsHost="True" />
                     </Border>
                 </Popup>
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver"  Value="True">
-                                <Setter Property="Background" Value="#4CA9A9A9"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </StackPanel.Style>
             </StackPanel>
         </ControlTemplate>
         <!-- style a icon menu item -->
-        <ControlTemplate x:Key="MainMenuIcon" TargetType="MenuItem">
+        <ControlTemplate x:Key="MainMenuIcon" TargetType="{x:Type MenuItem}">
             <StackPanel Height="30" Width="45">
-                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Margin="15,8,15,8"/>
                 <StackPanel.Style>
-                    <Style TargetType="StackPanel">
+                    <Style TargetType="{x:Type StackPanel}">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver"  Value="True">
                                 <Setter Property="Background" Value="#4CA9A9A9"/>
@@ -49,10 +49,11 @@
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Margin="15,8,15,8"/>
             </StackPanel>
         </ControlTemplate>
         <!-- style a non-top level menu item -->
-        <ControlTemplate x:Key="VsMenuSub" TargetType="MenuItem">
+        <ControlTemplate x:Key="VsMenuSub" TargetType="{x:Type MenuItem}">
             <DockPanel TextBlock.FontSize="12px" x:Name="panel">
                 <!--label, icons, etc.-->
                 <!--<Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="40" Height="40"/>-->
@@ -73,17 +74,17 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <!-- style the separator -->
-        <ControlTemplate x:Key="VsMenuSep" TargetType="Separator">
+        <ControlTemplate x:Key="VsMenuSep" TargetType="{x:Type Separator}">
             <Border Height="1" Background="#E0E0E0" />
         </ControlTemplate>
         <!-- style a image menu item -->
-        <ControlTemplate x:Key="MainMenuImage" TargetType="MenuItem">
+        <ControlTemplate x:Key="MainMenuImage" TargetType="{x:Type MenuItem}">
             <StackPanel Height="30" Width="30">
                 <Image Source="/Source/logo/logo_white.png" Margin="5" Opacity="0.8" />
             </StackPanel>
         </ControlTemplate>
         <!-- some base stuff -->
-        <Style TargetType="Menu">
+        <Style TargetType="{x:Type Menu}">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Height" Value="30px" />
         </Style>
@@ -137,7 +138,7 @@
                         <MenuItem x:Name="mm_ui_bpmn_rect" Header="_Квадрат" Template="{StaticResource VsMenuSub}"/>
                         <MenuItem x:Name="mm_ui_bpmn_ask" Header="_Если" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
-                    <MenuItem Header="_AI" Template="{StaticResource VsMenuSub}">
+                    <MenuItem Visibility="Collapsed" Header="_AI" Template="{StaticResource VsMenuSub}">
                         <MenuItem x:Name="mm_ui_ai_block" Header="_Блок" Template="{StaticResource VsMenuSub}"/>
                     </MenuItem>
                     <MenuItem Header="_Документы" Template="{StaticResource VsMenuSub}">
@@ -177,5 +178,6 @@
             </StatusBarItem>
         </StatusBar>
         <Windows:ProjectManager x:Name="project_manager" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="0,30,0,0" d:IsHidden="True" Cursor="Arrow" />
+        <Notification:NotificationUI x:Name="notifManager" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

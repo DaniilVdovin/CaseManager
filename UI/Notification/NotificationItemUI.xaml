@@ -5,13 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CaseManager.UI.Notification"
              mc:Ignorable="d" 
-             Height="100" Width="300" IsHitTestVisible="False">
-    <Grid  x:Name="NatifRoot" Background="#FF232323">
-        <Grid.Triggers>
-            <EventTrigger>
-                
-            </EventTrigger>
-        </Grid.Triggers>
+             Height="70" Width="300" IsHitTestVisible="False">
+    <Grid x:Name="NatifRoot" Background="#FF232323">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="10*"/>
@@ -24,6 +19,6 @@
             <ColumnDefinition Width="10*"/>
         </Grid.ColumnDefinitions>
         <Image x:Name="NatifImage" Grid.Column="1" Grid.Row="1" Source="/Source/logo/logo_white.png" Margin="10,10,10,10" />
-        <TextBlock  x:Name="NatifText" Grid.Column="2" Grid.Row="1" TextWrapping="Wrap" Foreground="#FFF1F1F1" FontFamily="Segoe UI Emoji" VerticalAlignment="Center" Text="Проект успешно сохранен"/>
+        <TextBlock  x:Name="NatifText" Grid.Column="2" Grid.Row="1" TextWrapping="Wrap" Foreground="#FFF1F1F1" FontFamily="Segoe UI Emoji" VerticalAlignment="Center" Text="Проект успешно сохранен" Margin="10,0,0,0"/>
     </Grid>
 </UserControl>
