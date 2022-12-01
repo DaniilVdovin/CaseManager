@@ -79,6 +79,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\Notification\NotificationItemUI.xaml.cs">
+      <DependentUpon>NotificationItemUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Notification\NotificationUI.xaml.cs">
+      <DependentUpon>NotificationUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProjectManager.xaml.cs">
       <DependentUpon>ProjectManager.xaml</DependentUpon>
     </Compile>
@@ -101,6 +107,14 @@
     <Page Include="UI\ImageHolderUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Notification\NotificationItemUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Notification\NotificationUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ImageProcessing.xaml">
       <SubType>Designer</SubType>
