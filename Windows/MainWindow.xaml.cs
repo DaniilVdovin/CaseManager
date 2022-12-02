@@ -2,6 +2,8 @@
 using CaseManager.UI.AI;
 using CaseManager.UI.BPMN;
 using CaseManager.Windows;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -49,7 +51,6 @@ namespace CaseManager
             project_manager.Loaded += (s, e) =>
             {
                 mm_ui.IsEnabled = false;
-
             };
             project_manager.Close += (s, e) =>
             {
@@ -64,6 +65,21 @@ namespace CaseManager
             {
                 Op_Sp.ClearAll();
             };
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 2)
+            {
+                if (args[1].Contains(".cmp"))
+                    IOCore.Load(args[1], () => {
+                        project_manager.Close.Invoke(null, null);
+                    });
+                else
+                    notifManager.Add(3, "Не верный формат файла");
+            }
         }
     }
 }

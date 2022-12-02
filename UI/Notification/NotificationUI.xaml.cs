@@ -55,6 +55,7 @@ namespace CaseManager.UI.Notification
 
             myStoryboard = new Storyboard();
             myStoryboard.Children.Add(myDoubleAnimation);
+            myStoryboard.Completed += MyStoryboard_Completed;
             Storyboard.SetTargetName(myDoubleAnimation, itemUI.Name);
             Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath("Opacity"));
 
@@ -62,6 +63,13 @@ namespace CaseManager.UI.Notification
             NatifHistory.Children.Add(itemUI);
             myStoryboard.Begin(itemUI);
         }
+
+        private void MyStoryboard_Completed(object sender, EventArgs e)
+        {
+            items.RemoveAt(0);
+            NatifHistory.Children.RemoveAt(0);
+        }
+
         internal (ImageSource,int) GetNotifType(int type)
         {
             switch(type)
@@ -96,6 +104,7 @@ namespace CaseManager.UI.Notification
         }
         private void MyDoubleAnimation_Completed(object sender, EventArgs e)
         {
+            Console.WriteLine(sender.GetType().Name);
             items.Remove(sender as NotificationItemUI);
             NatifHistory.Children.Remove(sender as NotificationItemUI);
         }

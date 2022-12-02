@@ -126,15 +126,15 @@ namespace CaseManager.RecordSystem
                 main.notifManager.Add(0, "Проект сохранен");
             }
         }
-        internal static void Load(string ProjectFile, Action complite)
+        public static void Load(string ProjectFile, Action complite)
         {
             using (FileStream fs = new FileStream(ProjectFile, FileMode.Open))
             {
                 Record record = xmlSerializer.Deserialize(fs) as Record;
                 //Console.WriteLine($"Object has been deserialized");
-                openSpace.LoadFromFile(record);
                 main.notifManager.Add(0, "Проект загружен");
                 complite.Invoke();
+                openSpace.LoadFromFile(record);
             }
         }
         internal static void Create(string ProjectFolder,string ProjectName)

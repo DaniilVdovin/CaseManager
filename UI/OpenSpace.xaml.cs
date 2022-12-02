@@ -1200,7 +1200,6 @@ namespace CaseManager
                     canvas_Object_Manager.Add((obj as UIElement));
                 }
             }
-
             foreach (ConstrainRecord constrain in record.constrains)
             {
                 constrain_Manager.Add_New(canvas_Object_Manager.ObjectItems[constrain.StartIndex].UI_Item,
