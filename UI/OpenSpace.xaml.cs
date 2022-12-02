@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using static CaseManager.Canvas_Object_Manager;
 
 namespace CaseManager
 {
@@ -782,7 +783,8 @@ namespace CaseManager
             if(item == null) return;
             ObjectItems.Remove(item);
             listBox.Items.Remove(item.List_Item);
-            (item.UI_Item as IElement).Clear();
+            if(typeof(IElement).IsAssignableFrom(item.UI_Item.GetType()))
+                (item.UI_Item as IElement).Clear();
             canvas.Children.Remove(item.UI_Item);
         }
         internal void Select(UIElement uI)
@@ -917,7 +919,9 @@ namespace CaseManager
         }
         private void UserControl_Initialized(object sender, EventArgs e)
         {
-            
+
+            this.AllowDrop = true;
+
             Canvas.MouseWheel           += Canvas_MouseWheel;
             Canvas.MouseLeftButtonDown  += Canvas_MouseLeftButtonDown;
             Canvas.MouseLeftButtonUp    += Canvas_MouseLeftButtonUp;
@@ -925,6 +929,7 @@ namespace CaseManager
             Canvas.MouseLeave           += Canvas_MouseLeave;
 
             CanvasViewer.KeyDown        += CanvasViewer_KeyDown;
+            this.Drop                   += CanvasViewer_Drop;
             
             canvas_Cursor = new Canvas_Cursor(Canvas,CanvasViewer);
             canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape);
@@ -937,6 +942,33 @@ namespace CaseManager
 
             Mouse.OverrideCursor = Cursors.Arrow;
         }
+
+        private void CanvasViewer_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files)
+                {
+                    if (file.EndsWith(".cmp"))
+                    {
+                        IOCore.Load(file, () => { });
+                        return;
+                    }
+                    if (file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".jpeg"))
+                    {
+                        ImageHolderUI holderUI = new ImageHolderUI();
+                        holderUI.properties[0].Value = file;
+                        canvas_Object_Manager.Add(holderUI);
+                        Point p = e.GetPosition(Canvas);
+                        System.Windows.Controls.Canvas.SetLeft(holderUI, p.X-250);
+                        System.Windows.Controls.Canvas.SetTop(holderUI, p.Y-250);
+                        return;
+                    }
+                }
+            }
+        }
+
         public  void Add_Constrain()
         {
             _isAdding_Add_Constrain = true;

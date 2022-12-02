@@ -7,7 +7,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CaseManager"
              mc:Ignorable="d" 
-             Focusable="True" MaxHeight="500" MaxWidth="500">
+             Focusable="True" MaxHeight="400" MaxWidth="400">
     <Grid>
         <GroupBox Header="Изображение" BorderBrush="{x:Null}" Foreground="#FFEEEEEE" Cursor="Arrow" Margin="10,10,10,10" OpacityMask="{x:Null}">
             <GroupBox.Background>

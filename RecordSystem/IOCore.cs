@@ -9,7 +9,10 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Xml.Linq;
 using System.Xml.Serialization;
+using static CaseManager.Canvas_Object_Manager;
+using static CaseManager.Canvas_Propertis;
 
 namespace CaseManager.RecordSystem
 {
@@ -93,8 +96,9 @@ namespace CaseManager.RecordSystem
                         Y = Canvas.GetTop(objectItem.UI_Item)
                     },
                     Type = objectItem.UI_Item.GetType().ToString(),
-                    Property = GetPropertiesFromUI(objectItem.UI_Item as IElement)
+                    Property = typeof(IElement).IsAssignableFrom(objectItem.UI_Item.GetType())?GetPropertiesFromUI(objectItem.UI_Item as IElement):new List<PropertyRecord>()
                 });
+                
             }
             return elements;
         }
