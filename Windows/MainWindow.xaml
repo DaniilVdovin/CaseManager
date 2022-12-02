@@ -177,7 +177,7 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
-        <Windows:ProjectManager x:Name="project_manager" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="0,30,0,0" d:IsHidden="True" Cursor="Arrow" />
+        <Windows:ProjectManager x:Name="project_manager" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="0,30,0,0" Visibility="Collapsed" Cursor="Arrow" />
         <Notification:NotificationUI x:Name="notifManager" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

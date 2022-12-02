@@ -30,8 +30,6 @@ namespace CaseManager.Windows
             open.MouseLeftButtonDown += Open_MouseLeftButtonDown;
             create.MouseLeftButtonDown += Create_MouseLeftButtonDown;
             root.MouseLeftButtonDown += Root_MouseLeftButtonDown;
-
-            
         }
 
         private void Root_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

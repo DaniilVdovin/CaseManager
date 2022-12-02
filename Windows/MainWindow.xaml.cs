@@ -25,6 +25,7 @@ namespace CaseManager
             this.MaxHeight = SystemParameters.WorkArea.Height + SystemParameters.WorkArea.Top + 12;
             this.MaxWidth = SystemParameters.WorkArea.Width + SystemParameters.WorkArea.Left + 12;
 
+            
             status_progress.Visibility= Visibility.Hidden;
 
             mm_ui_person.Click += (s, e) => Op_Sp.Add_Element(new PersonUI());
@@ -54,6 +55,7 @@ namespace CaseManager
             {
                 mm_ui.IsEnabled = false;
             };
+
             project_manager.Close += (s, e) =>
             {
                 project_manager.Visibility = Visibility.Collapsed;
@@ -81,6 +83,10 @@ namespace CaseManager
                     });
                 else
                     notifManager.Add(3, "Не верный формат файла");
+            }
+            else
+            {
+                project_manager.Visibility = Visibility.Visible;
             }
         }
     }
