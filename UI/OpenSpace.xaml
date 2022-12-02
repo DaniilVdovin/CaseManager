@@ -53,7 +53,33 @@
                             <Image Source="/Source/icons/icons8-close-30.png" Stretch="Fill" Margin="5"/>
                         </Border>
                     </Grid>
-                    <ListBox x:Name="object_manager_list" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFD2D2D2" Margin="0,20,0,0"/>
+                    <ListBox x:Name="object_manager_list" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFD2D2D2" Margin="0,20,0,0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border Name="_Border"
+                                                    Padding="2"
+                                                    SnapsToDevicePixels="true">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="true">
+                                                    <Setter TargetName="_Border" Property="Background" Value="gray"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="_Border" Property="Background" Value="lightgray"/>
+                                                    <Setter Property="Foreground" Value="gray"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </Grid>
             </Border>
             <GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" Background="Transparent" Height="4" VerticalAlignment="Bottom" Margin="5,0,5,-3"/>
