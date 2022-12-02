@@ -24,6 +24,7 @@ namespace CaseManager.UI.Notification
         {
             InitializeComponent();
             NatifText.Text = text;
+
         }
     }
 }
