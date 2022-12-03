@@ -961,9 +961,9 @@ namespace CaseManager
                         holderUI.properties[0].Value = file;
                         canvas_Object_Manager.Add(holderUI);
                         Point p = e.GetPosition(Canvas);
-                        System.Windows.Controls.Canvas.SetLeft(holderUI, p.X-250);
-                        System.Windows.Controls.Canvas.SetTop(holderUI, p.Y-250);
-                        return;
+                        System.Windows.Controls.Canvas.SetLeft(holderUI, (p.X - 200));
+                        System.Windows.Controls.Canvas.SetTop(holderUI, p.Y-200);
+                        IOCore.main.notifManager.Add(1, "Фото добавленно");
                     }
                 }
             }

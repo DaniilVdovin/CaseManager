@@ -16,7 +16,7 @@
                     <GradientStop Color="#F2313131" Offset="0.986"/>
                 </LinearGradientBrush>
             </GroupBox.Background>
-            <DocumentViewer HorizontalAlignment="Left" VerticalAlignment="Top" Zoom="50"/>
+            <DocumentViewer x:Name="doc_hold" HorizontalAlignment="Left" VerticalAlignment="Top" Zoom="50"/>
         </GroupBox>
     </Grid>
 </UserControl>
