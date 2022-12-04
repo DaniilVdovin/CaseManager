@@ -56,7 +56,7 @@
         <ControlTemplate x:Key="VsMenuSub" TargetType="{x:Type MenuItem}">
             <DockPanel TextBlock.FontSize="12px" x:Name="panel">
                 <!--label, icons, etc.-->
-                <Label Content="{TemplateBinding Header}" Foreground="White" Margin="0,5,5,5"/>
+                <Label Content="{TemplateBinding Header}" Foreground="White" Width="120" Margin="0,5,5,5"/>
                 <Image Source="/Source/icons/icons8-circled-down-left-96.png" Visibility="{Binding HasItems, Converter={StaticResource btv}, RelativeSource={RelativeSource TemplatedParent}}" Width="10" Height="10" Margin="10,10,10,10" />
                 <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" Placement="Right" >
                     <Border BorderThickness="1" Background="#FF212121" BorderBrush="#FF212121">
