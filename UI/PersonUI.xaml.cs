@@ -13,18 +13,18 @@ namespace CaseManager
     public partial class PersonUI : UserControl, IElement
     {
         public bool CanDelite { get; set; }
-        public List<Canvas_Propertis.Property> properties { get; set; }
+        public List<OpenSpace_Propertis.Property> properties { get; set; }
         private readonly ImageSource image_default;
         public PersonUI()
         {
             InitializeComponent();
             CanDelite= false;
-            properties = new List<Canvas_Propertis.Property>
+            properties = new List<OpenSpace_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Основное","Имя", "Daniil", "string",(v)=>{ t_name.Text = v.ToString(); }),
-                new Canvas_Propertis.Property("Основное","Изображение", "-","File",(v)=>{LoadImage(v.ToString());}),
-                new Canvas_Propertis.Property("Параметры","Возраст", 22, "string",(v)=>{ t_age.Text = "Возраст: " + v.ToString(); }),
-                new Canvas_Propertis.Property("Параметры","Рост", 182, "string",(v)=>{ t_Height.Text = "Рост: " + v.ToString(); }),
+                new OpenSpace_Propertis.Property("Основное","Имя", "Daniil", "string",(v)=>{ t_name.Text = v.ToString(); }),
+                new OpenSpace_Propertis.Property("Основное","Изображение", "-","File",(v)=>{LoadImage(v.ToString());}),
+                new OpenSpace_Propertis.Property("Параметры","Возраст", 22, "string",(v)=>{ t_age.Text = "Возраст: " + v.ToString(); }),
+                new OpenSpace_Propertis.Property("Параметры","Рост", 182, "string",(v)=>{ t_Height.Text = "Рост: " + v.ToString(); }),
             };
             image_default = i_image.Source;
         }

@@ -23,7 +23,7 @@ namespace CaseManager.UI.AI
     /// </summary>
     public partial class AI_blockUI : FrameworkElement, IElement
     {
-        public List<Canvas_Propertis.Property> properties { get; set; }
+        public List<OpenSpace_Propertis.Property> properties { get; set; }
         public bool CanDelite { get; set; }
 
         public List<List<AI_NodeUI>> nodes;
@@ -52,9 +52,9 @@ namespace CaseManager.UI.AI
             Width = 100;
             Height = 60;
             RenderSize = new Size(Width, Height);
-            properties = new List<Canvas_Propertis.Property>
+            properties = new List<OpenSpace_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Основное","Данные", "1,2,2,1", "string",ReGenerate)
+                new OpenSpace_Propertis.Property("Основное","Данные", "1,2,2,1", "string",ReGenerate)
             };
         }
         private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

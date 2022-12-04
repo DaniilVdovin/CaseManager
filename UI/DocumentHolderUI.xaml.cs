@@ -26,15 +26,15 @@ namespace CaseManager
     public partial class DocumentHolderUI : UserControl, IElement
     {
         public bool CanDelite { get; set; }
-        public List<Canvas_Propertis.Property> properties { get; set; }
+        public List<OpenSpace_Propertis.Property> properties { get; set; }
 
         public DocumentHolderUI()
         {
             InitializeComponent();
             CanDelite = true;
-            properties = new List<Canvas_Propertis.Property>
+            properties = new List<OpenSpace_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Основное","Файл", "-","File",(v)=>{LoadDock(v.ToString());})
+                new OpenSpace_Propertis.Property("Основное","Файл", "-","File",(v)=>{LoadDock(v.ToString());})
             };
         }
         public void LoadDock(string file)

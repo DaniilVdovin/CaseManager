@@ -20,18 +20,18 @@ namespace CaseManager.UI.BPMN
     /// </summary>
     public partial class BPMN_ask : IElement
     {
-        public List<Canvas_Propertis.Property> properties { get; set; }
+        public List<OpenSpace_Propertis.Property> properties { get; set; }
         public bool CanDelite { get; set; }
 
         public BPMN_ask()
         {
             InitializeComponent();
             CanDelite = true;
-            properties = new List<Canvas_Propertis.Property>
+            properties = new List<OpenSpace_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Основное","Текст", "<Текст>", "string",(v)=>{ context.Content = v.ToString(); }),
-                new Canvas_Propertis.Property("Параметры","Да", "Да", "string",(v)=>{ context_yes.Content = v.ToString(); }),
-                new Canvas_Propertis.Property("Параметры","Нет", "Нет", "string",(v)=>{ context_no.Content = v.ToString(); }),
+                new OpenSpace_Propertis.Property("Основное","Текст", "<Текст>", "string",(v)=>{ context.Content = v.ToString(); }),
+                new OpenSpace_Propertis.Property("Параметры","Да", "Да", "string",(v)=>{ context_yes.Content = v.ToString(); }),
+                new OpenSpace_Propertis.Property("Параметры","Нет", "Нет", "string",(v)=>{ context_no.Content = v.ToString(); }),
             };
         }
 

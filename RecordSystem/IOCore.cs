@@ -11,8 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using static CaseManager.Canvas_Object_Manager;
-using static CaseManager.Canvas_Propertis;
+using static CaseManager.OpenSpace_Object_Manager;
+using static CaseManager.OpenSpace_Propertis;
 
 namespace CaseManager.RecordSystem
 {
@@ -61,7 +61,7 @@ namespace CaseManager.RecordSystem
         internal static List<ConstrainRecord> GetConstrains()
         {
             List<ConstrainRecord> elements = new List<ConstrainRecord>();
-            foreach (Canvas_Constrain constrain in openSpace.constrain_Manager.Constrains)
+            foreach (OpenSpace_Constrain constrain in openSpace.constrain_Manager.Constrains)
             {
                 var p = GetConstrainConnectIndex(constrain);
                 elements.Add(new ConstrainRecord()
@@ -72,7 +72,7 @@ namespace CaseManager.RecordSystem
             }
             return elements;
         }
-        internal static (int,int) GetConstrainConnectIndex(Canvas_Constrain constrain)
+        internal static (int,int) GetConstrainConnectIndex(OpenSpace_Constrain constrain)
         {
             int start=0, end=0;
             for (int i = 0; i < openSpace.canvas_Object_Manager.ObjectItems.Count; i++)
@@ -85,7 +85,7 @@ namespace CaseManager.RecordSystem
         internal static List<ElementRecord> GetElements()
         {
             List<ElementRecord> elements = new List<ElementRecord>();
-            foreach(Canvas_Object_Manager.ObjectItem objectItem in openSpace.canvas_Object_Manager.ObjectItems)
+            foreach(OpenSpace_Object_Manager.ObjectItem objectItem in openSpace.canvas_Object_Manager.ObjectItems)
             {
                 if (objectItem.UI_Item.GetType() == typeof(AI_NodeUI)) continue;
                 elements.Add(new ElementRecord() {

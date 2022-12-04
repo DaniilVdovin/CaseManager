@@ -1,13 +1,11 @@
 ﻿using CaseManager.RecordSystem;
 using CaseManager.RecordSystem.RecordModel;
 using CaseManager.UI;
-using CaseManager.UI.AI;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,11 +13,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-using static CaseManager.Canvas_Object_Manager;
 
 namespace CaseManager
 {
-    public class Canvas_Constrain
+    public class OpenSpace_Constrain
     {
         public class ControlPoint
         {
@@ -44,7 +41,7 @@ namespace CaseManager
         readonly List<ControlPoint> start_control_points;
         readonly List<ControlPoint> end_control_points;
         bool _isEdit = false;
-        public Canvas_Constrain(Canvas canvas, UIElement start, UIElement end)
+        public OpenSpace_Constrain(Canvas canvas, UIElement start, UIElement end)
         {
             this.canvas = canvas;
             this.start = start;
@@ -178,13 +175,13 @@ namespace CaseManager
             return IntersectionPoint;
         }*/
     }
-    public class Canvas_Cursor {
+    public class OpenSpace_Cursor {
         private readonly Line line1, line2;
         private readonly UIElement View;
-        public Canvas_Cursor(Canvas canvas,UIElement View)
+        public OpenSpace_Cursor(Canvas canvas, UIElement View)
         {
             this.View = View;
-            line1 = new Line();line2 = new Line();
+            line1 = new Line(); line2 = new Line();
             canvas.Children.Add(line1);
             canvas.Children.Add(line2);
             line1.Stroke = line2.Stroke = new SolidColorBrush(Colors.WhiteSmoke);
@@ -194,7 +191,7 @@ namespace CaseManager
         {
             SetVisible(true);
             line1.X1 = line1.X2 = point.X;
-            line1.Y1 = point.Y-View.DesiredSize.Height; line1.Y2 = point.Y+View.DesiredSize.Height;
+            line1.Y1 = point.Y - View.DesiredSize.Height; line1.Y2 = point.Y + View.DesiredSize.Height;
             line2.Y1 = line2.Y2 = point.Y;
             line2.X1 = point.X - View.DesiredSize.Width; line2.X2 = point.X + View.DesiredSize.Width;
         }
@@ -204,7 +201,7 @@ namespace CaseManager
             line2.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
     }
-    public class Canvas_Ruler
+    public class OpenSpace_Ruler
     {
         private readonly Canvas left, top;
         private Line line_left, line_top;
@@ -218,21 +215,21 @@ namespace CaseManager
 
         public Point Coefficient;
 
-        private readonly TranslateTransform tt_t   = new TranslateTransform(),
-                                            tt_l   = new TranslateTransform(),
+        private readonly TranslateTransform tt_t = new TranslateTransform(),
+                                            tt_l = new TranslateTransform(),
                                             tt_v_l = new TranslateTransform(),
                                             tt_v_t = new TranslateTransform();
-        private readonly ScaleTransform     st_t   = new ScaleTransform(),
-                                            st_l   = new ScaleTransform(),
+        private readonly ScaleTransform st_t = new ScaleTransform(),
+                                            st_l = new ScaleTransform(),
                                             st_v_l = new ScaleTransform(),
                                             st_v_t = new ScaleTransform();
-        private readonly TransformGroup     tg_t   = new TransformGroup(),
-                                            tg_l   = new TransformGroup(),
+        private readonly TransformGroup tg_t = new TransformGroup(),
+                                            tg_l = new TransformGroup(),
                                             tg_v_l = new TransformGroup(),
                                             tg_v_t = new TransformGroup();
 
         private readonly Brush brush;
-        public Canvas_Ruler(Canvas canvas, Canvas left, Canvas top)
+        public OpenSpace_Ruler(Canvas canvas, Canvas left, Canvas top)
         {
             this.left = left;
             this.top = top;
@@ -265,7 +262,7 @@ namespace CaseManager
             view_rect_top.Opacity = view_rect_left.Opacity = 0.15d;
             view_rect_top.Height = view_rect_left.Width = 30;
 
-           
+
             tg_v_t.Children.Add(tt_v_t);
             tg_v_t.Children.Add(st_v_t);
 
@@ -277,11 +274,11 @@ namespace CaseManager
             left.Children.Add(view_rect_left);
             top.Children.Add(view_rect_top);
         }
-        public void SetCoefficient(Point c,Point v)
+        public void SetCoefficient(Point c, Point v)
         {
-            Coefficient = new Point(c.X / v.X, c.Y /v.Y);
-            view_rect_top.Width = (v.X/Coefficient.X);
-            view_rect_left.Height = (v.Y/Coefficient.Y);
+            Coefficient = new Point(c.X / v.X, c.Y / v.Y);
+            view_rect_top.Width = (v.X / Coefficient.X);
+            view_rect_left.Height = (v.Y / Coefficient.Y);
             //Console.WriteLine($"Coefficient:{Coefficient}");
         }
         private void Create_Cursor_Line()
@@ -308,7 +305,7 @@ namespace CaseManager
                     };
                     top.Children.Add(line);
                 }
-                else 
+                else
                 if (i % OneDecimal == 0) {
                     Line line = new Line() {
                         X1 = i,
@@ -354,15 +351,15 @@ namespace CaseManager
         }
         public void SetVisible(bool visible)
         {
-            line_left.Visibility = line_top.Visibility =  visible ? Visibility.Visible : Visibility.Hidden;
+            line_left.Visibility = line_top.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
         public void SetOffset(Point point)
         {
             tt_t.X = point.X;
-            tt_l.Y = point.Y; 
-            
-            tt_v_l.Y = -(point.Y + (point.Y/Coefficient.Y));
-            tt_v_t.X = -(point.X + (point.X/Coefficient.X));
+            tt_l.Y = point.Y;
+
+            tt_v_l.Y = -(point.Y + (point.Y / Coefficient.Y));
+            tt_v_t.X = -(point.X + (point.X / Coefficient.X));
         }
         public void SetScale(ScaleTransform scaleTransform)
         {
@@ -381,21 +378,21 @@ namespace CaseManager
         {
             SetVisible(true);
             line_left.X1 = 0; line_left.X2 = left.ActualWidth;
-            line_left.Y1 =    line_left.Y2 = point.Y;
-            line_top.Y1  = 0; line_top.Y2  = top.ActualHeight;
-            line_top.X1  =    line_top.X2  = point.X;
+            line_left.Y1 = line_left.Y2 = point.Y;
+            line_top.Y1 = 0; line_top.Y2 = top.ActualHeight;
+            line_top.X1 = line_top.X2 = point.X;
         }
         public void Change_Dimension()
         {
             left.Children.Clear();
             top.Children.Clear();
-            left.Children.Add(line_left);      top.Children.Add(line_top);
+            left.Children.Add(line_left); top.Children.Add(line_top);
             left.Children.Add(view_rect_left); top.Children.Add(view_rect_top);
             Dimension();
         }
 
     }
-    public class Canvas_Propertis
+    public class OpenSpace_Propertis
     {
         public class Property
         {
@@ -429,12 +426,12 @@ namespace CaseManager
         readonly UIElement propertis;
         readonly DataGrid dataGrid;
         readonly Label nonData;
-        public Canvas_Propertis(UIElement propertis,DataGrid dataGrid,Label nonData)
+        public OpenSpace_Propertis(UIElement propertis, DataGrid dataGrid, Label nonData)
         {
             this.propertis = propertis;
             this.dataGrid = dataGrid;
             this.nonData = nonData;
-        } 
+        }
         public void LoadProperty(List<Property> list)
         {
             ClearProperty();
@@ -473,27 +470,27 @@ namespace CaseManager
             propertis.Visibility = Visibility.Collapsed;
         }
     }
-    public class Canvas_Constrain_Manager {
-        public List<Canvas_Constrain> _constrais;
+    public class OpenSpace_Constrain_Manager {
+        public List<OpenSpace_Constrain> _constrais;
 
         public UIElement current_strat, current_end;
         bool _isWaitEnd = false;
         private readonly Canvas canvas;
 
-        public Canvas_Constrain_Manager(Canvas canvas)
+        public OpenSpace_Constrain_Manager(Canvas canvas)
         {
             this.canvas = canvas;
-            Constrains = new List<Canvas_Constrain>();
+            Constrains = new List<OpenSpace_Constrain>();
         }
 
-        public List<Canvas_Constrain> Constrains { get => _constrais; set
+        public List<OpenSpace_Constrain> Constrains { get => _constrais; set
             {
-                if(value != _constrais)
+                if (value != _constrais)
                 {
                     _constrais = value;
                     UpdateList();
                 }
-            } 
+            }
         }
         internal void SetStart(UIElement uIElement)
         {
@@ -502,7 +499,7 @@ namespace CaseManager
         }
         internal void SetEnd(UIElement uIElement)
         {
-            if(uIElement == null)return;
+            if (uIElement == null) return;
             if (_isWaitEnd)
                 if (current_strat != null)
                 {
@@ -512,16 +509,16 @@ namespace CaseManager
                 }
                 else Current_Clear();
         }
-        public Canvas_Constrain Add_New(UIElement start,UIElement end)
+        public OpenSpace_Constrain Add_New(UIElement start, UIElement end)
         {
-            Canvas_Constrain bieze = new Canvas_Constrain(canvas,start, end);
+            OpenSpace_Constrain bieze = new OpenSpace_Constrain(canvas, start, end);
             Constrains.Add(bieze);
             bieze.Position();
             return bieze;
         }
         internal void UpdateList()
         {
-            foreach (Canvas_Constrain item in Constrains)
+            foreach (OpenSpace_Constrain item in Constrains)
             {
                 item.Update();
                 item.Position();
@@ -534,8 +531,8 @@ namespace CaseManager
         }
         internal void Remove(UIElement element)
         {
-            List<Canvas_Constrain> _onDelete = new List<Canvas_Constrain>();
-            foreach (Canvas_Constrain b in _constrais)
+            List<OpenSpace_Constrain> _onDelete = new List<OpenSpace_Constrain>();
+            foreach (OpenSpace_Constrain b in _constrais)
             {
                 if (b.start == element || b.end == element)
                 {
@@ -543,7 +540,7 @@ namespace CaseManager
                     _onDelete.Add(b);
                 }
             }
-            foreach (Canvas_Constrain b in _onDelete)
+            foreach (OpenSpace_Constrain b in _onDelete)
             {
                 _constrais.Remove(b);
             }
@@ -552,27 +549,27 @@ namespace CaseManager
 
         internal void Clear()
         {
-            foreach (Canvas_Constrain item in Constrains)
+            foreach (OpenSpace_Constrain item in Constrains)
             {
                 item.Clear();
             }
             Constrains.Clear();
         }
     }
-    public class Canvas_Grid : Canvas
+    public class OpenSpace_Grid : Canvas
     {
         private readonly Pen brush2;
         private readonly Pen bg;
         private readonly SolidColorBrush solidColorBrush2;
         private readonly SolidColorBrush bgbrush;
-        public Canvas_Grid()
+        public OpenSpace_Grid()
         {
             solidColorBrush2 = new SolidColorBrush(Colors.Gray);
             bgbrush = new SolidColorBrush(Colors.Transparent);
             solidColorBrush2.Opacity = 0.3d;
             solidColorBrush2.Freeze();
             brush2 = new Pen(solidColorBrush2, 0.5d);
-            bg = new Pen(bgbrush,0);
+            bg = new Pen(bgbrush, 0);
         }
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -585,7 +582,7 @@ namespace CaseManager
             drawingContext.DrawRectangle(bgbrush, bg, new Rect(this.DesiredSize));
         }
     }
-    public class Canvas_Focus
+    public class OpenSpace_Focus
     {
         private UIElement _curent_Focus;
         public UIElement Curent_Focus
@@ -603,7 +600,7 @@ namespace CaseManager
         readonly OpenSpace openSpace;
         readonly Rectangle rectangle;
         readonly TranslateTransform tt;
-        public Canvas_Focus(OpenSpace openSpace)
+        public OpenSpace_Focus(OpenSpace openSpace)
         {
             this.openSpace = openSpace;
 
@@ -639,8 +636,8 @@ namespace CaseManager
         {
             Size view = openSpace.CanvasViewer.DesiredSize;
             var tt = (TranslateTransform)((TransformGroup)openSpace.Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
-            tt.X = -(Canvas.GetLeft(Curent_Focus) - view.Width/2 + Curent_Focus.DesiredSize.Width/2);
-            tt.Y = -(Canvas.GetTop(Curent_Focus) - view.Height/2 + Curent_Focus.DesiredSize.Height/2);
+            tt.X = -(Canvas.GetLeft(Curent_Focus) - view.Width / 2 + Curent_Focus.DesiredSize.Width / 2);
+            tt.Y = -(Canvas.GetTop(Curent_Focus) - view.Height / 2 + Curent_Focus.DesiredSize.Height / 2);
             openSpace.Corect_Size();
         }
         public void CleadFocus()
@@ -668,25 +665,25 @@ namespace CaseManager
                 rectangle.Visibility = Visibility.Visible;
                 ChangeFocusSize();
                 tt.X = Canvas.GetLeft(Curent_Focus);
-                tt.Y = Canvas.GetTop(Curent_Focus)+10;
+                tt.Y = Canvas.GetTop(Curent_Focus) + 10;
                 //Console.WriteLine("BIND FOCUS");
             }
         }
 
         private void Curent_Focus_LayoutUpdated(object sender, EventArgs e)
         {
-            ChangeFocusSize(); 
+            ChangeFocusSize();
         }
         private void UI_MouseMove(object sender, MouseEventArgs e)
         {
             if (Curent_Focus != null)
             {
                 tt.X = Canvas.GetLeft(Curent_Focus);
-                tt.Y = Canvas.GetTop(Curent_Focus)+10;
+                tt.Y = Canvas.GetTop(Curent_Focus) + 10;
             }
         }
     }
-    public class Canvas_Object_Manager
+    public class OpenSpace_Object_Manager
     {
         public class ObjectItem
         {
@@ -694,7 +691,7 @@ namespace CaseManager
             public ListBoxItem List_Item { get; set; }
             public UIElement UI_Item { get; set; }
             public UIElement UI_Item_parent { get; set; }
-            public ObjectItem(int i,UIElement uI_Item,RoutedEventHandler action, UIElement UI_Item_parent =  null)
+            public ObjectItem(int i, UIElement uI_Item, RoutedEventHandler action, UIElement UI_Item_parent = null)
             {
                 this.UI_Item_parent = UI_Item_parent;
                 UI_Item = uI_Item;
@@ -702,17 +699,17 @@ namespace CaseManager
                 List_Item = new ListBoxItem
                 {
                     Content = $"{child} {uI_Item.GetType().Name} ({i})"
-                    ,Opacity = this.UI_Item_parent != null ? .5 : 1
+                    , Opacity = this.UI_Item_parent != null ? .5 : 1
                 };
                 List_Item.Selected += action;
             }
             public override bool Equals(object obj)
             {
-                if(obj is ListBoxItem)
+                if (obj is ListBoxItem)
                     return List_Item == obj as ListBoxItem;
-                if(obj is UIElement)
+                if (obj is UIElement)
                     return UI_Item == obj as UIElement;
-                if(obj is ObjectItem)
+                if (obj is ObjectItem)
                     return this == obj as ObjectItem;
                 return false;
             }
@@ -730,7 +727,7 @@ namespace CaseManager
         private readonly Canvas canvas;
         private readonly ListBox listBox;
         private readonly OpenSpace openSpace;
-        public Canvas_Object_Manager(OpenSpace openSpace,Canvas canvas,ListBox listBox)
+        public OpenSpace_Object_Manager(OpenSpace openSpace, Canvas canvas, ListBox listBox)
         {
             this.openSpace = openSpace;
             this.listBox = listBox;
@@ -780,10 +777,10 @@ namespace CaseManager
         internal void Remove(UIElement element)
         {
             ObjectItem item = FindItemByUIelement(element);
-            if(item == null) return;
+            if (item == null) return;
             ObjectItems.Remove(item);
             listBox.Items.Remove(item.List_Item);
-            if(typeof(IElement).IsAssignableFrom(item.UI_Item.GetType()))
+            if (typeof(IElement).IsAssignableFrom(item.UI_Item.GetType()))
                 (item.UI_Item as IElement).Clear();
             canvas.Children.Remove(item.UI_Item);
         }
@@ -802,6 +799,33 @@ namespace CaseManager
             index = 1;
         }
     }
+    public class OpenSpace_CopyPaste{
+
+        private OpenSpace os;
+        public UIElement obj;
+        private bool _isCopyPasty = false;
+        public OpenSpace_CopyPaste(OpenSpace openSpace)
+        {
+            os = openSpace;
+        }
+        public void Copy(UIElement element)
+        {
+            obj = element;
+        }
+        public void Paste()
+        {
+            if (obj != null)
+            {
+                object result = Activator.CreateInstance(obj.GetType());
+                for (int i = 0; i < (obj as IElement).properties.Count; i++)
+                {
+                    (result as IElement).properties[i].Value = (obj as IElement).properties[i].Value;
+                }
+                (result as IElement).CanDelite = (obj as IElement).CanDelite;
+                os.Add_Element(result as UIElement);
+            }
+        }
+    }
     public partial class OpenSpace : UserControl
     {
         private Point origin;
@@ -814,12 +838,13 @@ namespace CaseManager
         private bool _isAdding_Hover = false;
         private bool _isAdding_Add_Constrain = false;
         private UIElement Adding = null;
-        public  Canvas_Cursor canvas_Cursor;
-        public  Canvas_Ruler canvas_Ruler;
-        public  Canvas_Propertis canvas_Propertis;
-        public  Canvas_Constrain_Manager constrain_Manager;
-        public  Canvas_Focus canvas_Focus;
-        public  Canvas_Object_Manager canvas_Object_Manager;
+        public  OpenSpace_Cursor canvas_Cursor;
+        public  OpenSpace_Ruler canvas_Ruler;
+        public  OpenSpace_Propertis canvas_Propertis;
+        public  OpenSpace_Constrain_Manager constrain_Manager;
+        public  OpenSpace_Focus canvas_Focus;
+        public  OpenSpace_Object_Manager canvas_Object_Manager;
+        public  OpenSpace_CopyPaste CopyPaste;
         private Line Constrain_Line;
         public  OpenSpace()
         {
@@ -931,18 +956,19 @@ namespace CaseManager
             CanvasViewer.KeyDown        += CanvasViewer_KeyDown;
             this.Drop                   += CanvasViewer_Drop;
             
-            canvas_Cursor = new Canvas_Cursor(Canvas,CanvasViewer);
-            canvas_Ruler = new Canvas_Ruler(Canvas,left_tape,top_tape);
-            canvas_Propertis = new Canvas_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
-            constrain_Manager = new Canvas_Constrain_Manager(Canvas);
-            canvas_Focus = new Canvas_Focus(this);
-            canvas_Object_Manager = new Canvas_Object_Manager(this,Canvas,object_manager_list);
+            canvas_Cursor = new OpenSpace_Cursor(Canvas,CanvasViewer);
+            canvas_Ruler = new OpenSpace_Ruler(Canvas,left_tape,top_tape);
+            canvas_Propertis = new OpenSpace_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
+            constrain_Manager = new OpenSpace_Constrain_Manager(Canvas);
+            canvas_Focus = new OpenSpace_Focus(this);
+            canvas_Object_Manager = new OpenSpace_Object_Manager(this,Canvas,object_manager_list);
+            CopyPaste = new OpenSpace_CopyPaste(this);
+
             PropertisBar_close.MouseLeftButtonDown += (s, b) => { canvas_Propertis.Close(); };
             bt_line_add.MouseLeftButtonDown += (s, b) => Add_Constrain();
-
+            
             Mouse.OverrideCursor = Cursors.Arrow;
         }
-
         private void CanvasViewer_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -968,7 +994,6 @@ namespace CaseManager
                 }
             }
         }
-
         public  void Add_Constrain()
         {
             _isAdding_Add_Constrain = true;
@@ -1213,6 +1238,14 @@ namespace CaseManager
                 case Key.Delete:
                     DeleteElement(canvas_Focus.Curent_Focus);
                     break;
+            }
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.C)
+            {
+                CopyPaste.Copy(canvas_Focus.Curent_Focus);
+            }
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
+            {
+                CopyPaste.Paste();
             }
         }
         public void LoadFromFile(Record record)

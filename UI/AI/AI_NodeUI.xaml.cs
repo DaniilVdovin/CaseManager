@@ -22,15 +22,15 @@ namespace CaseManager.UI
     public partial class AI_NodeUI : UserControl, IElement
     {
         public bool CanDelite {get;set;}
-        public List<Canvas_Propertis.Property> properties { get ; set; }
+        public List<OpenSpace_Propertis.Property> properties { get ; set; }
         public AI_NodeUI()
         {
             InitializeComponent();
             CanDelite = true;
-            properties = new List<Canvas_Propertis.Property>
+            properties = new List<OpenSpace_Propertis.Property>
             {
-                new Canvas_Propertis.Property("Основное","Вес", "1,8", "string",(v)=>{ node_text.Content = v.ToString()+"w"; }),
-                new Canvas_Propertis.Property("Основное","Цвет", "White","string",(v)=>{ node_color.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(v.ToString())); })
+                new OpenSpace_Propertis.Property("Основное","Вес", "1,8", "string",(v)=>{ node_text.Content = v.ToString()+"w"; }),
+                new OpenSpace_Propertis.Property("Основное","Цвет", "White","string",(v)=>{ node_color.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(v.ToString())); })
             };
         }
 
