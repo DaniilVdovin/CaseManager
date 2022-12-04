@@ -803,7 +803,6 @@ namespace CaseManager
 
         private OpenSpace os;
         public UIElement obj;
-        private bool _isCopyPasty = false;
         public OpenSpace_CopyPaste(OpenSpace openSpace)
         {
             os = openSpace;
