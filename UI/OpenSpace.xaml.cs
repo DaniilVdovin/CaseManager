@@ -802,7 +802,7 @@ namespace CaseManager
     }
     public class OpenSpace_CopyPaste{
 
-        private OpenSpace os;
+        private readonly OpenSpace os;
         public UIElement obj;
         public OpenSpace_CopyPaste(OpenSpace openSpace)
         {
