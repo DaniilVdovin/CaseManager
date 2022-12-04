@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace CaseManager
 {
@@ -816,11 +817,14 @@ namespace CaseManager
             if (obj != null)
             {
                 object result = Activator.CreateInstance(obj.GetType());
-                for (int i = 0; i < (obj as IElement).properties.Count; i++)
+                if (typeof(IElement).IsAssignableFrom(obj.GetType()))
                 {
-                    (result as IElement).properties[i].Value = (obj as IElement).properties[i].Value;
+                    for (int i = 0; i < (obj as IElement).properties.Count; i++)
+                    {
+                        (result as IElement).properties[i].Value = (obj as IElement).properties[i].Value;
+                    }
+                    (result as IElement).CanDelite = (obj as IElement).CanDelite;
                 }
-                (result as IElement).CanDelite = (obj as IElement).CanDelite;
                 os.Add_Element(result as UIElement);
             }
         }
