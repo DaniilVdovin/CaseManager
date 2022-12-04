@@ -34,7 +34,7 @@ namespace CaseManager
             mm_ui_bpmn_rect.Click += (s, e) => Op_Sp.Add_Element(new BPMN_Rect());
             mm_ui_bpmn_ask.Click += (s, e) => Op_Sp.Add_Element(new BPMN_ask());
             mm_ui_ai_block.Click += (s, e) => Op_Sp.Add_Element(new AI_blockUI());
-
+            mm_ui_clear.Click += (s, e) => Op_Sp.ClearAll();
             mm_ui_line.Click += (s, e) => Op_Sp.Add_Constrain();
 
             mm_ui_imageprocessing.Click += (s, e) => new ImageProcessing().Show();

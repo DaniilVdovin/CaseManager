@@ -22,11 +22,14 @@ namespace CaseManager.UI
     public partial class AI_NodeUI : UserControl, IElement
     {
         public bool CanDelite {get;set;}
+        public bool[] ControlPoints { get; set; }
         public List<OpenSpace_Propertis.Property> properties { get ; set; }
         public AI_NodeUI()
         {
             InitializeComponent();
             CanDelite = true;
+            ControlPoints = new bool[4];
+            for(int i = 0;i<4;i++) ControlPoints[i] = true;
             properties = new List<OpenSpace_Propertis.Property>
             {
                 new OpenSpace_Propertis.Property("Основное","Вес", "1,8", "string",(v)=>{ node_text.Content = v.ToString()+"w"; }),

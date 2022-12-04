@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using static System.Windows.Forms.LinkLabel;
 
 namespace CaseManager
 {
@@ -124,9 +125,11 @@ namespace CaseManager
             Vector tottal_min = new Vector(10000, 10000);
             for (int i = 0; i < start_control_points.Count; i++)
             {
+                if (!(start as IElement).ControlPoints[i]) continue;
                 Vector min = new Vector(10000, 10000);
                 for (int j = 0; j < end_control_points.Count; j++)
                 {
+                    if (!(end as IElement).ControlPoints[j]) continue;
                     Vector now = end_control_points[j].position - start_control_points[i].position;
                     if (min.Length > now.Length)
                     {
@@ -181,10 +184,14 @@ namespace CaseManager
         public OpenSpace_Cursor(Canvas canvas, UIElement View)
         {
             this.View = View;
+            DoubleCollection dashes = new DoubleCollection();
+            dashes.Add(6);
+            dashes.Add(6);
             line1 = new Line(); line2 = new Line();
             canvas.Children.Add(line1);
             canvas.Children.Add(line2);
             line1.Stroke = line2.Stroke = new SolidColorBrush(Colors.WhiteSmoke);
+            line1.StrokeDashArray = line2.StrokeDashArray = dashes;
             line1.StrokeThickness = line2.StrokeThickness = 1d;
         }
         public void SetPosition(Point point)

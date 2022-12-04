@@ -26,12 +26,16 @@ namespace CaseManager
     public partial class DocumentHolderUI : UserControl, IElement
     {
         public bool CanDelite { get; set; }
+        public bool[] ControlPoints { get; set; }
         public List<OpenSpace_Propertis.Property> properties { get; set; }
 
         public DocumentHolderUI()
         {
             InitializeComponent();
             CanDelite = true;
+            
+            ControlPoints = new bool[4];
+            for (int i = 0; i<4; i++) ControlPoints[i] = true;
             properties = new List<OpenSpace_Propertis.Property>
             {
                 new OpenSpace_Propertis.Property("Основное","Файл", "-","File",(v)=>{LoadDock(v.ToString());})

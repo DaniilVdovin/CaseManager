@@ -24,6 +24,7 @@ namespace CaseManager
     public partial class ImageHolderUI : UserControl, IElement
     {
         public bool CanDelite { get; set; }
+        public bool[] ControlPoints { get; set; }
         public List<OpenSpace_Propertis.Property> properties { get; set; }
         private readonly ImageSource image_default;
         public ImageHolderUI()
@@ -31,6 +32,9 @@ namespace CaseManager
             InitializeComponent();
             image_default = i_image.Source;
             CanDelite = true;
+            
+            ControlPoints = new bool[4];
+            for (int i = 0; i<4; i++) ControlPoints[i] = true;
             properties = new List<OpenSpace_Propertis.Property>
             {
                 new OpenSpace_Propertis.Property("Основное","Изображение", "-","File",(v)=>{LoadImage(v.ToString());})

@@ -8,6 +8,8 @@ namespace CaseManager.UI
     {
         List<OpenSpace_Propertis.Property> properties { get; set; }
         bool CanDelite { get; set; }
+        bool[] ControlPoints { get; set; }
+
         void Clear();
     }
 }

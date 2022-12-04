@@ -22,11 +22,14 @@ namespace CaseManager.UI.BPMN
     {
         public List<OpenSpace_Propertis.Property> properties { get; set; }
         public bool CanDelite { get; set; }
+        public bool[] ControlPoints { get; set; }
 
         public BPMN_ask()
         {
             InitializeComponent();
             CanDelite = true;
+            ControlPoints = new bool[4];
+            for (int i = 0; i < ControlPoints.Length; i++) ControlPoints[i] = true;
             properties = new List<OpenSpace_Propertis.Property>
             {
                 new OpenSpace_Propertis.Property("Основное","Текст", "<Текст>", "string",(v)=>{ context.Content = v.ToString(); }),

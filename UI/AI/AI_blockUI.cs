@@ -25,6 +25,7 @@ namespace CaseManager.UI.AI
     {
         public List<OpenSpace_Propertis.Property> properties { get; set; }
         public bool CanDelite { get; set; }
+        public bool[] ControlPoints { get; set; }
 
         public List<List<AI_NodeUI>> nodes;
         public List<Line> lines;
@@ -37,6 +38,9 @@ namespace CaseManager.UI.AI
         public AI_blockUI()
         {
             CanDelite = true;
+            ControlPoints = new bool[4];
+            for(int i = 0;i<4;i++) ControlPoints[i] = true;
+
             this.os = IOCore.openSpace;
 
             this.MouseLeftButtonUp += Rectangle_MouseLeftButtonUp;
