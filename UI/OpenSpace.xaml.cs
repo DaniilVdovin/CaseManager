@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,9 @@ using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace CaseManager
 {
@@ -808,6 +811,52 @@ namespace CaseManager
             index = 1;
         }
     }
+    public static class OpenSpace_Render
+    {
+        public static void SaveControlImage(
+            Visual baseElement, int imageWidth, int imageHeight, string pathToOutputFile)
+        {
+            // 1) get current dpi
+            var pSource = PresentationSource.FromVisual(Application.Current.MainWindow);
+            Matrix m = pSource.CompositionTarget.TransformToDevice;
+            double dpiX = m.M11 * 96;
+            double dpiY = m.M22 * 96;
+
+            // 2) create RenderTargetBitmap
+            var elementBitmap = new RenderTargetBitmap(imageWidth, imageHeight, dpiX, dpiY, PixelFormats.Default);
+
+            // 3) undo element transformation
+            var drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                var visualBrush = new VisualBrush(baseElement);
+                drawingContext.DrawRectangle(
+                new SolidColorBrush(Colors.DarkGray),
+                null,
+                new Rect(new Point(0, 0), new Size(imageWidth / m.M11, imageHeight / m.M22)));
+                drawingContext.DrawRectangle(
+                    visualBrush,
+                    null,
+                    new Rect(new Point(0, 0), new Size(imageWidth / m.M11, imageHeight / m.M22)));
+            }
+
+            // 4) draw element
+            elementBitmap.Render(drawingVisual);
+
+            // 5) create PNG image
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(elementBitmap));
+
+            // 6) save image to file
+            using (var imageFile = new FileStream(pathToOutputFile, FileMode.Create, FileAccess.Write))
+            {
+                encoder.Save(imageFile);
+                imageFile.Flush();
+                imageFile.Close();
+                IOCore.main.notifManager.Add(0, "Рендер");
+            }
+        }
+    }
     public class OpenSpace_CopyPaste{
 
         private readonly OpenSpace os;
@@ -839,9 +888,7 @@ namespace CaseManager
                     (result as IElement).CanDelite = (obj as IElement).CanDelite;
                 }
                 os.Add_Element(result as UIElement);
-                obj = null;
                 os.canvas_Focus.ChangeColor(Colors.OrangeRed);
-                os.canvas_Focus.CleadFocus();
             }
         }
     }
@@ -1271,6 +1318,10 @@ namespace CaseManager
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.V)
             {
                 CopyPaste.Paste();
+            }
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.R)
+            {
+                OpenSpace_Render.SaveControlImage(CanvasViewer,(int)CanvasViewer.RenderSize.Width, (int)CanvasViewer.RenderSize.Height, "D:\\\\image.png");
             }
         }
         public void LoadFromFile(Record record)
