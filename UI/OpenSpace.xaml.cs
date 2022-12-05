@@ -9,11 +9,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
-using static System.Windows.Forms.LinkLabel;
 
 namespace CaseManager
 {
@@ -113,13 +113,13 @@ namespace CaseManager
             Update();
             start_offset = new Point(Canvas.GetLeft(start), Canvas.GetTop(start));
             end_offset = new Point(Canvas.GetLeft(end), Canvas.GetTop(end));
-            start_control_points[0].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2));  //Right
-            start_control_points[1].SetPosition(new Point(start_offset.X, start_offset.Y + start_size.Height / 2));                     //left
-            start_control_points[2].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + 10));                 //Up
+            start_control_points[2].SetPosition(new Point(start_offset.X + start_size.Width, start_offset.Y + start_size.Height / 2));  //Right
+            start_control_points[0].SetPosition(new Point(start_offset.X, start_offset.Y + start_size.Height / 2));                     //left
+            start_control_points[1].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + 10));                 //Up
             start_control_points[3].SetPosition(new Point(start_offset.X + start_size.Width / 2, start_offset.Y + start_size.Height));  //down
-            end_control_points[0].SetPosition(new Point(end_offset.X + end_size.Width, end_offset.Y + end_size.Height / 2));            //Right
-            end_control_points[1].SetPosition(new Point(end_offset.X, end_offset.Y + end_size.Height / 2));                             //Left
-            end_control_points[2].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + 10));                         //UP
+            end_control_points[2].SetPosition(new Point(end_offset.X + end_size.Width, end_offset.Y + end_size.Height / 2));            //Right
+            end_control_points[0].SetPosition(new Point(end_offset.X, end_offset.Y + end_size.Height / 2));                             //Left
+            end_control_points[1].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + 10));                         //UP
             end_control_points[3].SetPosition(new Point(end_offset.X + end_size.Width / 2, end_offset.Y + end_size.Height));            //Down
             int m_i = 0, m_j = 0;
             Vector tottal_min = new Vector(10000, 10000);
@@ -196,7 +196,6 @@ namespace CaseManager
         }
         public void SetPosition(Point point)
         {
-            SetVisible(true);
             line1.X1 = line1.X2 = point.X;
             line1.Y1 = point.Y - View.DesiredSize.Height; line1.Y2 = point.Y + View.DesiredSize.Height;
             line2.Y1 = line2.Y2 = point.Y;
@@ -610,27 +609,18 @@ namespace CaseManager
         public OpenSpace_Focus(OpenSpace openSpace)
         {
             this.openSpace = openSpace;
-
             rectangle = new Rectangle
             {
                 Visibility = Visibility.Collapsed,
                 Fill = new SolidColorBrush(Colors.Transparent),
                 IsHitTestVisible = false,
-                Stroke = new SolidColorBrush(Colors.OrangeRed),
                 StrokeThickness = 3,
                 RadiusX = 10,
                 RadiusY = 10
             };
             tt = new TranslateTransform();
             rectangle.RenderTransform = tt;
-            rectangle.Effect = new DropShadowEffect
-            {
-                Color = Colors.OrangeRed,
-                Direction = 270,
-                ShadowDepth = 0,
-                Opacity = 1,
-                BlurRadius = 20
-            };
+            ChangeColor(Colors.OrangeRed);
             openSpace.Canvas.Children.Add(rectangle);
             Panel.SetZIndex(rectangle, 3);
         }
@@ -638,6 +628,18 @@ namespace CaseManager
         {
             Curent_Focus = uI;
             //openSpace.canvas_Object_Manager.Select(uI);
+        }
+        public void ChangeColor(Color color)
+        {
+            rectangle.Effect = new DropShadowEffect
+            {
+                Color = color,
+                Direction = 270,
+                ShadowDepth = 0,
+                Opacity = 1,
+                BlurRadius = 20
+            };
+            rectangle.Stroke = new SolidColorBrush(color);
         }
         public void MoveToFocus()
         {
@@ -816,7 +818,12 @@ namespace CaseManager
         }
         public void Copy(UIElement element)
         {
-            obj = element;
+            if (element != null)
+            {
+                obj = element;
+                os.canvas_Focus.ChangeColor(Colors.Blue);
+                os.canvas_Focus.SetFocus(obj);
+            }
         }
         public void Paste()
         {
@@ -832,6 +839,9 @@ namespace CaseManager
                     (result as IElement).CanDelite = (obj as IElement).CanDelite;
                 }
                 os.Add_Element(result as UIElement);
+                obj = null;
+                os.canvas_Focus.ChangeColor(Colors.OrangeRed);
+                os.canvas_Focus.CleadFocus();
             }
         }
     }
@@ -882,14 +892,14 @@ namespace CaseManager
         }
         internal void Adding_MouseLeave(object sender, MouseEventArgs e)
         {
-            canvas_Cursor.SetVisible(true);
+            //canvas_Cursor.SetVisible(true);
             _isAdding_Hover = false;
             _isAdding_Move = false;
             //Console.WriteLine($"{sender.GetType().Name}:LEAVE");
         }
         internal void Adding_MouseEnter(object sender, MouseEventArgs e)
         {
-            canvas_Cursor.SetVisible(false);
+            //canvas_Cursor.SetVisible(false);
             _isAdding_Hover = true;
             //Console.WriteLine($"{sender.GetType().Name}:ENTER");
         }
@@ -961,11 +971,12 @@ namespace CaseManager
             Canvas.MouseLeftButtonUp    += Canvas_MouseLeftButtonUp;
             Canvas.MouseMove            += Canvas_MouseMove;
             Canvas.MouseLeave           += Canvas_MouseLeave;
+            Canvas.MouseEnter           += Canvas_MouseEnter;
 
             CanvasViewer.KeyDown        += CanvasViewer_KeyDown;
             this.Drop                   += CanvasViewer_Drop;
             
-            canvas_Cursor = new OpenSpace_Cursor(Canvas,CanvasViewer);
+            //canvas_Cursor = new OpenSpace_Cursor(Canvas,CanvasViewer);
             canvas_Ruler = new OpenSpace_Ruler(Canvas,left_tape,top_tape);
             canvas_Propertis = new OpenSpace_Propertis(PropertisBar,propertisGrid,propertisGrid_nonData);
             constrain_Manager = new OpenSpace_Constrain_Manager(Canvas);
@@ -978,6 +989,12 @@ namespace CaseManager
             
             Mouse.OverrideCursor = Cursors.Arrow;
         }
+
+        private void Canvas_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Cross;
+        }
+
         private void CanvasViewer_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -1011,7 +1028,7 @@ namespace CaseManager
         }
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-            canvas_Cursor.SetVisible(false);
+            //canvas_Cursor.SetVisible(false);
             Mouse.OverrideCursor = Cursors.Arrow;
         }
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -1062,9 +1079,8 @@ namespace CaseManager
             {
                 if (sender is Canvas)
                 {
-                    Mouse.OverrideCursor = Cursors.Cross;
                     Point point = e.GetPosition(Canvas);
-                    canvas_Cursor.SetPosition(point);
+                    //canvas_Cursor.SetPosition(point);
                     canvas_Ruler.SetMousePosition(point);
                     if (!Canvas.IsMouseCaptured) return;
                     var tt = (TranslateTransform)((TransformGroup)Canvas.RenderTransform).Children.First(tr => tr is TranslateTransform);
@@ -1082,7 +1098,7 @@ namespace CaseManager
         }
         internal void Adding_Move(bool first,UIElement obj,Point point,Point point_view)
         {
-            canvas_Cursor.SetVisible(false);
+            //canvas_Cursor.SetVisible(false);
             canvas_Ruler.SetMousePosition(point);
             canvas_Ruler.SetVisible(true);
             if (!first)

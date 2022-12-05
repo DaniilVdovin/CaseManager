@@ -30,6 +30,7 @@ namespace CaseManager.UI.BPMN
             CanDelite = true;
             ControlPoints = new bool[4];
             for (int i = 0; i < ControlPoints.Length; i++) ControlPoints[i] = true;
+            ControlPoints[3] = false;
             properties = new List<OpenSpace_Propertis.Property>
             {
                 new OpenSpace_Propertis.Property("Основное","Текст", "<Текст>", "string",(v)=>{ context.Content = v.ToString(); }),

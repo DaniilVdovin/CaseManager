@@ -10,9 +10,7 @@
         Title="Case Manager" 
         Height="725" Width="1283"
         MinHeight="725" MinWidth="1283"
-        Foreground="#FF676767" Icon="/Source/logo/logo_white.png"
-        WindowStyle="None" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" 
-        AllowsTransparency="True" ResizeMode="CanResize" BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center" WindowStartupLocation="CenterScreen">
+        Foreground="#FF676767" Icon="/Source/logo/logo_white.png" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" ResizeMode="CanResize" BorderThickness="5" HorizontalAlignment="Center" VerticalAlignment="Center" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" SnapsToDevicePixels="True" Cursor="Arrow">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="btv" />
         <!-- style a top level menu item -->
