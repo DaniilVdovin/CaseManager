@@ -816,7 +816,6 @@ namespace CaseManager
         public static void SaveControlImage(
             Visual baseElement, Point point1, Point point2, string pathToOutputFile)
         {
-            // 1) get current dpi
             var pSource = PresentationSource.FromVisual(Application.Current.MainWindow);
             Matrix m = pSource.CompositionTarget.TransformToDevice;
             int coef = 1;
@@ -827,13 +826,11 @@ namespace CaseManager
             int o_main_height = (int)((point2.Y * coef));
             int main_width = (int)((baseElement as UIElement).RenderSize.Width);
             int main_height = (int)((baseElement as UIElement).RenderSize.Height);
-            // 2) create RenderTargetBitmap
             var elementBitmap = new RenderTargetBitmap(
                 o_main_width * coef,
                 o_main_height * coef,
                 dpiX, dpiY, PixelFormats.Default);
-            Console.WriteLine($"RenderTargetBitmap ({main_width},{main_height})");
-            // 3) undo element transformation
+            //Console.WriteLine($"RenderTargetBitmap ({main_width},{main_height})");
             var drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
             {
@@ -851,18 +848,9 @@ namespace CaseManager
             drawingVisual.Clip = new RectangleGeometry(new Rect((int)((point1.X * coef)), (int)((point1.Y * coef)),
             (int)((point2.X * coef)), (int)((point2.Y * coef))));
             drawingVisual.Offset = -new Vector((int)((point1.X * coef)), (int)((point1.Y * coef)));
-            // 4) draw element
             elementBitmap.Render(drawingVisual);
-            //Console.WriteLine($"elementBitmap ({elementBitmap.PixelWidth},{elementBitmap.PixelHeight})");
-            //var int_c_rect = new Int32Rect((int)((point1.X* coef)), (int)((point1.Y* coef)),
-            //    (int)((point2.X* coef)), (int)((point2.Y* coef)));
-            //Console.WriteLine($"int_c_rect " + int_c_rect.ToString());
-            // var crop = new CroppedBitmap(elementBitmap, int_c_rect);
-            // 5) create PNG image
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(elementBitmap));
-
-            // 6) save image to file
             using (var imageFile = new FileStream(pathToOutputFile, FileMode.Create, FileAccess.Write))
             {
                 encoder.Save(imageFile);
