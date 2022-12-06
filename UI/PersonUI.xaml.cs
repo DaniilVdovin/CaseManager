@@ -19,7 +19,7 @@ namespace CaseManager
         public PersonUI()
         {
             InitializeComponent();
-            CanDelite= false;
+            CanDelite=true;
             ControlPoints = new bool[4];
             for (int i = 0; i<4; i++) ControlPoints[i] = true;
             properties = new List<OpenSpace_Propertis.Property>

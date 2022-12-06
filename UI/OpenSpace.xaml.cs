@@ -10,11 +10,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
@@ -814,17 +814,25 @@ namespace CaseManager
     public static class OpenSpace_Render
     {
         public static void SaveControlImage(
-            Visual baseElement, int imageWidth, int imageHeight, string pathToOutputFile)
+            Visual baseElement, Point point1, Point point2, string pathToOutputFile)
         {
             // 1) get current dpi
             var pSource = PresentationSource.FromVisual(Application.Current.MainWindow);
             Matrix m = pSource.CompositionTarget.TransformToDevice;
-            double dpiX = m.M11 * 96;
-            double dpiY = m.M22 * 96;
-
+            int coef = 1;
+            int scale = 96;
+            double dpiX = m.M11 * scale;
+            double dpiY = m.M22 * scale;
+            int o_main_width = (int)((point2.X * coef));
+            int o_main_height = (int)((point2.Y * coef));
+            int main_width = (int)((baseElement as UIElement).RenderSize.Width);
+            int main_height = (int)((baseElement as UIElement).RenderSize.Height);
             // 2) create RenderTargetBitmap
-            var elementBitmap = new RenderTargetBitmap(imageWidth, imageHeight, dpiX, dpiY, PixelFormats.Default);
-
+            var elementBitmap = new RenderTargetBitmap(
+                o_main_width * coef,
+                o_main_height * coef,
+                dpiX, dpiY, PixelFormats.Default);
+            Console.WriteLine($"RenderTargetBitmap ({main_width},{main_height})");
             // 3) undo element transformation
             var drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
@@ -833,16 +841,23 @@ namespace CaseManager
                 drawingContext.DrawRectangle(
                 new SolidColorBrush(Colors.DarkGray),
                 null,
-                new Rect(new Point(0, 0), new Size(imageWidth / m.M11, imageHeight / m.M22)));
+                new Rect(new Point(0,0),new Point(main_width* coef, main_height* coef)));
                 drawingContext.DrawRectangle(
                     visualBrush,
                     null,
-                    new Rect(new Point(0, 0), new Size(imageWidth / m.M11, imageHeight / m.M22)));
+                    new Rect(new Point(0, 0), new Point(main_width* coef, main_height* coef)));
             }
-
+           
+            drawingVisual.Clip = new RectangleGeometry(new Rect((int)((point1.X * coef)), (int)((point1.Y * coef)),
+            (int)((point2.X * coef)), (int)((point2.Y * coef))));
+            drawingVisual.Offset = -new Vector((int)((point1.X * coef)), (int)((point1.Y * coef)));
             // 4) draw element
             elementBitmap.Render(drawingVisual);
-
+            //Console.WriteLine($"elementBitmap ({elementBitmap.PixelWidth},{elementBitmap.PixelHeight})");
+            //var int_c_rect = new Int32Rect((int)((point1.X* coef)), (int)((point1.Y* coef)),
+            //    (int)((point2.X* coef)), (int)((point2.Y* coef)));
+            //Console.WriteLine($"int_c_rect " + int_c_rect.ToString());
+            // var crop = new CroppedBitmap(elementBitmap, int_c_rect);
             // 5) create PNG image
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(elementBitmap));
@@ -1303,6 +1318,50 @@ namespace CaseManager
             constrain_Manager.Clear();
             this.UpdateLayout();
         }
+        public void ScreenOfItemsAll()
+        {
+            double mX = 0, mY = 0;
+            double lX = 5000, lY = 5000;
+            foreach (var item in canvas_Object_Manager.ObjectItems)
+            {
+                double l = System.Windows.Controls.Canvas.GetLeft(item.UI_Item);
+                double t = System.Windows.Controls.Canvas.GetTop(item.UI_Item);
+                if (l < lX)
+                    lX = l;
+                if (t < lY)
+                    lY = t;
+                if (l+item.UI_Item.DesiredSize.Width > mX)
+                    mX = l + item.UI_Item.DesiredSize.Width;
+                if (t + item.UI_Item.DesiredSize.Height > mY)
+                    mY = t+item.UI_Item.DesiredSize.Height;
+            }
+            double 
+                left = lX - 50,
+                top = lY - 50,
+                width = mX - lX + 100,
+                height = mY - lY + 100;
+            Screen(new Point(left, top), new Point(width, height));
+        }
+        public void ScreenOfCanvas() => Screen();
+        internal void Screen() => Screen(new Point(0,0), new Point((int)Canvas.RenderSize.Width, (int)Canvas.RenderSize.Height));
+        internal void Screen(Point point1,Point point2)
+        {
+            SaveFileDialog openFileDialog = new SaveFileDialog()
+            {
+                FileName = IOCore.CurrentProjectName + "_Render",
+                Filter = "ImageRender (*.png)|*.png",
+                DefaultExt = ".png"
+            };
+            openFileDialog.FileOk += (b, i) =>
+            {
+                if (openFileDialog.FileName != "")
+                {
+                    OpenSpace_Render.SaveControlImage(Canvas, point1,point2, openFileDialog.FileName);
+                    Console.WriteLine("Render");
+                }
+            };
+            openFileDialog.ShowDialog();
+        }
         private void CanvasViewer_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -1321,7 +1380,7 @@ namespace CaseManager
             }
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.R)
             {
-                OpenSpace_Render.SaveControlImage(CanvasViewer,(int)CanvasViewer.RenderSize.Width, (int)CanvasViewer.RenderSize.Height, "D:\\\\image.png");
+                ScreenOfItemsAll();
             }
         }
         public void LoadFromFile(Record record)
